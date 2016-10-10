@@ -1,0 +1,14 @@
+RewriteEngine on
+RewriteBase /newsroom/web/
+
+<IfModule mod_expires.c>
+ExpiresActive on
+ExpiresDefault "access plus 1 day"
+</IfModule>
+
+# if a directory or a file exists, use it directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# otherwise forward it to index.php
+RewriteRule . index.php

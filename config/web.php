@@ -7,6 +7,22 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
+   		'assetManager' => [
+   			'bundles' => [
+   					'yii\web\JqueryAsset' => [
+   							'js'=>[]
+   					],
+   					'yii\bootstrap\BootstrapPluginAsset' => [
+   							'js'=>[]
+   					],
+   					'yii\bootstrap\BootstrapAsset' => [
+   							'css' => [],
+   					],
+ 			],
+   		],
+   		'authManager' => [
+ 			'class' => 'yii\rbac\PhpManager',
+   		],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'uBnYqV1c9tcSN20eOZjgemRpmWCG8Jjt',
@@ -17,6 +33,7 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+        	'authTimeout' => 7200,
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -38,16 +55,18 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
-        /*
+      
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+      
     ],
     'params' => $params,
+	'timeZone' => 'Asia/Bangkok',
+	'language' => 'th',
 ];
 
 if (YII_ENV_DEV) {
