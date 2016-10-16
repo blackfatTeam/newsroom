@@ -3,21 +3,19 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Contents;
-use app\models\Categories;
 
 use app\models\Media;
 
 use yii\helpers\Url;
 
 use app\lib\Workflow;
-use app\models\Relation;
 
 use yii\helpers\ArrayHelper;
 
 use yii\data\Pagination;
-use yii\base\Controller;
 
 use app\models\Log;
+use yii\web\Controller;
 //use common\models\Tags;
 
 class ContentsController extends Controller
@@ -87,8 +85,6 @@ class ContentsController extends Controller
     		$publicDate = Yii::$app->request->post('publishDate');
     		$publicTime = Yii::$app->request->post('publishTime');
 
-    		$categoriesReq = Yii::$app->request->post('categories');    	
-
     		//เก็บ tags
     		$values = $reqstContents['tags'];
     		$arrV = explode(',', $values);
@@ -130,7 +126,6 @@ class ContentsController extends Controller
     		}else{
     			$strPost = $reqstContents['title'];
     		}    			
-    		//$arrTmp = preg_split("/\/|\?|\=|\ |\-|\\\|\*|\./", $reqstContents['title']);
     		$arrTmp = preg_split("/[-!$%^&*\(\)_+|~=`{}\[\]:;\'<>?,.\"\/\\\ ]/", $strPost);
     		$strTmp = '';
     		foreach($arrTmp as $tmp){
@@ -146,22 +141,6 @@ class ContentsController extends Controller
     		
     		
     		if($contents->save()){
-    			//save category
-	    		$r = Relation::deleteAll(['contentId'=>$contents->id]);   
-	    		if($categoriesReq){
-	    			foreach($categoriesReq as $id=>$cate){
-	    				$model = new Relation();
-	    				$model->categoryId = $id;
-	    				$model->contentId = $contents->id;
-	    				if(!$model->save()){
-	    					$error[]=['relation'=>['id'=>$model->id]];
-	    				}
-	    
-		    		}
-	    			$contents->save();
-	    		}else{
-	    			$contents->save();
-	    		}
 	    		
 	    		//set flag show in content
 	    		$models = Media::find()->where(['refId'=>$contents->id])->all();
@@ -205,7 +184,8 @@ class ContentsController extends Controller
     		
     			Yii::$app->session->setFlash('message.level', 'success');
     			Yii::$app->session->setFlash('message.content', 'บันทึกข้อมูล');
-	    		
+    			
+    			return $this->redirect(['edit','id'=>$contents->id]);
     		}else{
     			$error[]=['content'=>['id'=>$contents->id]];
     			Yii::$app->session->setFlash('message.level', 'warning');
@@ -213,27 +193,9 @@ class ContentsController extends Controller
     		}
     	}
 
-    	//display
-    	$categories = Categories::find()->where(['type'=>Workflow::TYPE_PARENT])->andWhere(['not',['id'=>0]])->all();
-		$arrCategory = [];
-		foreach ($categories as $cate){
-			$tmp = Categories::find()->where(['parentId'=>$cate->id])->all();
-			$arrCategory[] = ['parent'=>$cate,'sub'=>$tmp];
-		}
-
-    	
-		$query = Categories::find();
-		$query->innerJoin('relation', 'categories.id = relation.categoryId');
-		$query->innerJoin('contents', 'contents.id = relation.contentId');
-		$query->andWhere(['contents.id'=>$contents->id]);
-		$liveInCate = yii\helpers\ArrayHelper::map($query->all(),'id','id');	
-	
-
     	return $this->render('edit',[
     			'type'=>$type,
     			'contents'=>$contents,
-      			'arrCategory'=>$arrCategory,
-    			'liveInCate'=>$liveInCate,
     	]);
     }
     public function actionList(){
@@ -276,7 +238,6 @@ class ContentsController extends Controller
     		}else if($op == 'search'){
     			$title =  Yii::$app->request->post('title');
     			$status =  Yii::$app->request->post('status');
-    			$category =  Yii::$app->request->post('category');
     			$publishTime =  Yii::$app->request->post('publishTime');
 
     			$query = Contents::find();
@@ -289,17 +250,12 @@ class ContentsController extends Controller
     			if($publishTime!=null){
     				$query->andWhere(['like','publishTime',$publishTime]);    
     			}    			
-    			if($category!=null){
-    				$tmp = Relation::find()->where(['categoryId'=>$category])->all();
-    				$arrId = ArrayHelper::map($tmp, 'contentId', 'contentId');
-    				$query->andWhere(['in','id',$arrId]);
-      				
-    			}
+
     			\Yii::$app->session['contents/list.query'] = $query;
     			\Yii::$app->session['contents/list.query.title'] = $title;
     			\Yii::$app->session['contents/list.query.status'] = $status;
     			\Yii::$app->session['contents/list.query.publishTime'] = $publishTime;
-    			\Yii::$app->session['contents/list.query.category'] = $category;
+
     			
     		}else if($op == 'resetSearch'){
     			$query = Contents::find();
@@ -307,14 +263,12 @@ class ContentsController extends Controller
     			\Yii::$app->session['contents/list.query.title'] = '';
     			\Yii::$app->session['contents/list.query.status'] = '';
     			\Yii::$app->session['contents/list.query.publishTime'] = '';
-    			\Yii::$app->session['contents/list.query.category'] = '';
     		}
     	}
     	
     	$query = isset(\Yii::$app->session['contents/list.query'])?\Yii::$app->session['contents/list.query']:Contents::find();
     	$search['title'] = isset(\Yii::$app->session['contents/list.query.title'])?\Yii::$app->session['contents/list.query.title']:'';
     	$search['status'] = isset(\Yii::$app->session['contents/list.query.status'])?\Yii::$app->session['contents/list.query.status']:'';
-    	$search['category'] = isset(\Yii::$app->session['contents/list.query.category'])?\Yii::$app->session['contents/list.query.category']:'';
     	$search['publishTime'] = isset(\Yii::$app->session['contents/list.query.publishTime'])?\Yii::$app->session['contents/list.query.publishTime']:'';
     	
     	$query->orderBy('id DESC');
@@ -333,29 +287,16 @@ class ContentsController extends Controller
     	
     	$contentList = [];
     	foreach($models as $model){
-    		$arrCategory=[];
-    		foreach($model->getRelations()->all() as $cat){
-    			$tmp = Categories::find()->where(['id'=>$cat->categoryId])->one();
-    			$arrCategory[] = $tmp->getAttributes(['title'])['title'];
-    		}
-    		if(empty($arrCategory)){
-    			$arrCategory[]='Uncategory';
-    		}
-    		
+  		
     		$amountImage = Media::find()->where(['refId'=>$model->id,'type'=>Workflow::TYPE_CONTENT])->count();
     		$contentList[]=$model->getAttributes()
-    		+['categoryText'=>implode(',', $arrCategory)]
     		+['amountImage'=>$amountImage];
     	}
-
-    	$query = Categories::find();
-    	$categories = ArrayHelper::map($query->all(), 'id', 'title');
 
     	return $this->render('list',[
     		'pages'=>$pages,
     		'search'=>$search,
 			'contentList'=>$contentList,
-    		'categories'=>$categories,
     	]);
     }
 	public function doDelete($arrContentId,$type){
@@ -379,6 +320,9 @@ class ContentsController extends Controller
 		Relation::deleteAll(['in','contentId',$arrContentId]);
 		//ลบ contents
 		return Contents::deleteAll(['in','id',$arrContentId]);
+	}
+	public function actionTest(){
+		
 	}
   
 }

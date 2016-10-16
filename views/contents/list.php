@@ -98,14 +98,6 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => [$uri]];
 								<div class="col-md-3">
 									<div class="form-body">
 										<div class="form-group">
-											<?= Html::dropDownList('category',$search['category'],[''=>'ทุกหมวด']+$categories,['class'=>'form-control']);?>
-											<span class="help-block">Categories (หมวด)</span>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-body">
-										<div class="form-group">
 											<?php echo DatePicker::widget([
 													'name' => 'publishTime',
 													'language'=>'th',
@@ -142,7 +134,6 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => [$uri]];
 						<tr class="text-center">
 							<th class="text-center"><div class="checkList"><i class="fa fa-check-square-o"></i></div></th>
 							<th >ชื่อข่าว</th>
-							<th class="text-center">หมวด</th>
 							<th class="text-center">สถานะ</th>
 							<th class="text-center">เวลาแสดง</th>
 							<th class="text-center">จำนวนรูปที่อัพโหลด</th>							
@@ -159,7 +150,6 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => [$uri]];
 								<?= $model['id']?> <?= mb_substr($model['title'], 0,40,'UTF-8')?>
 								</a>
 							</td>
-							<td class="text-center"><?= $model['categoryText']?></td>
 							<td  align="center">
 								<i class="fa <?= Workflow::$arrStatusFaIcon[$model['status']]['icon']?>" 
 									title="<?= Workflow::$arrStatusTh[$model['status']]?>">

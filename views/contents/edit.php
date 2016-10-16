@@ -88,9 +88,7 @@ $this->params['breadcrumbs'][] = ['label' => $contents->title];
 						<?= yii\base\View::render('confbar',[
 								'form'=>$form,
 								'contents'=>$contents,
-								'liveInCate'=>$liveInCate,
-								'arrCategory'=>$arrCategory,
-								
+									
 						]); ?>
 					</div>
 					<div class="tab-pane" id="portlet_log">

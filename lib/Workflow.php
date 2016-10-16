@@ -102,26 +102,7 @@ class Workflow {
 			self::STATIC_TYPE_LETTER => 'E-Letter'
 	);
 
-	/*------------------------------Categories----------------------------*/
-	const STATUS_CLOSE = 0;
-	const STATUS_OPEN = 1;
-	 
-	const TYPE_PARENT = 1;
-	const TYPE_SUB = 2;
-	 
-	public static $status = [
-			self::STATUS_OPEN => 'เปิด',
-			self::STATUS_CLOSE => 'ปิด',
-	];
-	public static $type = [
-			self::TYPE_PARENT => 'เป็น parent',
-			self::TYPE_SUB => 'เป็น sub',
-	];
-	public static $arrIcon=[
-			self::STATUS_OPEN=> array('icon'=>'fa-check', 'css'=> 'published'),
-			self::STATUS_CLOSE => array('icon'=>'fa-lock', 'css'=> 'delete'),
-	];
-	
+		
 	/*------------------------------Contents----------------------------*/
 	public static $theme = [
 			1 => 'Full Panorama',

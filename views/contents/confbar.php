@@ -65,40 +65,7 @@ $str = <<<EOT
 			
         });
 		
-$('.categoryClick').on('click',function(){
-		type = $(this).attr('catetype');
-		id = $(this).attr('parentId');
 
-			$("#categoriesuncate").removeAttr('checked');
-			$('#categoriesuncate').parent().removeClass('checked');
-						
-		if(type=='sub'){			
-			$('#'+id).attr('checked','checked');
-			$('#'+id).parent().addClass('checked');
-						
-			
-		}else if(type=='uncate'){
-
-			$(".categoryClick").removeAttr('checked');
-			$('.categoryClick').parent().removeClass('checked');
-
-			$('#categoriesuncate').attr('checked','checked');
-			$('#categoriesuncate').parent().addClass('checked');
-
-		}
-		if($(".categoryClick[parentid='"+id+"']:checked").length > 0){
-			$('#'+id).attr('checked','checked');
-			$('#'+id).parent().addClass('checked');
-		}		
-});
-
-$('.saveBtn').on('click',function(){
-		if($(".categoryClick:checked").length <= 0){
-			alert('กรุณาเลือก Category');
-			return false;
-		}
-		
-	});
 EOT;
 $this->registerJs($str);
 $css = <<<EOT
@@ -162,69 +129,7 @@ $this->registerCss($css);
 		</div>
 	</div>
 </div>
-<div class="col-md-4">
-	<div class="portlet box grey tabbable">
-		<div class="portlet-title">
-			<div class="caption"><i class="fa fa-cog"></i> หมวดหมู่</div>
-			<div class="tools">
-				<a href="javascript:;" class="collapse"></a>
-			</div>
-		</div>
-		<div class="portlet-body">
-			<div class="form-body">
-				<div class="form-group">
-					<label  class="">รายการหมวดหมู่</label>
-					<div class="checkbox-list">
-						<ul>
-						<?php $checked = empty($liveInCate)?true:false;
-						?>
-							<li>
-								<label>
-								<?= Html::checkbox('tmp',$checked,['class'=>'categoryClick','id'=>'categoriesuncate','parentId'=>'categoriesuncate','catetype'=>'uncate'])?><span style="color:red;">Uncategory</span>
-								</label>
-							</li>
-						<?php foreach ($arrCategory as $cate){
-							$parent = $cate['parent'];
-							$sub = $cate['sub'];
-							
-							$checked = false;
-							if(isset($liveInCate[$parent->id])){
-								$checked = true;
-							}
-							$catId = 'categories'.$parent->id;
-	
-						?>
-						
-							<li>
-								<label>
-								<?= Html::checkbox('categories['.$parent->id.']',$checked,['class'=>'categoryClick','id'=>$catId,'parentId'=>$catId,'catetype'=>'parent'])?><?= $parent->title?>
-								</label>
-								<?php if($sub){?>
-								<ul>
-									<?php foreach ($sub as $s){
-										$checked = false;
-										if(isset($liveInCate[$s->id])){
-											$checked = true;
-										}
-									?>
-										<li>
-											<label>
-											<?= Html::checkbox('categories['.$s->id.']',$checked,['class'=>'categoryClick','parentId'=>$catId,'catetype'=>'sub'])?><?= $s->title?>
-											</label>
-										</li>
-									<?php }?>
-								</ul>
-								<?php }?>
-							</li>
-						
-						<?php }?>
-						</ul>
-					</div>
-				</div>							
-			</div>
-		</div>
-	</div>
-</div>
+
 <div class="col-md-4">
 	<div class="portlet box grey tabbable">
 		<div class="portlet-title">
