@@ -90,6 +90,7 @@ $this->params['breadcrumbs'][] = ['label' => $contents->title];
 								'contents'=>$contents,
 									
 						]); ?>
+						
 					</div>
 					<div class="tab-pane" id="portlet_log">
 						<?= LogWidget::widget([
