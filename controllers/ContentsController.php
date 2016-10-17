@@ -6,6 +6,8 @@ use app\models\Contents;
 
 use app\models\Media;
 
+use app\models\Relatecontent;
+
 use yii\helpers\Url;
 
 use app\lib\Workflow;
@@ -94,7 +96,9 @@ class ContentsController extends Controller
     		$contents = new Contents();	
 
     	}	   	
-    	   	
+    	 
+    	//relateContent
+    	$relateData = RelateContent::find()->where(['contentId'=>$id])->all();
     	if(\Yii::$app->request->post()){
 
     		$reqstContents = Yii::$app->request->post('Contents');
@@ -212,6 +216,7 @@ class ContentsController extends Controller
     	return $this->render('edit',[
     			'type'=>$type,
     			'contents'=>$contents,
+    			'relateData'=>$relateData
     	]);
     }
     public function actionList(){
@@ -337,8 +342,14 @@ class ContentsController extends Controller
 		//ลบ contents
 		return Contents::deleteAll(['in','id',$arrContentId]);
 	}
-	public function actionTest(){
-		
+
+	public function actionGetitem(){
+		$request = Yii::$app->request;
+	
+		$id = $request->post('id');
+	
+		header('Content-Type: application/json');
+		echo json_encode($id);
 	}
   
 }
