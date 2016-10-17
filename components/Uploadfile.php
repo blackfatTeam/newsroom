@@ -28,7 +28,7 @@ class Uploadfile extends Widget {
 
 		list($initialPreview,$initialPreviewConfig) = Workflow::getInitialPreview($media,$this->type,$this->model);
 		
-		//var_dump($initialPreview);exit;
+		//var_dump($initialPreviewConfig);exit;
 		echo $this->render('uploadfile',[
 				'currentAction'=>$this->currentAction,
 				'modalId'=>$this->modalId,

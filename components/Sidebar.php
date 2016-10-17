@@ -11,7 +11,7 @@ use app\Workflow;
 class Sidebar extends Widget {
 	public function run() {
 
-//		$identity = \Yii::$app->user->getIdentity();
+		$identity = \Yii::$app->user->getIdentity();
 		$arrMenu = [];
 		
 		//default

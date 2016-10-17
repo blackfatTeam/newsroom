@@ -1,5 +1,9 @@
 <?php
 namespace app\lib;
+use app\models\Media;
+use yii\bootstrap\Html;
+use yii\helpers\Url;
+use yii\helpers\BaseFileHelper;
 
 class Workflow {
 	/*------------------------------workflow----------------------------*/
@@ -124,19 +128,16 @@ class Workflow {
 	}
 	public static function getUploadPath($ch=''){
 		if($ch=='img'){
-			//return Yii::getAlias('@common').'/'.self::UPLOAD_FOLDER.'/'.self::UPLOAD_IMAGES_FOLDER;
-			return Yii::getAlias('@backend').'/web/'.self::UPLOAD_FOLDER.'/'.self::UPLOAD_IMAGES_FOLDER;
+			return \Yii::getAlias('@uploadPath');
 		}
-	
-		//return Yii::getAlias('@common').'/'.self::UPLOAD_FOLDER;
-		return Yii::getAlias('@backend').'/web/'.self::UPLOAD_FOLDER;
+		return false;
 	}
 	
 	public static function getUploadUrl($ch=''){
 		if($ch=='img'){
-			return Yii::getAlias('@uploadUrl').'/'.self::UPLOAD_IMAGES_FOLDER;
+			return \Yii::getAlias('@uploadUrl');
 		}
-		return yii::getAlias('@uploadUrl').'/'.self::UPLOAD_FOLDER;
+		return false;
 	}
 	
 	public function getPreviewGallery($path)
@@ -162,7 +163,7 @@ class Workflow {
 				if($value->id == $model->thumbnail){
 					$setThumb = true;
 				}
-				array_push ( $initialPreview, Media::getTemplatePreview ( $value,$type,$setThumb ) );
+				array_push ( $initialPreview, Workflow::getTemplatePreview ( $value,$type,$setThumb ) );
 				array_push ( $initialPreviewConfig, [
 						'caption' => $value->fileName,
 						//'width' => '120px',
@@ -179,7 +180,7 @@ class Workflow {
 		}else{
 			foreach ( $media as $key => $value ) {
 	
-				array_push ( $initialPreview, Media::getTemplatePreview ($value,$type) );
+				array_push ( $initialPreview, Workflow::getTemplatePreview ($value,$type) );
 				array_push ( $initialPreviewConfig, [
 						'caption' => $value->fileName,
 						//'width' => '120px',
@@ -202,11 +203,7 @@ class Workflow {
 	private static function getTemplatePreview(Media $model,$type,$setThumb = FALSE) {
 	
 		$arrThumb = json_decode($model->thumbPath);
-		if($arrThumb == null){
-			$thumPath = $model->fullPath;
-		}else{
-			$thumPath = $arrThumb->{'250'};
-		}
+		$thumPath = isset($arrThumb->{Workflow::SIZE_LIT})?$arrThumb->{Workflow::SIZE_LIT}:null;
 	
 		//$isImage = Media::isImage ( $thumPath );
 		$isImage = 1;
@@ -223,7 +220,7 @@ class Workflow {
 				$isThumb=1;
 				$thumb = '<button class="btn isThumb" style="position: absolute;top:1;background-color:#BE922A;"><i class="fa fa-picture-o"></i></button>';
 			}
-	
+
 			$file = Html::img ( $thumPath, [
 					'class' => 'file-preview-image imageThumb',
 					'data-id' => $model->id,
