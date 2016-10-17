@@ -46,6 +46,7 @@ $this->params['breadcrumbs'][] = ['label' => $contents->title];
 				<ul class="nav nav-tabs">
 					<li><a href="#portlet_log" data-toggle="tab">Log</a></li>
 					<li><a href="#portlet_tab3" data-toggle="tab">ตั้งค่า</a></li>
+					<li><a href="#portlet_relate" data-toggle="tab">ข่าวที่เกี่ยวข้อง</a></li>
 					<li class="active"><a href="#portlet_tab1" data-toggle="tab">Content</a></li>					
 				</ul>
 				<div class="tab-content">
@@ -84,12 +85,17 @@ $this->params['breadcrumbs'][] = ['label' => $contents->title];
 							</div>		
 						</div>
 					</div>
+					
+					<div class="tab-pane" id="portlet_relate">
+						<?= yii\base\View::render('relatecontent'); ?>
+					</div>
 					<div class="tab-pane" id="portlet_tab3">
 						<?= yii\base\View::render('confbar',[
 								'form'=>$form,
 								'contents'=>$contents,
 									
 						]); ?>
+						
 						
 					</div>
 					<div class="tab-pane" id="portlet_log">
