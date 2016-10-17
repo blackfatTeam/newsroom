@@ -17,7 +17,7 @@ $( "tbody" ).sortable({
 		var tb = dropItem.parent('tbody');
 		debugger;
 		var cloneTr = $('#cloneTrSelect').clone();
-		$.get('$url', {
+		$.post('$url', {
 				id: dropItem.attr('data-id')
 		}).done(function(data) {
 			debugger;

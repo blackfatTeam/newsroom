@@ -345,11 +345,19 @@ class ContentsController extends Controller
 
 	public function actionGetitem(){
 		$request = Yii::$app->request;
-	
 		$id = $request->post('id');
-	
+		
+		$query = Contents::find()->where(['id'=>$id])->one();
+		$result = [];
+		if (!empty($query)){
+			$result = [
+					'id' => $query->id,
+					'title' => $query->title,
+			];
+		}
+
 		header('Content-Type: application/json');
-		echo json_encode($id);
+		echo json_encode($result);
 	}
   
 }
