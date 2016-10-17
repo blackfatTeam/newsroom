@@ -62,11 +62,21 @@ $config = [
             'rules' => [
             ],
         ],
+    		
+    	'image' => [
+    		'class' => 'yii\image\ImageDriver',
+    		'driver' => 'GD',  //GD or Imagick
+    	],
       
     ],
-    'params' => $params,
+	'aliases' => [
+			'@uploadUrl' => 'http://localhost/newsroom/images/uploads',
+			'@uploadPath' => '/www/newsroom/images/uploads',
+			//'@uploadUrl' => 'http://2016.hisoparty.com/backend/web/uploads',
+	],
 	'timeZone' => 'Asia/Bangkok',
 	'language' => 'th',
+    'params' => $params,	
 ];
 
 if (YII_ENV_DEV) {

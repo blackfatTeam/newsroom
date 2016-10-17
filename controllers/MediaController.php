@@ -2,19 +2,16 @@
 namespace app\controllers;
 
 use Yii;
-use yii\helpers\Url;
-use yii\helpers\Html;
 use app\models\Media;
 use app\lib\Workflow;
 use app\models\Contents;
-use yii\base\Controller;
-//use common\models\Background;
+
 use yii\helpers\BaseFileHelper;
 use yii\web\UploadedFile;
 use app\models\Categories;
 use yii\helpers\ArrayHelper;
-//use common\models\Banner;
-//use common\models\Staticpage;
+use yii\web\Controller;
+
 
 class MediaController extends Controller
 {
@@ -58,7 +55,6 @@ class MediaController extends Controller
     		$modelId = Yii::$app->request->post('modelId');
     		$type = Yii::$app->request->post('type');
     
-    		//$contents = Contents::find()->where(['id'=>$contId])->one();
     		$images = UploadedFile::getInstancesByName ('upload_ajax');
     		$param = ['images'=>$images,'modelId'=>$modelId,'type'=>$type];
     		$this->Uploads($param);
@@ -70,7 +66,7 @@ class MediaController extends Controller
     	$id = Yii::$app->request->post ( 'key' );
     	$type = (int)Yii::$app->request->get( 'type' );
     
-    	$r = Media::deletefile([$id]);    	
+    	$r = Workflow::deletefile([$id]);    	
     	if ($r){	
     		if($type == Workflow::TYPE_CONTENT){			
 		    	$arrContent = Contents::find()->where(['thumbnail'=>$id])->all();
@@ -104,7 +100,6 @@ class MediaController extends Controller
     	$modelId =  Yii::$app->request->post('modelId');
     	$currentAction =  Yii::$app->request->post('currentAction');
     	
-
     	if($op == 'deleteAllimg'){
     		
     		$query = Media::find();
@@ -123,7 +118,7 @@ class MediaController extends Controller
     					$arrImgPath[]=$path;
     				}
     			}
-    			Media::removeUploadDir($arrImgPath);
+    			Workflow::removeUploadDir($arrImgPath);
     			
     			if($type == Workflow::TYPE_CONTENT){
     				Media::deleteAll(['refId'=>$modelId,'type'=>$type]);
@@ -160,6 +155,7 @@ class MediaController extends Controller
     	return $this->redirect($currentAction);
     }
     private function doQuery() {
+    	var_dump(55);exit;
     	$items = array();
     	$id = Yii::$app->request->post('id');
     	$type = Yii::$app->request->post('type');
@@ -183,7 +179,7 @@ class MediaController extends Controller
     				$thumPath = '';
     				$fullPath = '';
     			}else{
-    				$thumPath = $arrThumb->{'250'};
+    				$thumPath = $arrThumb->{Workflow::SIZE_LIT};
     				$fullPath = $arrThumb->{'full'};
     			}
     			
@@ -202,7 +198,7 @@ class MediaController extends Controller
 	    			$thumPath = '';
 	    			$fullPath = '';
 	    		}else{
-	    			$thumPath = $arrThumb->{'250'};
+	    			$thumPath = $arrThumb->{Workflow::SIZE_LIT};
 	    			$fullPath = $arrThumb->{'full'};
 	    			
 	    		}
@@ -226,19 +222,14 @@ class MediaController extends Controller
     	}
     	return false;
     }
-    private function createThumbnail($imgUpPath, $fileName, $width = 250) {
+    private function createThumbnail($imgUpPath, $fileName, $width = Workflow::SIZE_LIT) {
     
-    	$this->CreateDir($imgUpPath,Media::UPLOAD_THUMBNAIL_FOLDER);
-    	$uploadPath = $imgUpPath.'/'.Media::UPLOAD_THUMBNAIL_FOLDER;
+    	$this->CreateDir($imgUpPath,Workflow::UPLOAD_THUMBNAIL_FOLDER);
+    	$uploadPath = $imgUpPath.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER;
     	$file = $imgUpPath .'/'. $fileName;
     
     	$name = $width.'_'.$fileName;
-    	
-    	//ลดขนาด 250 แก้ โหลดหลังบ้าน ช้า แต่ยังคง ชื่อ 250 ตามเดิม
-    	if($width==Workflow::SIZE_LIT){
-    		$width = 130;
-    	}
-
+    
     	$image = Yii::$app->image->load($file);
     	$image->resize ( $width );
     
@@ -254,7 +245,7 @@ class MediaController extends Controller
     }
    
     private function Uploads($param) {
-    
+
     	$images = $param['images'];
     	$modelId = $param['modelId'];
     	$type = $param['type'];
@@ -262,9 +253,8 @@ class MediaController extends Controller
     	$identity = \Yii::$app->user->getIdentity();
     	$dateCreate = date('Y-m-d H:i:s',time());
     	$date = date('Ym',strtotime($dateCreate));
-    	$imgUpPath = Media::getUploadPath('img');
-    	$imgUpUrl = Media::getUploadUrl('img');
-    	 
+    	$imgUpPath = Workflow::getUploadPath('img');
+    	$imgUpUrl = Workflow::getUploadUrl('img');
     	 
     	//สร้าง folder แยกตามวัน
     	$this->CreateDir($imgUpPath,$date);
@@ -283,25 +273,25 @@ class MediaController extends Controller
     		$fileName = $file->baseName . '.' . $file->extension;
     		$realFileName = md5($file->baseName . microtime()) . '.' . $file->extension;
     		$savePath = $imgUpPath.'/'.$realFileName;
-    
+
     		if ($file->saveAs($savePath)){
     
     			if($this->isImage($imgUpUrl.'/'.$realFileName)) {
-    
+
     				$this->createThumbnail($imgUpPath,$realFileName,Workflow::SIZE_LIT);
     				$this->createThumbnail($imgUpPath,$realFileName,Workflow::SIZE_MID);
     			}
     			$arrThumb = [
-    			Workflow::SIZE_LIT=>$imgUpUrl.'/'.Media::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_LIT.'_'.$realFileName,
-    			Workflow::SIZE_MID=>$imgUpUrl.'/'.Media::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_MID.'_'.$realFileName,
+    			Workflow::SIZE_LIT=>$imgUpUrl.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_LIT.'_'.$realFileName,
+    			Workflow::SIZE_MID=>$imgUpUrl.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_MID.'_'.$realFileName,
     			Workflow::SIZE_FULL=>$imgUpUrl.'/'.$realFileName,
     			];
     			$jsonThumb = json_encode($arrThumb);
     			 
     			$arrSrcPath = [
     			'origin'=>$imgUpPath.'/'.$realFileName,
-    			Workflow::SIZE_LIT=>$imgUpPath.'/'.Media::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_LIT.'_'.$realFileName,
-    			Workflow::SIZE_MID=>$imgUpPath.'/'.Media::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_MID.'_'.$realFileName,
+    			Workflow::SIZE_LIT=>$imgUpPath.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_LIT.'_'.$realFileName,
+    			Workflow::SIZE_MID=>$imgUpPath.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_MID.'_'.$realFileName,
     			];
     			$jsonSrcPath = json_encode($arrSrcPath);
 
@@ -445,6 +435,9 @@ class MediaController extends Controller
     	}
     	//var_dump($tmpp);
 		
+	}
+	public function actionTest(){
+		echo \Yii::getAlias('@web');
 	}
 	
 }

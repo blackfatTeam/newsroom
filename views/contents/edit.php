@@ -116,7 +116,7 @@ $this->params['breadcrumbs'][] = ['label' => $contents->title];
 
 <?php echo TinyMCE::widget()?>
 
-<?php $currentAction = !empty($contents->id)?'contents/edit?id='.$contents->id:'contents/edit'?>
+<?php $currentAction = !empty($contents->id)?'contents/edit?id='.$contents->id:'contents/edit';?>
 <?= Uploadfile::widget([
 		'currentAction'=>Url::toRoute($currentAction),
 		'model'=>$contents,

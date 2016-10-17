@@ -16,10 +16,26 @@ use yii\data\Pagination;
 
 use app\models\Log;
 use yii\web\Controller;
-//use common\models\Tags;
+use yii\filters\AccessControl;
+use app\models\Tags;
 
 class ContentsController extends Controller
 {
+	public function behaviors()
+	{
+		return [
+				'access' => [
+						'class' => AccessControl::className(),
+						'rules' => [
+								[
+										'allow' => true,
+										'roles' => ['@'],
+								],
+						],
+				],
+				 
+		];
+	}
 	public function actionTagapi() {
 		$request = Yii::$app->request;
 		
@@ -97,7 +113,7 @@ class ContentsController extends Controller
     			if(empty($qtag)){
     				$ntag = new Tags();
     				$ntag->value = $v;
-    				$ntag->createBy = '';//$identity->id;
+    				$ntag->createBy = $identity->id;
     				$ntag->createTime = date('Y-m-d H:i:s',time());
     				$ntag->save();
     			}
@@ -108,13 +124,13 @@ class ContentsController extends Controller
     		$action = '';
     		if(empty($contents->id)){
     			$action= Workflow::ACTION_CREATE;
-    			$contents->createBy = '';//$identity->id;
+    			$contents->createBy = $identity->id;
     			$contents->createTime = date('Y-m-d H:i:s',time());
-    			$contents->lastUpdateBy = '';//$identity->id;
+    			$contents->lastUpdateBy = $identity->id;
     			$contents->lastUpdateTime = date('Y-m-d H:i:s',time());
     		}else{
     			$action= Workflow::ACTION_UPDATE;
-    			$contents->lastUpdateBy = '';//$identity->id;
+    			$contents->lastUpdateBy = $identity->id;
     			$contents->lastUpdateTime = date('Y-m-d H:i:s',time());
     		}
     		$contents->setAttributes($reqstContents, false);
@@ -170,15 +186,15 @@ class ContentsController extends Controller
 	    		$log->action = $action;
 	    		$log->type = Workflow::TYPE_CONTENT;
 	    		$log->modelId = $contents->id;
-	    		$log->userId = '';//$identity->id;
-	    		$log->createBy = '';//$identity->id;
+	    		$log->userId = $identity->id;
+	    		$log->createBy = $identity->id;
 	    		$log->createTime = date('Y-m-d H:i:s',time());
 	    		$log->description = json_encode([
 					'id'=>$contents->id,
 	    			'title'=>$contents->title,
 	    			'table'=>'contents',
-	    			'username'=>'',//$identity->username,
-	    			"fullname"=>'',//$identity->firstName.' '.$identity->lastName,
+	    			'username'=>$identity->username,
+	    			"fullname"=>$identity->firstName.' '.$identity->lastName,
 	    		]);
 	    		$log->save();
     		
@@ -215,8 +231,8 @@ class ContentsController extends Controller
 			    		$log->action = Workflow::ACTION_DELETE;
 			    		$log->type = Workflow::TYPE_CONTENT;
 			    		$log->modelId = $id;
-			    		$log->userId = '';//$identity->id;
-			    		$log->createBy = '';//$identity->id;
+			    		$log->userId = $identity->id;
+			    		$log->createBy = $identity->id;
 			    		$log->createTime = date('Y-m-d H:i:s',time());
 			    		$log->description = json_encode([
 							'id'=>$id,

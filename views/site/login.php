@@ -1,5 +1,4 @@
 <?php 
-use yii\helpers\Html;
 use yii\bootstrap\ActiveForm ;
 $baseUri = Yii::getAlias('@web');
 $baseUriCss = $baseUri.'/assets/metronic';
