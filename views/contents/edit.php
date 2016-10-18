@@ -87,7 +87,10 @@ $this->params['breadcrumbs'][] = ['label' => $contents->title];
 					</div>
 					
 					<div class="tab-pane" id="portlet_relate">
-						<?= yii\base\View::render('relatecontent'); ?>
+						<?= yii\base\View::render('relatecontent', [
+								'contents' => $contents,
+								'relateData' => $relateData
+						]); ?>
 					</div>
 					<div class="tab-pane" id="portlet_tab3">
 						<?= yii\base\View::render('confbar',[

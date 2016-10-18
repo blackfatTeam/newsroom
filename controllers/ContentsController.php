@@ -98,7 +98,22 @@ class ContentsController extends Controller
     	}	   	
     	 
     	//relateContent
-    	$relateData = RelateContent::find()->where(['contentId'=>$id])->all();
+    	$queryRelate = RelateContent::find()->where(['contentId'=>$id])->all();
+    	$relateData = [];
+    	if(!empty($queryRelate)){
+    		foreach ($queryRelate as $lst){
+    			$query = Contents::find()->where(['id'=>$lst->relateId])->one();
+    			
+    			$relateData[] = [
+    					'contentId' => $lst->contentId,
+    					'relateId' => $lst->relateId,
+    					'title' => $query->title?$query->title:'',
+    					'orderNo' => $lst->orderNo,
+    					'lastUpdateTime' => $lst->lastUpdateTime,
+    			];
+    		}
+    	}
+    	
     	if(\Yii::$app->request->post()){
 
     		$reqstContents = Yii::$app->request->post('Contents');
@@ -356,6 +371,38 @@ class ContentsController extends Controller
 			];
 		}
 
+		header('Content-Type: application/json');
+		echo json_encode($result);
+	}
+	
+	public function actionSaverelate(){
+		$request = Yii::$app->request;
+		$id = $request->post('id');
+		$arrId = $request->post('arrId');
+		$identity = \Yii::$app->user->getIdentity();
+		Relatecontent::deleteAll(['contentId'=>$id]);
+	
+		$count = count($arrId);
+		$result = 'บันทึกไม่สำเร็จ';
+		if (!empty($arrId) && !empty($id)){
+			$i = 1;
+			foreach ($arrId as $relateId){
+				$model = new Relatecontent();
+				$model->contentId = $id;
+				$model->relateId = $relateId;
+				$model->orderNo = $i;
+				$model->lastUpdateTime = date('Y-m-d H:i:s');
+				$model->lastUpdateBy = $identity->id;
+				if ($model->save()){
+					if($count == $i){
+						$result = 'บันทึกสำเร็จแล้ว';
+					}
+					$i++;
+					
+					
+				}
+			}
+		}
 		header('Content-Type: application/json');
 		echo json_encode($result);
 	}
