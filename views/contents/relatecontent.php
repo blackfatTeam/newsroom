@@ -15,15 +15,31 @@ $( "tbody" ).sortable({
 		dropItem = $(ui.item[0]);	
 		dropUi = ui;
 		var tb = dropItem.parent('tbody');
-		debugger;
-		var cloneTr = $('#cloneTrSelect').clone();
+
 		$.post('$url', {
 				id: dropItem.attr('data-id')
 		}).done(function(data) {
+			if(typeof data == "string"){
+				var data = $.parseJSON(data);
+			}
+		
+			var cloneTr = $('#cloneTrSelect').clone();
+			var dropHtml = dropData(data, cloneTr);
+			debugger;
+			dropItem.after(dropHtml);	
+			dropItem.remove();	
 			debugger;
 		});
     }	
 });
+
+function dropData(data, cloneTr){
+	var cloneHtml = $(cloneTr).html();
+	cloneHtml = cloneHtml.replace('{id}', data.id);
+	cloneHtml = cloneHtml.replace('{title}', data.title);
+	return '<tr data-object="content" data-id="'+ data.id +'">'+ cloneHtml + '</tr>';
+	debugger;
+}
 EOT;
 
 $this->registerJs($str);
