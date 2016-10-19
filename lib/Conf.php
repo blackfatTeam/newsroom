@@ -19,6 +19,21 @@ class Conf {
 
 					]
 			],
+			[
+				'title' => 'Online',
+				'icon' => 'fa fa-globe',
+				'uri' => 'contents/list',
+				'group' => [
+						'contents/list',
+						'contents/edit'
+				],
+				'sub'=>[],
+				'authen'=>[
+				
+				]
+			],
 			
 	];
+	
+
 }
