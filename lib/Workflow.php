@@ -19,6 +19,7 @@ class Workflow {
 	const TYPE_BANNER = 5;
 	const TYPE_FEATURED = 6;	
 	const TYPE_STATIC = 7;
+	const TYPE_GALLARY = 8;
 	
 	const STATIC_TYPE_MAGAZINE = 1;
 	const STATIC_TYPE_LETTER = 2;

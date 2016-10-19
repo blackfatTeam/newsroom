@@ -2,7 +2,7 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Contents;
+use app\models\Gallary;
 
 use app\models\Media;
 
@@ -21,7 +21,7 @@ use yii\web\Controller;
 use yii\filters\AccessControl;
 use app\models\Tags;
 
-class ContentsController extends Controller
+class GallaryController extends Controller
 {
 	public function behaviors()
 	{
@@ -60,29 +60,8 @@ class ContentsController extends Controller
 		header('Content-Type: application/json');
 		return json_encode($result);
 	}
-	public function actionInstagramapi(){
-		$json = file_get_contents('http://api.instagram.com/oembed?url='.$_REQUEST['objectName']);
-
-		if($json){
-			header('Content-Type: application/json');
-			echo $json;
-		}else{
-			return false;
-		}
-	}
-	public function actionTwitterapi(){
-		$json = file_get_contents('https://api.twitter.com/1/statuses/oembed.json?url='.$_REQUEST['objectName']);
-
-		if($json){
-			header('Content-Type: application/json');
-			echo $json;
-		}else{
-			return false;
-		}
-	}
-
     public function actionEdit(){
-    	$type = Workflow::TYPE_CONTENT;
+    	$type = Workflow::TYPE_GALLARY;
     	$error=[];
     	//request
     	$id = Yii::$app->request->post('id');
@@ -91,9 +70,9 @@ class ContentsController extends Controller
 		}
 		$identity = \Yii::$app->user->getIdentity();
 	   	//query
-    	$contents = Contents::find()->where(['id'=>$id])->one();
+    	$contents = Gallary::find()->where(['id'=>$id])->one();
     	if(empty($contents)){
-    		$contents = new Contents();	
+    		$contents = new Gallary();	
 
     	}	   	
     	 
@@ -102,7 +81,7 @@ class ContentsController extends Controller
     	$relateData = [];
     	if(!empty($queryRelate)){
     		foreach ($queryRelate as $lst){
-    			$query = Contents::find()->where(['id'=>$lst->relateId])->one();
+    			$query = Gallary::find()->where(['id'=>$lst->relateId])->one();
     			
     			$relateData[] = [
     					'contentId' => $lst->contentId,
@@ -116,7 +95,7 @@ class ContentsController extends Controller
     	
     	if(\Yii::$app->request->post()){
 
-    		$reqstContents = Yii::$app->request->post('Contents');
+    		$reqstContents = Yii::$app->request->post('Gallary');
     		$publicDate = Yii::$app->request->post('publishDate');
     		$publicTime = Yii::$app->request->post('publishTime');
 
@@ -178,7 +157,6 @@ class ContentsController extends Controller
     		}
     		$contents->postTitle = mb_substr($strTmp, 0,299,'UTF-8');
     		
-    		
     		if($contents->save()){
 	    		
 	    		//set flag show in content
@@ -207,7 +185,7 @@ class ContentsController extends Controller
 	    		//log
 	    		$log = new Log();
 	    		$log->action = $action;
-	    		$log->type = Workflow::TYPE_CONTENT;
+	    		$log->type = Workflow::TYPE_GALLARY;
 	    		$log->modelId = $contents->id;
 	    		$log->userId = $identity->id;
 	    		$log->createBy = $identity->id;
@@ -244,16 +222,16 @@ class ContentsController extends Controller
     		$op = Yii::$app->request->post('op');
     		$selectContent =  Yii::$app->request->post('selectContent');
     		if($op == 'delete'){
-    			$contentsDelete = Contents::find()->where(['in','id',$selectContent])->all();
+    			$contentsDelete = Gallary::find()->where(['in','id',$selectContent])->all();
     			
-    			$r = $this->doDelete($selectContent,Workflow::TYPE_CONTENT);
+    			$r = $this->doDelete($selectContent,Workflow::TYPE_GALLARY);
     			if($r){
 	    			$detail = ArrayHelper::map($contentsDelete, 'id', 'title');
     				//log
     				foreach ($detail as $id=>$item){
     					$log = new Log();
 			    		$log->action = Workflow::ACTION_DELETE;
-			    		$log->type = Workflow::TYPE_CONTENT;
+			    		$log->type = Workflow::TYPE_GALLARY;
 			    		$log->modelId = $id;
 			    		$log->userId = $identity->id;
 			    		$log->createBy = $identity->id;
@@ -280,7 +258,7 @@ class ContentsController extends Controller
     			$status =  Yii::$app->request->post('status');
     			$publishTime =  Yii::$app->request->post('publishTime');
 
-    			$query = Contents::find();
+    			$query = Gallary::find();
     			if($title!=null){
     				$query->andWhere(['like','title',$title]); 
     			}
@@ -291,25 +269,25 @@ class ContentsController extends Controller
     				$query->andWhere(['like','publishTime',$publishTime]);    
     			}    			
 
-    			\Yii::$app->session['contents/list.query'] = $query;
-    			\Yii::$app->session['contents/list.query.title'] = $title;
-    			\Yii::$app->session['contents/list.query.status'] = $status;
-    			\Yii::$app->session['contents/list.query.publishTime'] = $publishTime;
+    			\Yii::$app->session['gallary/list.query'] = $query;
+    			\Yii::$app->session['gallary/list.query.title'] = $title;
+    			\Yii::$app->session['gallary/list.query.status'] = $status;
+    			\Yii::$app->session['gallary/list.query.publishTime'] = $publishTime;
 
     			
     		}else if($op == 'resetSearch'){
-    			$query = Contents::find();
-    			\Yii::$app->session['contents/list.query'] = $query;
-    			\Yii::$app->session['contents/list.query.title'] = '';
-    			\Yii::$app->session['contents/list.query.status'] = '';
-    			\Yii::$app->session['contents/list.query.publishTime'] = '';
+    			$query = Gallary::find();
+    			\Yii::$app->session['gallary/list.query'] = $query;
+    			\Yii::$app->session['gallary/list.query.title'] = '';
+    			\Yii::$app->session['gallary/list.query.status'] = '';
+    			\Yii::$app->session['gallary/list.query.publishTime'] = '';
     		}
     	}
     	
-    	$query = isset(\Yii::$app->session['contents/list.query'])?\Yii::$app->session['contents/list.query']:Contents::find();
-    	$search['title'] = isset(\Yii::$app->session['contents/list.query.title'])?\Yii::$app->session['contents/list.query.title']:'';
-    	$search['status'] = isset(\Yii::$app->session['contents/list.query.status'])?\Yii::$app->session['contents/list.query.status']:'';
-    	$search['publishTime'] = isset(\Yii::$app->session['contents/list.query.publishTime'])?\Yii::$app->session['contents/list.query.publishTime']:'';
+    	$query = isset(\Yii::$app->session['gallary/list.query'])?\Yii::$app->session['gallary/list.query']:Gallary::find();
+    	$search['title'] = isset(\Yii::$app->session['gallary/list.query.title'])?\Yii::$app->session['gallary/list.query.title']:'';
+    	$search['status'] = isset(\Yii::$app->session['gallary/list.query.status'])?\Yii::$app->session['gallary/list.query.status']:'';
+    	$search['publishTime'] = isset(\Yii::$app->session['gallary/list.query.publishTime'])?\Yii::$app->session['gallary/list.query.publishTime']:'';
     	
     	$query->orderBy('id DESC');
     	$count = $query->count();
@@ -328,7 +306,7 @@ class ContentsController extends Controller
     	$contentList = [];
     	foreach($models as $model){
   		
-    		$amountImage = Media::find()->where(['refId'=>$model->id,'type'=>Workflow::TYPE_CONTENT])->count();
+    		$amountImage = Media::find()->where(['refId'=>$model->id,'type'=>Workflow::TYPE_GALLARY])->count();
     		$contentList[]=$model->getAttributes()
     		+['amountImage'=>$amountImage];
     	}
@@ -366,7 +344,7 @@ class ContentsController extends Controller
 		$request = Yii::$app->request;
 		$id = $request->post('id');
 		
-		$query = Contents::find()->where(['id'=>$id])->one();
+		$query = Gallary::find()->where(['id'=>$id])->one();
 		$result = [];
 		if (!empty($query)){
 			$result = [
@@ -409,21 +387,5 @@ class ContentsController extends Controller
 		}
 		header('Content-Type: application/json');
 		echo json_encode($result);
-	}
-	public function actionTest(){
-		$originModel = Media::findOne(13);
-		$watermarkModel = Media::findOne(14);
-	
-		$path = json_decode($originModel->srcPath);
-		$file = $path->{'origin'};
-		$origin = Yii::$app->image->load($file);
-	
-		$path = json_decode($watermarkModel->srcPath);
-		$file = $path->{'origin'};
-		$watermark = Yii::$app->image->load($file);
-	
-		$origin->watermark($watermark, NULL, NULL, 20);
-	
-		$origin->save( Workflow::getUploadPath('img'). '/test.png');
 	}
 }

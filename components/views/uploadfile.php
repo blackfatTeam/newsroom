@@ -174,11 +174,57 @@ $this->registerCss($css);
 							<img src="" class="img-responsive col-md-12 modal-image-preview" alt="">
 						</div>
 					</div>		
+					<div class="row">
+						<div class="col-md-12">
+							<form class="form-horizontal" role="form">
+								<div class="form-body">
+									<div class="form-group">
+										<label class="col-md-3 control-label">Caption</label>
+										<div class="col-md-9">
+											<textarea class="form-control" rows="3"></textarea>
+										</div>
+									</div>
+									<div class="form-group">
+										<label  class="col-md-3 control-label">Thumbnail</label>
+										<div class="col-md-9">
+											<div class="checkbox-list">
+												<label class="checkbox-inline">
+												<input type="checkbox" value="option1">
+												</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label  class="col-md-3 control-label">ลายน้ำ</label>
+										<div class="col-md-9">
+											<div class="radio-list">
+												<label class="radio-inline">
+												<input type="radio" name="optionsRadios" id="optionsRadios25" value="option1" checked> ไม่มี
+												</label>
+												<label class="radio-inline">
+												<input type="radio" name="optionsRadios" id="optionsRadios26" value="option2" > แบบที่ 1
+												</label>
+												<label class="radio-inline">
+												<input type="radio" name="optionsRadios" id="optionsRadios27" value="option3" > แบบที่ 2
+												</label>  
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-actions fluid">
+									<div class="col-md-offset-3 col-md-9">
+										<button type="button" class="btn default" data-dismiss="modal" aria-hidden="true">Cancel</button> 
+										<button type="button" class="btn green" data-dismiss="modal" aria-hidden="true">Save</button>										                             
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
 						
-				</div>
+				</div><!-- 
 				<div class="modal-footer">
 					<a href="javascript:;" class="btn dark btn-block btn-lg setConfigImage" data-action="set"><i class="fa fa-picture-o"></i> Thumbnail</a>
-				</div>
+				</div> -->
 			</div>
 			<!-- /.modal-content -->
 		</div>
