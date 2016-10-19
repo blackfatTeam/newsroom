@@ -7,10 +7,10 @@ use app\models\Contents;
 use app\models\Media;
 
 class OnlineController extends Controller{
-    public function actionIndex()
+    public function actionView()
     {
     
-    	return $this->render('index');
+    	return $this->render('view');
     }
     
     public function actionEdit()

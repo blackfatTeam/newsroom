@@ -22,9 +22,9 @@ class Conf {
 			[
 				'title' => 'Online',
 				'icon' => 'fa fa-globe',
-				'uri' => 'online/index',
+				'uri' => 'online/view',
 				'group' => [
-						'online/index',
+						'online/view',
 						'online/edit'
 				],
 				'sub'=>[],
