@@ -85,7 +85,7 @@ class Workflow {
 
 	public static $arrStatusIcon = array(
 			self::STATUS_REJECTED => 'disable_icon.png',
-			self::STATUS_DRAFT=>'abc.png',
+			self::STATUS_DRAFT=>'edit_icon.png',
 			self::STATUS_PUBLISHED=>'enable_icon.png',
 	);
 

@@ -22,10 +22,10 @@ class Conf {
 			[
 				'title' => 'Online',
 				'icon' => 'fa fa-globe',
-				'uri' => 'contents/list',
+				'uri' => 'online/index',
 				'group' => [
-						'contents/list',
-						'contents/edit'
+						'online/index',
+						'online/edit'
 				],
 				'sub'=>[],
 				'authen'=>[

@@ -12,4 +12,10 @@ class OnlineController extends Controller{
     
     	return $this->render('index');
     }
+    
+    public function actionEdit()
+    {
+    
+    	return $this->render('edit');
+    }
 }

@@ -1,3 +1,7 @@
+<?php 
+$baseUri = Yii::getAlias('@web');
+use app\lib\Workflow;
+?>
 <style>
 #cloneTrData{
 	display: none;
@@ -27,8 +31,8 @@
 							<?php foreach ($contentList as $lst):?>
 							<tr data-object="content" data-id="<?php echo $lst->id?>">
 								<td><?php echo $lst->id;?>. <?php echo $lst->title?$lst->title:''?></td>
-								<td class="text-right">
-									<?php echo date('Y-m-d | H:i', strtotime($lst->publishTime))?> published
+								<td width="200" class="text-right">
+									<?php echo date('Y-m-d | H:i', strtotime($lst->publishTime))?> <img src="<?php echo $baseUri?>/assets/img/<?php echo Workflow::$arrStatusIcon[$lst->status]?>">
 								</td>
 							</tr>
 							<?php endforeach;?>
