@@ -7,6 +7,7 @@ use app\lib\Conf;
 use yii\helpers\Url;
 use app\Auth;
 use app\Workflow;
+use app\OnlineConfig;
 
 class Sidebar extends Widget {
 	public function run() {

@@ -4,8 +4,16 @@ namespace app\lib;
 
 use \Yii;
 use app\Auth;
+use app\lib\Workflow;
 
 class OnlineConfig {
+	
+	public static $arrOnline = [
+		[
+			'title' => 'กรุงเทพ',
+			'uri' => 'online/list',
+		],
+	];
 	public static $arrSection = [
 			[
 					'section' => 'editorPick',

@@ -4,6 +4,7 @@ namespace app\lib;
 
 use \Yii;
 use app\Auth;
+
 class Conf {
 	public static $arrMenu = [ 
 			[ 
@@ -14,7 +15,7 @@ class Conf {
 							'contents/list',
 							'contents/edit' 
 					],
-					'sub'=>[],
+					'sub'=> [],
 					'authen'=>[
 
 					]
@@ -27,7 +28,20 @@ class Conf {
 						'online/view',
 						'online/edit'
 				],
-				'sub'=>[],
+				'sub'=> [
+							[
+								'title' => 'กรุงเทพ',
+								'uri' => 'online/view',
+							],
+							[
+								'title' => 'กาญจนบุรี',
+								'uri' => 'online/view',
+							],
+							[
+								'title' => 'นครราชสีมา',
+								'uri' => 'online/view',
+							],
+						],
 				'authen'=>[
 				
 				]
