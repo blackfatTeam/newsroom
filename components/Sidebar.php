@@ -8,6 +8,7 @@ use yii\helpers\Url;
 use app\Auth;
 use app\Workflow;
 use app\OnlineConfig;
+use app\controllers\ConfigController;
 
 class Sidebar extends Widget {
 	public function run() {
@@ -16,7 +17,7 @@ class Sidebar extends Widget {
 		$arrMenu = [];
 		
 		//default
-		foreach (Conf::$arrMenu as $menu){
+		foreach (ConfigController::getConfig() as $menu){
 			$can = false;
 			$can = true;
 			foreach($menu['authen'] as $authen){

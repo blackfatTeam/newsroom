@@ -155,7 +155,6 @@ class MediaController extends Controller
     	return $this->redirect($currentAction);
     }
     private function doQuery() {
-    	var_dump(55);exit;
     	$items = array();
     	$id = Yii::$app->request->post('id');
     	$type = Yii::$app->request->post('type');

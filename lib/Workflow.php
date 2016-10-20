@@ -56,7 +56,7 @@ class Workflow {
 	
 	const INSTAGRAM_CATEGORYID = 1000;
 	const POST_URL = "www.hisoparty.com/content/";
-	const POST_URL_UNCATE = "www.hisoparty.com/special/";
+	const POST_URL_UNCATE = "www.your-url.com/";
 	
 	const ACTION_CREATE = 'create';
 	const ACTION_UPDATE = 'update';
