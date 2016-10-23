@@ -50,7 +50,7 @@ class ConfigController extends Controller
     							[
     									'title'=>'กรุงเทพ',
     									'icon'=>'',
-    									'uri'=> Url::toRoute(["online/view"]),
+    									'uri'=> Url::toRoute(["online/view", 'web' => 'bkk']),
     									'group'=> [
     											Url::toRoute(["online/view"]),
     									],

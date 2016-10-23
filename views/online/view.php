@@ -5,7 +5,7 @@ $baseUri = Yii::getAlias('@web');
 ?>
 <div class="portlet box grey">
 	<div class="portlet-title">
-		<div class="caption"><i class="fa fa-reorder"></i> Online</div>
+		<div class="caption"><i class="fa fa-reorder"></i> จัดการข่าวในหน้า <?php echo $web?> </div>
 		<div class="tools">
 			<a href="javascript:;" class="collapse"></a>
 		</div>
@@ -19,7 +19,7 @@ $baseUri = Yii::getAlias('@web');
 					<div class="portlet-title">
 						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (3 of 6)</div>
 						<div class="actions">
-							<a href="<?= Url::toRoute(['online/edit', 'section' => $lst['section']])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
+							<a href="<?= Url::toRoute(['online/edit', 'section' => $lst['section'], 'web' => $web])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
 						</div>
 					</div>
 					<div class="portlet-body">

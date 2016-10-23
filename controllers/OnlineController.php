@@ -9,8 +9,11 @@ use app\models\Media;
 class OnlineController extends Controller{
     public function actionView()
     {
-    
-    	return $this->render('view');
+    	$web = Yii::$app->request->get('web');
+    	
+    	return $this->render('view', [
+    			'web' => $web
+    	]);
     }
     
     public function actionEdit()
