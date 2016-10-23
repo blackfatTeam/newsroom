@@ -105,7 +105,7 @@ table > thead > tr{
 	<!-- BEGIN FOOTER -->
 	<div class="footer">
 		<div class="footer-inner">
-			2016 &copy; Hisoparty.com by imake-web
+			2016 &copy; CMS by imake-web
 		</div>
 		<div class="footer-tools">
 			<span class="go-top">

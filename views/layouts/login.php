@@ -45,7 +45,7 @@ $baseUriCss = $baseUri.'/assets/metronic';
 	<?= $content?>
 
 	<div class="copyright">
-		2016 &copy; Hisoparty.com by imake-web
+		2016 &copy; CMS by imake-web
 	</div>
 	<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 	<!-- BEGIN CORE PLUGINS -->   
