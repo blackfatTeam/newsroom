@@ -390,19 +390,58 @@ class ContentsController extends Controller
 	
 	public function actionGetitem(){
 		$request = Yii::$app->request;
-		$id = $request->post('id');
 		
+		$baseUri = Yii::getAlias('@web');
+		$id = $request->post('id');
+		if(empty($id)){
+			$id = $request->get('id');
+		}
 		$query = Contents::find()->where(['id'=>$id])->one();
 		$result = [];
-		if (!empty($query)){
+		if(!empty($query)){
+			
+			if(!empty($query->thumbnail)){
+				$img = $this->getThumbnail($query->thumbnail);
+			}else{
+				$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive">';
+			}
+			
 			$result = [
 					'id' => $query->id,
 					'title' => $query->title,
+					'img' => $img
 			];
 		}
 
 		header('Content-Type: application/json');
 		echo json_encode($result);
+	}
+	
+	public function getThumbnail($thumbnailId){
+		$baseUri = Yii::getAlias('@web');
+		$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive">';
+		
+		if (!empty($thumbnailId)){
+			$query = Media::find();
+			$query->andWhere('id = :id', [':id' => $thumbnailId]);
+			$result = $query->one();
+			
+			if (!empty($result->thumbPath)){
+				$arrThumb = json_decode($result->thumbPath);
+				if($arrThumb == null){
+					$thumPath = '';
+					$fullPath = '';
+				}else{
+					$thumPath = $arrThumb->{Workflow::SIZE_LIT};
+					$fullPath = $arrThumb->{'full'};
+				}
+				
+				
+				$img = '<img src="'.$thumPath.'" class="img-responsive" width="80">';
+			}
+		}
+		
+		return $img;
 	}
 	
 	public function actionSaverelate(){

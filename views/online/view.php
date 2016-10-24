@@ -14,12 +14,12 @@ $baseUri = Yii::getAlias('@web');
 		<div class="row">
 			<?php $arrSection = array_splice(OnlineConfig::$arrSection, 0,2);?>
 			<div class="col-md-4">
-				<?php foreach ($arrSection as $lst):?>
+				<?php foreach ($arrSection as $key => $lst):?>
 				<div class="portlet box grey">
 					<div class="portlet-title">
 						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (3 of 6)</div>
 						<div class="actions">
-							<a href="<?= Url::toRoute(['online/edit', 'section' => $lst['section'], 'web' => $web])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
+							<a href="<?= Url::toRoute(['online/edit', 'section' => $key, 'web' => $web])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
 						</div>
 					</div>
 					<div class="portlet-body">
