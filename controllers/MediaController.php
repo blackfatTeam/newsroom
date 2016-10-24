@@ -11,6 +11,7 @@ use yii\web\UploadedFile;
 use app\models\Categories;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
+use app\models\Gallary;
 
 
 class MediaController extends Controller
@@ -29,10 +30,8 @@ class MediaController extends Controller
     	 
     	if($type == Workflow::TYPE_CONTENT){
     		$model = Contents::find()->where(['id'=>$modelId])->one();
-    	}elseif($type == workflow::TYPE_BANNER){
-    		$model = Banner::find()->where(['id'=>$modelId])->one();
-    	}elseif($type == workflow::TYPE_STATIC){
-    		$model = Staticpage::find()->where(['id'=>$modelId])->one();
+    	}elseif($type == workflow::TYPE_GALLARY){
+    		$model = Gallary::find()->where(['id'=>$modelId])->one();
     	}
     	
     	if(!empty($model)){
@@ -75,13 +74,6 @@ class MediaController extends Controller
 		    		$content->save();
 		    	}
     		}
-    		if($type == Workflow::TYPE_BANNER){
-    			$arrBanner = Banner::find()->where(['thumbnail'=>$id])->all();
-    			foreach($arrBanner as $banner){
-    				$banner->thumbnail = null;
-    				$banner->save();
-    			}
-    		}
     		echo json_encode ( [
     			'success' => true
     		] );
@@ -103,10 +95,8 @@ class MediaController extends Controller
     	if($op == 'deleteAllimg'){
     		
     		$query = Media::find();
-    		if($type == Workflow::TYPE_CONTENT||$type==Workflow::TYPE_BANNER||$type==Workflow::TYPE_FEATURED){
+    		if($type == Workflow::TYPE_CONTENT||$type==Workflow::TYPE_GALLARY){
     			$query->where(['refId'=>$modelId,'type'=>$type]);
-    		}elseif($type == Workflow::TYPE_BACKGROUND_SECTION||$type == Workflow::TYPE_BACKGROUND_PAGE){
-    			$query->where(['type'=>$type]);
     		}
     		$media = $query->all();
 
@@ -128,25 +118,15 @@ class MediaController extends Controller
     					$contents->save();
     				}    				
     				
-    			}elseif($type == Workflow::TYPE_BANNER){
+    			}elseif($type == Workflow::TYPE_GALLARY){
     				Media::deleteAll(['refId'=>$modelId,'type'=>$type]);
-    				$banner = Banner::find()->where(['id'=>$modelId])->one();
-    				if($banner){
-    					$banner->thumbnail = null;
-    					$banner->save();
+    				$gallary = Gallary::find()->where(['id'=>$modelId])->one();
+    				if($gallary){
+    					$gallary->thumbnail = null;
+    					$gallary->save();
     				}    				
     				
-    			}elseif($type == Workflow::TYPE_BACKGROUND_SECTION || $type == Workflow::TYPE_BACKGROUND_PAGE){
-	    			Media::deleteAll(['type'=>$type]);
-	    			$backGroundSection = Background::find()->all();
-	    			foreach ($backGroundSection as $bg){
-	    				$bg->mediaId = null;
-	    				$bg->save();
-	    			}
-	    			
-	    		}elseif($type == Workflow::TYPE_FEATURED){
-	    			Media::deleteAll(['refId'=>$modelId,'type'=>$type]);
-	    		}
+    			}
 	    		
     			Yii::$app->session->setFlash('message.content', 'ลบสำเร็จ');
     		}
@@ -166,46 +146,23 @@ class MediaController extends Controller
     	$query->andWhere(['type'=>$type]);
     	$models=$query->all();
     	
-    	if($type==Workflow::TYPE_CONTENT&&$id==null||$type==Workflow::TYPE_BANNER&&$id==null){
+    	if($type==Workflow::TYPE_CONTENT&&$id==null){
     		$models = null;
     	}
-
-    	if($type == Workflow::TYPE_BACKGROUND_SECTION){
-    		$section = ArrayHelper::map(Categories::find()->all(), 'id', 'title');
-    		foreach ($models as $model){
-    			$arrThumb = json_decode($model->thumbPath);
-    			if($arrThumb == null){
-    				$thumPath = '';
-    				$fullPath = '';
-    			}else{
-    				$thumPath = $arrThumb->{Workflow::SIZE_LIT};
-    				$fullPath = $arrThumb->{'full'};
-    			}
+    	foreach ($models as $model){
+    		$arrThumb = json_decode($model->thumbPath);
+    		if($arrThumb == null){
+    			$thumPath = '';
+    			$fullPath = '';
+    		}else{
+    			$thumPath = $arrThumb->{Workflow::SIZE_LIT};
+    			$fullPath = $arrThumb->{'full'};
     			
-    			$query = Background::find();
-    			$query->andWhere(['mediaId'=>$model->id]);
-    			$inSection = [];
-    			foreach ($query->all() as $bg){
-    				$inSection[] = isset($section[$bg->section])?$section[$bg->section]:'';
-    			}
-    			$items[] = ['id'=>$model->id,'title'=>$model->fileName, 'thumbPath' => $thumPath,'fullPath'=>$fullPath, 'section'=>implode(',', $inSection)];
     		}
-    	}else{
-	    	foreach ($models as $model){
-	    		$arrThumb = json_decode($model->thumbPath);
-	    		if($arrThumb == null){
-	    			$thumPath = '';
-	    			$fullPath = '';
-	    		}else{
-	    			$thumPath = $arrThumb->{Workflow::SIZE_LIT};
-	    			$fullPath = $arrThumb->{'full'};
-	    			
-	    		}
-	    		
-	    		$items[] = ['id'=>$model->id,'title'=>$model->fileName, 'thumbPath' => $thumPath,'fullPath'=>$fullPath];
-	    	}
+    		
+    		$items[] = ['id'=>$model->id,'title'=>$model->fileName, 'thumbPath' => $thumPath,'fullPath'=>$fullPath];
     	}
-    	
+
     	header('Content-Type: application/json');
     	echo json_encode($items);
     }
@@ -316,13 +273,13 @@ class MediaController extends Controller
 	    						$contentModel->save();
 	    					}
 	    				}
-    				}elseif($type == Workflow::TYPE_BANNER){
-    					//set thumbnail ตั้งต้นให้กับ banner
-    					$banner = Banner::find()->where(['id'=>$modelId])->one();
-    					if($banner!=null){
-    						if($banner->thumbnail==null){
-    							$banner->thumbnail = $model->id;
-    							$banner->save();
+    				}elseif($type == Workflow::TYPE_GALLARY){
+    					//set thumbnail ตั้งต้นให้กับ gallary
+    					$gallary = Gallary::find()->where(['id'=>$modelId])->one();
+    					if($gallary!=null){
+    						if($gallary->thumbnail==null){
+    							$gallary->thumbnail = $model->id;
+    							$gallary->save();
     						}
     					}
     				}

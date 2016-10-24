@@ -23,7 +23,7 @@ $( document ).ready(function() {
 		return false;
 	});
 	$('.imageThumb').on('click',function(){
-		
+		debugger;
 		imgPath = $(this).attr('src');
 		id = $(this).attr('data-id');
 		isthumb = $(this).attr('data-isthumb');

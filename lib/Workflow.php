@@ -151,7 +151,7 @@ class Workflow {
 		$initialPreview = [ ];
 		$initialPreviewConfig = [ ];
 	
-		if($type == Workflow::TYPE_CONTENT || $type == Workflow::TYPE_BANNER || $type==Workflow::TYPE_STATIC){
+		if($type == Workflow::TYPE_CONTENT || $type == Workflow::TYPE_GALLARY){
 	
 			foreach ( $media as $key => $value ) {
 				$setThumb = false;
@@ -162,26 +162,9 @@ class Workflow {
 				array_push ( $initialPreviewConfig, [
 						'caption' => $value->fileName,
 						//'width' => '120px',
-						//'height' => '120px',
+						//'height' => '120px',							
 						'url' => Url::to ( [
 								'//media/deletefileajax?type='.$type
-						] ),
-						/* 'url' => Url::to ( [
-						 '//media/deletefileajax'
-						] ), */
-						'key' => $value->id,
-				] );
-			}
-		}else{
-			foreach ( $media as $key => $value ) {
-	
-				array_push ( $initialPreview, Workflow::getTemplatePreview ($value,$type) );
-				array_push ( $initialPreviewConfig, [
-						'caption' => $value->fileName,
-						//'width' => '120px',
-						//'height' => '120px',
-						'url' => Url::to ( [
-								'//media/deletefileajax'
 						] ),
 						'key' => $value->id,
 				] );
@@ -202,16 +185,13 @@ class Workflow {
 	
 		//$isImage = Media::isImage ( $thumPath );
 		$isImage = 1;
-		$modalId = '#modalPreview';
-		if($type==Workflow::TYPE_CONTENT || $type==Workflow::TYPE_BANNER || $type==Workflow::TYPE_STATIC){
-			$modalId = '#modalConfigImage';
-		}
+		//$modalId = '#modalPreview'; //สำหรับไว้ดูรูปอย่างเดียว
 	
-		if ($isImage) {
-	
+		$modalId = '#modalConfigImage';
+		if ($isImage) {	
 			$thumb='';
 			$isThumb=0;
-			if($setThumb){
+			if($setThumb){ //เป็นการบอกว่ารูปนี้ ใช้เป็น thumbnail อยู่
 				$isThumb=1;
 				$thumb = '<button class="btn isThumb" style="position: absolute;top:1;background-color:#BE922A;"><i class="fa fa-picture-o"></i></button>';
 			}
