@@ -13,13 +13,7 @@ class Workflow {
 	
 	//type media 
 	const TYPE_CONTENT = 1;
-	const TYPE_HIGHLIGHT = 2;  
-	const TYPE_BACKGROUND_PAGE = 3;
-	const TYPE_BACKGROUND_SECTION = 4;
-	const TYPE_BANNER = 5;
-	const TYPE_FEATURED = 6;	
-	const TYPE_STATIC = 7;
-	const TYPE_GALLARY = 8;
+	const TYPE_GALLARY = 2;
 	
 	const STATIC_TYPE_MAGAZINE = 1;
 	const STATIC_TYPE_LETTER = 2;

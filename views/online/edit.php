@@ -88,10 +88,10 @@ $this->registerJs($str);
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="fa fa-reorder"></i>
-					<?php echo $sectionData['title']?> (3 of 6)
+					<?php echo $sectionData['title']?> (3 of <?php echo $limit?>)
 				</div>
 				<div class="actions">
-					<a href="javascript:;" class="btn green btn-sm saveOnline" data-web="<?php echo $web?>" data-section="<?php echo $section?>"><i class="fa fa-plus"></i> Save</a>
+					<a href="javascript:;" class="btn green btn-sm saveOnline" data-limit="<?php echo $limit?>" data-web="<?php echo $web?>" data-section="<?php echo $section?>"><i class="fa fa-plus"></i> Save</a>
 				</div>
 			</div>
 			<div class="portlet-body">
@@ -110,7 +110,7 @@ $this->registerJs($str);
 										<?php echo date('Y-m-d H:i น.', strtotime($lst['publishTime']))?>
 									</div>
 									<div class="pull-right">
-										<a href="javascript:;"> <i class="fa fa-pencil" title="แก้ไขข่าวนี้"></i> </a> 
+										<a href="<?= Url::toRoute(['contents/edit','id'=>$lst['id']])?>"> <i class="fa fa-pencil" title="แก้ไขข่าวนี้"></i> </a> 
 										<a href="javascript:;" class="deleteTr"> <i class="fa fa-trash-o" title="ลบ"></i> </a>
 									</div>
 									</p>

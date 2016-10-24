@@ -57,7 +57,7 @@ class OnlineController extends Controller{
     	$web = Yii::$app->request->get('web');
     	$section = Yii::$app->request->get('section');
     	$sectionData = OnlineConfig::$arrSection[$section];
-    	
+    	$limit = OnlineConfig::$arrSection[$section]['limit'];
     	$arrContent = [];
     	if (!empty($web) && !empty($section)){
 	    	$query = Online::find();
@@ -96,7 +96,8 @@ class OnlineController extends Controller{
     			'web' => $web,
     			'section' => $section,
     			'sectionData' => $sectionData,
-    			'arrContent' => $arrContent
+    			'arrContent' => $arrContent,
+    			'limit' => $limit
     	]);
     }
     

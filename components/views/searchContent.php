@@ -3,16 +3,23 @@ $baseUri = Yii::getAlias('@web');
 use app\lib\Workflow;
 use yii\helpers\Url;
 $url = Url::toRoute(['contents/generatecontent']);
+$urlReset = Url::toRoute(['contents/resetcontent']);
 $str = <<<EOT
 $(document).delegate('.findConent','click',function(e){
 	doSearch();
 });
 
-/* $(document).keypress(function(e) {
+$(document).delegate('.resetContent','click',function(e){
+	doReset();
+	$('input[name=q]').val('');
+});
+
+
+$(document).keypress(function(e) {
     if(e.which == 13) {
         doSearch();
     }
-}); */
+});
 
 function doSearch(){
 	var q = $('input[name=q]').val();
@@ -35,7 +42,24 @@ function doSearch(){
 		});
 	}
 }		
-		
+
+function doReset(){
+	$.get('$urlReset').done(function(data) {
+		if(typeof data == "string"){
+			var data = $.parseJSON(data);
+		}
+		var mainBody = $('.tbodyData');
+		if(data.length){
+			var resultTr = getItem(data);
+			$(mainBody).html(resultTr);
+		}else{
+			var noData = '<td colspan="2" height="100" class="text-center"><h2>ไม่มีข้อมูลที่คุณค้นหา</h2></td>';
+			$(mainBody).html(noData);
+		}
+	});
+	
+}				
+				
 function getItem(data, cloneTr){
 	var cloneDiv = $('#cloneTrData').clone();	
 	cloneHtml = '';
@@ -76,6 +100,9 @@ $this->registerJs($str);
 						<input type="text" class="form-control" placeholder="กรอก ID หรือชื่อข่าวลงที่นี่" name="q">
 						<span class="input-group-btn">
 						<a class="btn green findConent" href="javascript:;">ค้นหา</a>
+						</span>
+						<span class="input-group-btn">
+						<a class="btn yellow resetContent" href="javascript:;">รีเซ็ต</a>
 						</span>
 					</div>
 					

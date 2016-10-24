@@ -367,8 +367,12 @@ class ContentsController extends Controller
 		$q = $request->get('q');
 		
 		$query = Contents::find();
-		$query->orWhere(['like', 'title', $q]);
-		$query->orWhere('id =:id', [':id' => $q]);
+		if (!empty($q)){
+			$query->orWhere(['like', 'title', $q]);
+			$query->orWhere('id =:id', [':id' => $q]);
+		}
+		$query->limit(30);
+		$query->orderBy('publishTime DESC');
 		$query->andWhere('status  = :status',[':status' => Workflow::STATUS_PUBLISHED]);
 		$resultQuery = $query->all();
 		$baseUri = Yii::getAlias('@web');
@@ -384,6 +388,30 @@ class ContentsController extends Controller
 			}
 		}
 		
+		header('Content-Type: application/json');
+		echo json_encode($result);
+	}
+	
+	public function actionResetcontent(){
+		$request = Yii::$app->request;
+
+		$query = Contents::find();
+		$query->limit(30);
+		$query->orderBy('publishTime DESC');
+		$resultQuery = $query->all();
+		$baseUri = Yii::getAlias('@web');
+		$result = [];
+		if(!empty($resultQuery)){
+			foreach ($resultQuery as $lst){
+				$result[] = [
+						'id' => $lst->id,
+						'title' => $lst->title,
+						'time' => $lst->publishTime?date('Y-m-d | H:i', strtotime($lst->publishTime)):'',
+						'status' => '<img src="'.$baseUri.'/assets/img/'.Workflow::$arrStatusIcon[$lst->status].'"'
+				];
+			}
+		}
+	
 		header('Content-Type: application/json');
 		echo json_encode($result);
 	}
