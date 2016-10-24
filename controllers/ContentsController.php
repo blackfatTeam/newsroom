@@ -364,24 +364,24 @@ class ContentsController extends Controller
 
 	public function actionGeneratecontent(){
 		$request = Yii::$app->request;
-		$q = $request->get('q');
+		$q = $request->get('q')?$request->get('q'):'';
+		$qGallery = $request->get('qGallery')?$request->get('qGallery'):'';
 		$type = $request->get('type');
 		
 		if ($type == 'gallery'){
 			$query = Gallary::find();
+			$query->orWhere(['like', 'title', $qGallery]);
+			$query->orWhere('id =:id', [':id' => $qGallery]);
 		}else{
 			$query = Contents::find();
-		}
-		
-		if (!empty($q)){
 			$query->orWhere(['like', 'title', $q]);
 			$query->orWhere('id =:id', [':id' => $q]);
 		}
+
 		$query->limit(30);
 		$query->orderBy('publishTime DESC');
 		//$query->andWhere('status  = :status',[':status' => Workflow::STATUS_PUBLISHED]);
 		$resultQuery = $query->all();
-		var_dump($resultQuery);exit;
 		$baseUri = Yii::getAlias('@web');
 		$result = [];
 		if(!empty($resultQuery)){
@@ -401,8 +401,14 @@ class ContentsController extends Controller
 	
 	public function actionResetcontent(){
 		$request = Yii::$app->request;
+		$type = $request->get('type')?$request->get('type'):'';
+		
+		if ($type == 'content'){
+			$query = Contents::find();
+		}else{
+			$query = Gallary::find();
+		}
 
-		$query = Contents::find();
 		$query->limit(30);
 		$query->orderBy('publishTime DESC');
 		$resultQuery = $query->all();

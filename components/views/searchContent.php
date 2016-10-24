@@ -13,9 +13,11 @@ $(document).delegate('.findGallery','click',function(e){
 	doSearch('gallery');
 });
 
-$(document).delegate('.resetContent','click',function(e){
-	doReset();
+$(document).delegate('.resetbtn','click',function(e){
+	var type = $(this).attr('data-type');
+	doReset(type);
 	$('input[name=q]').val('');
+	$('input[name=qGallery]').val('');
 });
 
 
@@ -31,12 +33,14 @@ function doSearch(type){
 	if(q.length || qGallery.length){
 		$.get('$url', {
 				q: q,
+				qGallery: qGallery,
 				type: type
 		}).done(function(data) {
 			if(typeof data == "string"){
 				var data = $.parseJSON(data);
 			}
-			var mainBody = $('.tbodyData');
+		
+			var mainBody = $('.tbodyData[data-type='+type+']');
 			if(data.length){
 				var resultTr = getItem(data);
 				$(mainBody).html(resultTr);
@@ -48,12 +52,14 @@ function doSearch(type){
 	}
 }		
 
-function doReset(){
-	$.get('$urlReset').done(function(data) {
+function doReset(type){
+	$.get('$urlReset', {
+				type: type
+		}).done(function(data) {
 		if(typeof data == "string"){
 			var data = $.parseJSON(data);
 		}
-		var mainBody = $('.tbodyData');
+		var mainBody = $('.tbodyData[data-type='+type+']');
 		if(data.length){
 			var resultTr = getItem(data);
 			$(mainBody).html(resultTr);
@@ -107,14 +113,14 @@ $this->registerJs($str);
 						<a class="btn green findConent" href="javascript:;">ค้นหา</a>
 						</span>
 						<span class="input-group-btn">
-						<a class="btn yellow resetContent" href="javascript:;">รีเซ็ต</a>
+						<a class="btn yellow resetbtn" data-type="content" href="javascript:;">รีเซ็ต</a>
 						</span>
 					</div>
 					
 					
 						<div class="table">
 						<table class="table table-striped table-bordered">
-							<tbody class="tbodyData">
+							<tbody class="tbodyData" data-type="content">
 								<?php if (!empty($contentList)){?>
 								<?php foreach ($contentList as $lst):?>
 								<tr data-type="content" data-id="<?php echo $lst->id?>">
@@ -149,14 +155,14 @@ $this->registerJs($str);
 						<a class="btn green findGallery" href="javascript:;">ค้นหา</a>
 						</span>
 						<span class="input-group-btn">
-						<a class="btn yellow resetGallery" href="javascript:;">รีเซ็ต</a>
+						<a class="btn yellow resetbtn" data-type="gallery" href="javascript:;">รีเซ็ต</a>
 						</span>
 					</div>
 					
 					
 						<div class="table">
 						<table class="table table-striped table-bordered">
-							<tbody class="tbodyData">
+							<tbody class="tbodyData" data-type="gallery">
 								<?php if (!empty($galleryList)){?>
 								<?php foreach ($galleryList as $lst):?>
 								<tr data-type="gallery" data-id="<?php echo $lst->id?>">
