@@ -6,7 +6,7 @@ $url = Url::toRoute(['contents/getitem']);
 $urlSave = Url::toRoute(['online/saveonline']);
 $str = <<<EOT
 $(document).delegate('.deleteTr','click',function(e){
-	debugger;
+	$(this).parent().parent().parent().remove();
 });
 
 
@@ -67,6 +67,7 @@ function dropData(data, cloneTr){
 	cloneHtml = cloneHtml.replace('{id}', data.id);
 	cloneHtml = cloneHtml.replace('{title}', data.title);
 	cloneHtml = cloneHtml.replace('{img}', data.img);
+	cloneHtml = cloneHtml.replace('{time}', data.time);
 	return '<tr class="selectedTr" data-object="content" data-id="'+ data.id +'">'+ cloneHtml + '</tr>';
 	debugger;
 }
@@ -104,7 +105,15 @@ $this->registerJs($str);
 								<td><?php echo $lst['img']?></td>
 								<td>
 									<p><?php echo $lst['id']?>. <?php echo $lst['title']?></p>
-									<p><a href="javascript:;" class="deleteTr"> <i class="fa fa-trash-o" title="ลบ"></i> </a></p>
+									<p>
+									<div class="pull-left">
+										<?php echo date('Y-m-d H:i น.', strtotime($lst['publishTime']))?>
+									</div>
+									<div class="pull-right">
+										<a href="javascript:;"> <i class="fa fa-pencil" title="แก้ไขข่าวนี้"></i> </a> 
+										<a href="javascript:;" class="deleteTr"> <i class="fa fa-trash-o" title="ลบ"></i> </a>
+									</div>
+									</p>
 								</td>
 							</tr>
 							<?php endforeach;?>
@@ -122,7 +131,15 @@ $this->registerJs($str);
 								<td>{img}</td>
 								<td>
 									<p>{id}. {title}</p>
-									<p><a href="javascript:;"> <i class="fa fa-trash-o" title="ลบ"></i> </a></p>
+									<p>
+									<div class="pull-left">
+										{time}
+									</div>
+									<div class="pull-right">
+										<a href="javascript:;"> <i class="fa fa-pencil" title="แก้ไขข่าวนี้"></i> </a> 
+										<a href="javascript:;" class="deleteTr"> <i class="fa fa-trash-o" title="ลบ"></i> </a>
+									</div>
+									</p>
 								</td>
 							</tr>
 					</table>

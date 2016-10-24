@@ -409,7 +409,9 @@ class ContentsController extends Controller
 			$result = [
 					'id' => $query->id,
 					'title' => $query->title,
-					'img' => $img
+					'img' => $img,
+					'time' => $query->publishTime?date('Y-m-d | H:i', strtotime($query->publishTime)):'',
+				
 			];
 		}
 

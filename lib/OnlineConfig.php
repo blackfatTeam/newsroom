@@ -19,7 +19,7 @@ class OnlineConfig {
 			self::ONLINE_EDITORPICK => [
 					'section' => 'editorPick',
 					'title' => 'บก. แนะนำ',
-					'limit' => 6,
+					'limit' => 5,
 					'type' => [
 						'content',
 						'gallery'

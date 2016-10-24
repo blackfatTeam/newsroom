@@ -12,9 +12,43 @@ class OnlineController extends Controller{
     public function actionView()
     {
     	$web = Yii::$app->request->get('web');
+    	OnlineConfig::$arrSection;
     	
+    	$query = Online::find();
+    	$query->andWhere('web = :web', [':web' => $web]);
+    	$resultQuery = $query->all();
+    	
+    	$arrItem = [];
+    	foreach (OnlineConfig::$arrSection as $key => $lst){
+    		$arrItem[$key] = [];
+    	}
+    	if (!empty($resultQuery)){
+    		foreach ($resultQuery as $lst){
+    			if (!empty($lst->contentId)){
+    				$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
+    				if (!empty($queryContent)){
+    					if(!empty($queryContent->thumbnail)){
+    						$img = $this->getThumbnail($queryContent->thumbnail);
+    					}else{
+    						$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive">';
+    					}
+    					
+	    				$arrItem[$lst->section][] = [
+	    						'id' => $queryContent->id,
+	    						'title' => $queryContent->title,
+	    						'time' => $queryContent->publishTime?date('Y-m-d | H:i', strtotime($queryContent->publishTime)):'',
+	    						'img' => $img
+	    				];
+    				}
+    			}
+    			
+    			
+    		}
+    	}
+
     	return $this->render('view', [
-    			'web' => $web
+    			'web' => $web,
+    			'arrItem' => $arrItem
     	]);
     }
     

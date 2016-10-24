@@ -58,7 +58,7 @@ class ConfigController extends Controller
     							[
     									'title'=>'กาญจนบุรี',
     									'icon'=>'',
-    									'uri'=>Url::toRoute(["online/view"]),
+    									'uri'=>Url::toRoute(["online/view", 'web' => 'kri']),
     									'group'=> [
     											Url::toRoute(["online/view"])
     									],
@@ -66,7 +66,7 @@ class ConfigController extends Controller
     							[
     									'title'=>'นครราชสีมา',
     									'icon'=>'',
-    									'uri'=>Url::toRoute(["online/view"]),
+    									'uri'=>Url::toRoute(["online/view", 'web' => 'nma']),
     									'group'=> [
     											Url::toRoute(["online/view"])
     									],
