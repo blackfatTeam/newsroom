@@ -22,11 +22,17 @@ $(document).delegate('.saveOnline','click',function(e){
 		$.each(selectTr, function( i, tr ) {
 			arrId.push($(tr).attr('data-id'));
 		});
-	
+		
+		arrType = [];
+		$.each(selectTr, function( i, tr ) {
+			arrType.push($(tr).attr('data-type'));
+		});
+		
 		$.get('$urlSave', {
 				web: web,
 				section: section,
-				arrId: arrId
+				arrId: arrId,
+				arrType: arrType
 		}).done(function(data) {
 			if(typeof data == "string"){
 				var data = $.parseJSON(data);
@@ -45,16 +51,19 @@ $( "tbody" ).sortable({
 	 receive: function(event, ui){
 		dropItem = $(ui.item[0]);
 		dropUi = ui;
+		currentTr = dropItem[0];
+		type = $(dropItem[0]).attr('data-type');
 		var tb = dropItem.parent('tbody');
 
 		$.get('$url', {
-				id: dropItem.attr('data-id')
+				id: dropItem.attr('data-id'),
+				type: type
 		}).done(function(data) {
 			if(typeof data == "string"){
 				var data = $.parseJSON(data);
 			}
 			var cloneTr = $('#cloneTrSelect').clone();
-			var dropHtml = dropData(data, cloneTr);
+			var dropHtml = dropData(data, cloneTr, type);
 			dropItem.after(dropHtml);
 			dropItem.remove();
 			$('.tbodySelect').find('.dumpTr').remove();
@@ -62,13 +71,13 @@ $( "tbody" ).sortable({
     }
 });
 
-function dropData(data, cloneTr){
+function dropData(data, cloneTr, type){
 	var cloneHtml = $(cloneTr).html();
 	cloneHtml = cloneHtml.replace('{id}', data.id);
 	cloneHtml = cloneHtml.replace('{title}', data.title);
 	cloneHtml = cloneHtml.replace('{img}', data.img);
 	cloneHtml = cloneHtml.replace('{time}', data.time);
-	return '<tr class="selectedTr" data-object="content" data-id="'+ data.id +'">'+ cloneHtml + '</tr>';
+	return '<tr class="selectedTr" data-type="'+type+'" data-id="'+ data.id +'">'+ cloneHtml + '</tr>';
 	debugger;
 }
 EOT;
@@ -101,7 +110,7 @@ $this->registerJs($str);
 						
 							<?php if(!empty($arrContent)){?>
 							<?php foreach($arrContent as $lst):?>
-							<tr class="selectedTr" data-object="content" data-id="<?php echo $lst['id']?>">
+							<tr class="selectedTr" data-type="<?php echo $lst['type']?>" data-id="<?php echo $lst['id']?>">
 								<td><?php echo $lst['img']?></td>
 								<td>
 									<p><?php echo $lst['id']?>. <?php echo $lst['title']?></p>
@@ -127,7 +136,7 @@ $this->registerJs($str);
 							
 
 						</tbody>
-						<tr id="cloneTrSelect" data-object="{type}" data-id="{id}">
+						<tr id="cloneTrSelect" data-type="{type}" data-id="{id}">
 								<td>{img}</td>
 								<td>
 									<p>{id}. {title}</p>

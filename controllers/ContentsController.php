@@ -7,7 +7,7 @@ use app\models\Contents;
 use app\models\Media;
 
 use app\models\Relatecontent;
-
+use app\models\Gallary;
 use yii\helpers\Url;
 
 use app\lib\Workflow;
@@ -365,16 +365,23 @@ class ContentsController extends Controller
 	public function actionGeneratecontent(){
 		$request = Yii::$app->request;
 		$q = $request->get('q');
+		$type = $request->get('type');
 		
-		$query = Contents::find();
+		if ($type == 'gallery'){
+			$query = Gallary::find();
+		}else{
+			$query = Contents::find();
+		}
+		
 		if (!empty($q)){
 			$query->orWhere(['like', 'title', $q]);
 			$query->orWhere('id =:id', [':id' => $q]);
 		}
 		$query->limit(30);
 		$query->orderBy('publishTime DESC');
-		$query->andWhere('status  = :status',[':status' => Workflow::STATUS_PUBLISHED]);
+		//$query->andWhere('status  = :status',[':status' => Workflow::STATUS_PUBLISHED]);
 		$resultQuery = $query->all();
+		var_dump($resultQuery);exit;
 		$baseUri = Yii::getAlias('@web');
 		$result = [];
 		if(!empty($resultQuery)){
@@ -421,15 +428,22 @@ class ContentsController extends Controller
 		
 		$baseUri = Yii::getAlias('@web');
 		$id = $request->post('id');
+		$type = $request->post('type');
 		if(empty($id)){
 			$id = $request->get('id');
+			$type = $request->get('type');
 		}
-		$query = Contents::find()->where(['id'=>$id])->one();
+		if ($type == 'content'){
+			$query = Contents::find()->where(['id'=>$id])->one();
+		}elseif ($type == 'gallery'){
+			$query = Gallary::find()->where(['id'=>$id])->one();
+		}
+		
 		$result = [];
 		if(!empty($query)){
 			
 			if(!empty($query->thumbnail)){
-				$img = $this->getThumbnail($query->thumbnail);
+				$img = $this->getThumbnail($query->thumbnail, $type);
 			}else{
 				$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive">';
 			}
@@ -447,13 +461,20 @@ class ContentsController extends Controller
 		echo json_encode($result);
 	}
 	
-	public function getThumbnail($thumbnailId){
+	public function getThumbnail($thumbnailId, $type){
 		$baseUri = Yii::getAlias('@web');
 		$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive">';
+		
+		if ($type == 'content'){
+			$typeNo = Workflow::TYPE_CONTENT;
+		}elseif ($type == 'gallery'){
+			$typeNo = Workflow::TYPE_GALLARY;
+		}
 		
 		if (!empty($thumbnailId)){
 			$query = Media::find();
 			$query->andWhere('id = :id', [':id' => $thumbnailId]);
+			$query->andWhere('type = :type', [':type' => $typeNo]);
 			$result = $query->one();
 			
 			if (!empty($result->thumbPath)){

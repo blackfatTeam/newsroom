@@ -1,7 +1,7 @@
 <?php
 namespace app\components;
 use app\models\Contents;
-
+use app\models\Gallary;
 use yii\base\Widget;
 
 use app\lib\Conf;
@@ -15,9 +15,13 @@ class SearchContent extends Widget {
 		$query->orderBy('publishTime desc');
 		$contentList = $query->all();
 		
+		$queryGallery = Gallary::find();
+		$queryGallery->orderBy('publishTime desc');
+		$galleryList = $queryGallery->all();
 		
 		echo $this->render('searchContent', [
-				'contentList' => $contentList
+				'contentList' => $contentList,
+				'galleryList' => $galleryList
 		]);
 	}	
 }

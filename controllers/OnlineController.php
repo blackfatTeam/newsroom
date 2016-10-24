@@ -4,6 +4,7 @@ use yii\web\Controller;
 use Yii;
 use app\models\Contents;
 use app\models\Online;
+use app\models\Gallary;
 use app\lib\OnlineConfig;
 use app\models\Media;
 use app\lib\Workflow;
@@ -25,10 +26,14 @@ class OnlineController extends Controller{
     	if (!empty($resultQuery)){
     		foreach ($resultQuery as $lst){
     			if (!empty($lst->contentId)){
-    				$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
+    				if ($lst->type == Workflow::TYPE_CONTENT){
+    					$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
+    				}elseif ($lst->type == Workflow::TYPE_GALLARY){
+    					$queryContent = Gallary::find()->where(['id'=>$lst->contentId])->one();
+    				}
     				if (!empty($queryContent)){
     					if(!empty($queryContent->thumbnail)){
-    						$img = $this->getThumbnail($queryContent->thumbnail);
+    						$img = $this->getThumbnail($queryContent->thumbnail, $lst->type);
     					}else{
     						$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive">';
     					}
@@ -69,7 +74,11 @@ class OnlineController extends Controller{
 	    	if (!empty($arrModel)){
 	    		foreach ($arrModel as $lst){
 	    			if (!empty($lst->contentId)){
-	    				$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
+		    			if ($lst->type == Workflow::TYPE_CONTENT){
+	    					$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
+	    				}elseif ($lst->type == Workflow::TYPE_GALLARY){
+	    					$queryContent = Gallary::find()->where(['id'=>$lst->contentId])->one();
+	    				}
 	    			}
 	    			if (!empty($queryContent)){
 	    				
@@ -79,12 +88,25 @@ class OnlineController extends Controller{
 	    					$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive">';
 	    				}
 	    				
+	    				$type = 'content';
+	    				if (!empty($lst->type)){
+		    				switch ($lst->type){
+		    					case Workflow::TYPE_CONTENT:
+		    						$type = 'content';
+		    						break;
+		    					case Workflow::TYPE_GALLARY:
+		    						$type = 'gallery';
+		    						break;
+		    				}
+	    				}
+	    				
 		    			$arrContent[] = [
 		    					'id' => $queryContent->id,
 		    					'title' => $queryContent->title,
 		    					'publishTime' => $queryContent->publishTime,
 		    					'status' => $queryContent->status,
-		    					'img' => $img
+		    					'img' => $img,
+		    					'type' => $type
 		    			];
 	    			}
 	    		}
@@ -133,14 +155,25 @@ class OnlineController extends Controller{
     	$web = $request->get('web');
     	$section = $request->get('section');
     	$arrId = $request->get('arrId');
-    	Online::deleteAll(['web'=>$web, 'section' => $section]);
+    	$arrType = $request->get('arrType');
+    	
+    	if (!empty($web) && !empty($section)){
+    		Online::deleteAll(['web'=>$web, 'section' => $section]);
+    	}
     	$identity = \Yii::$app->user->getIdentity();
     	
     	$count = count($arrId);
     	$result = 'บันทึกไม่สำเร็จ';
     	if (!empty($arrId) && !empty($web) && !empty($section)){
     		$i = 1;
+    		$n = 0;
     		foreach ($arrId as $id){
+    			
+    			$type = Workflow::TYPE_CONTENT;
+    			if ($arrType[$n] == 'gallery'){
+    				$type = Workflow::TYPE_GALLARY;;
+    			}
+    			
     			$model = new Online();
     			$model->web = $web;
     			$model->section = $section;
@@ -148,15 +181,14 @@ class OnlineController extends Controller{
     			$model->orderNo = $i;
     			$model->lastUpdateTime = date('Y-m-d H:i:s');
     			$model->lastUpdateBy = $identity->id;
-
+    			$model->type = $type;
     			if ($model->save()){
     				if($count == $i){
     					$result = 'บันทึกสำเร็จแล้ว';
     				}
-    				$i++;
-    					
-    					
+    				$i++;	
     			}
+    			$n++;
     		}
     	}
     	header('Content-Type: application/json');

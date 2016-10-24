@@ -6,7 +6,11 @@ $url = Url::toRoute(['contents/generatecontent']);
 $urlReset = Url::toRoute(['contents/resetcontent']);
 $str = <<<EOT
 $(document).delegate('.findConent','click',function(e){
-	doSearch();
+	doSearch('content');
+});
+
+$(document).delegate('.findGallery','click',function(e){
+	doSearch('gallery');
 });
 
 $(document).delegate('.resetContent','click',function(e){
@@ -17,16 +21,17 @@ $(document).delegate('.resetContent','click',function(e){
 
 $(document).keypress(function(e) {
     if(e.which == 13) {
-        doSearch();
+        doSearch('content');
     }
 });
 
-function doSearch(){
+function doSearch(type){
 	var q = $('input[name=q]').val();
-	
-	if(q.length){
+	var qGallery = $('input[name=qGallery]').val();
+	if(q.length || qGallery.length){
 		$.get('$url', {
 				q: q,
+				type: type
 		}).done(function(data) {
 			if(typeof data == "string"){
 				var data = $.parseJSON(data);
@@ -90,11 +95,11 @@ $this->registerJs($str);
 	<div class="portlet-body">
 		<div class="tabbable portlet-tabs">
 			<ul class="nav nav-tabs">
-				<li><a href="#portlet_tab_2" data-toggle="tab">Gallery</a></li>
-				<li class="active"><a href="#portlet_tab_1" data-toggle="tab">Content</a></li>
+				<li><a href="#gallery" data-toggle="tab">Gallery</a></li>
+				<li class="active"><a href="#content" data-toggle="tab">Content</a></li>
 			</ul>
 			<div class="tab-content">
-				<div class="tab-pane active" id="portlet_tab_1">
+				<div class="tab-pane active" id="content">
 					<div class="scroller" style="height:663px">
 					<div class="input-group">
 						<input type="text" class="form-control" placeholder="กรอก ID หรือชื่อข่าวลงที่นี่" name="q">
@@ -112,7 +117,7 @@ $this->registerJs($str);
 							<tbody class="tbodyData">
 								<?php if (!empty($contentList)){?>
 								<?php foreach ($contentList as $lst):?>
-								<tr data-object="content" data-id="<?php echo $lst->id?>">
+								<tr data-type="content" data-id="<?php echo $lst->id?>">
 									<td><?php echo $lst->id;?>. <?php echo $lst->title?$lst->title:''?></td>
 									<td width="200" class="text-right">
 										<?php echo date('Y-m-d | H:i', strtotime($lst->publishTime))?> <img src="<?php echo $baseUri?>/assets/img/<?php echo Workflow::$arrStatusIcon[$lst->status]?>">
@@ -136,10 +141,47 @@ $this->registerJs($str);
 					</div>
 					</div>
 				</div>
-				<div class="tab-pane" id="portlet_tab_2">
-					<p>
-						Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo.  
-					</p>
+				<div class="tab-pane" id="gallery">
+					<div class="scroller" style="height:663px">
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="กรอก ID หรือชื่อข่าวลงที่นี่" name="qGallery">
+						<span class="input-group-btn">
+						<a class="btn green findGallery" href="javascript:;">ค้นหา</a>
+						</span>
+						<span class="input-group-btn">
+						<a class="btn yellow resetGallery" href="javascript:;">รีเซ็ต</a>
+						</span>
+					</div>
+					
+					
+						<div class="table">
+						<table class="table table-striped table-bordered">
+							<tbody class="tbodyData">
+								<?php if (!empty($galleryList)){?>
+								<?php foreach ($galleryList as $lst):?>
+								<tr data-type="gallery" data-id="<?php echo $lst->id?>">
+									<td><?php echo $lst->id;?>. <?php echo $lst->title?$lst->title:''?></td>
+									<td width="200" class="text-right">
+										<?php echo date('Y-m-d | H:i', strtotime($lst->publishTime))?> <img src="<?php echo $baseUri?>/assets/img/<?php echo Workflow::$arrStatusIcon[$lst->status]?>">
+									</td>
+								</tr>
+								<?php endforeach;?>
+								<?php }else{?>
+								<tr>
+									<td colspan="2"><h3 class="text-center">ไม่มีข้อมูลที่จะแสดง</h3></td>
+								</tr>
+								<?php } ?>
+							
+							</tbody>
+							<tr id="cloneTrData" data-object="" data-id="">
+									<td>{id}. {title}</td>
+									<td width="200" class="text-right">
+										{time} {status}
+									</td>
+								</tr>
+						</table>
+					</div>
+					</div>
 				</div>
 			</div>
 		</div>
