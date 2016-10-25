@@ -113,6 +113,10 @@ class Workflow {
 	const UPLOAD_IMAGES_FOLDER = 'images';
 	const UPLOAD_THUMBNAIL_FOLDER ='thumbnail';
 		
+	const WATER_MARK_NONE = 0; 	//ไม่มีลายน้ำ
+	const WATER_MARK_1 = 1;		//ลายน้ำแบบที่ 1
+	const WATER_MARK_2 = 2;		//ลายน้ำแบบที่ 2
+	
 	/**
 	 *
 	 * @param string $ch รับ สองค่า   'img', 'thumb' สำหรับดึง path ที่เก็บรูปจริง และ path ของ thumbnail
@@ -200,6 +204,8 @@ class Workflow {
 					'class' => 'file-preview-image imageThumb',
 					'data-id' => $model->id,
 					'data-isThumb' => $isThumb,
+					'data-watermark' => $model->watermarkNo,
+					'data-caption' => $model->caption,						
 					'alt' => $model->realFilename,
 					'title' => $model->fileName
 			] );

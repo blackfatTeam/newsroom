@@ -4,6 +4,7 @@ use yii\helpers\Url ;
 use yii\base\View;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
+use app\lib\Workflow;
 
 $baseUri = Yii::getAlias('@web');
 
@@ -23,55 +24,60 @@ $( document ).ready(function() {
 		return false;
 	});
 	$('.imageThumb').on('click',function(){
-		debugger;
+
 		imgPath = $(this).attr('src');
 		id = $(this).attr('data-id');
 		isthumb = $(this).attr('data-isthumb');
+		caption = $(this).attr('data-caption');
+		watermark = $(this).attr('data-watermark');
 		
 		$('.modal-image-preview').attr('src',imgPath);
-		$('.setConfigImage').attr('data-id',id);
-		window.currentThumb = $(this);
-		window.btnThumb = '<button class="btn isThumb" style="position: absolute;top:1;background-color:#BE922A;"><i class="fa fa-picture-o"></i></button>';	
+		$('input[name="hiddenMediaId"]').val(id);
+		$('#formConfigMedia').find('textarea[name="textAreaCaption"]').val(caption);
 		
-		if(isthumb=='1'){
-			$('.setConfigImage').attr('data-action','clear');
-			$('.setConfigImage').removeClass('dark').addClass('default');
-			$('.setConfigImage').find('.fa').removeClass('fa fa-picture-o').addClass('fa-times');
+		//set checkbox thumbnail
+		if(isthumb == '1'){
+			$('#formConfigMedia').find('input[name="checkBoxSetThumbnail"]').attr('checked', true);
+			$('#formConfigMedia').find('input[name="checkBoxSetThumbnail"]').parent().addClass('checked');
 		}else{
-			$('.setConfigImage').attr('data-action','set');
-			$('.setConfigImage').removeClass('default').addClass('dark');
-			$('.setConfigImage').find('.fa').removeClass('fa-times').addClass('fa fa-picture-o');
-		}
-	});
-		
-	$('.setConfigImage').on('click',function(){
-		ac = $(this).attr('data-action');
-		id = $(this).attr('data-id');
-
-		result = setConfigImage(id,ac);
-		$('.isThumb').remove();		
-		$('.imageThumb[data-isthumb="1"]').attr('data-isthumb','0');
-		
-		if(ac=='set'){
-			window.currentThumb.attr('data-isthumb','1');
-			window.currentThumb.before(window.btnThumb);
+			$('#formConfigMedia').find('input[name="checkBoxSetThumbnail"]').attr('checked', false);
+			$('#formConfigMedia').find('input[name="checkBoxSetThumbnail"]').parent().removeClass('checked');
 		}
 		
+		//set radio watermark
+		$('input[name="radioWatermark"]:checked').parent().removeClass('checked');
+		$('input[name="radioWatermark"]:checked').attr('checked',false);		
+		
+		$('input[name="radioWatermark"][value='+ watermark +']').attr('checked',true);
+		$('input[name="radioWatermark"][value='+ watermark +']').parent().addClass('checked');
 
-		$('#modalConfigImage').modal('hide');
 	});
-	function setConfigImage(imageId,ac){
+		
+	$('.btnSaveConfigImage').on('click',function(){
+
+		caption = $('#formConfigMedia').find('textarea[name="textAreaCaption"]').val();
+		isThumbnail = $('#formConfigMedia').find('input[name="checkBoxSetThumbnail"]')[0].checked;
+		watermark = $('#formConfigMedia').find('input[name="radioWatermark"]:checked').val();
 		modelId = $('input[name="id"]').val();
+		mediaId = $('input[name="hiddenMediaId"]').val();
 
-		$.post("$baseUri/media/setthumbnail",{
-			modelId: modelId,
-			imageId: imageId,
-			action: ac,
-			type: $type
+		data = {
+			modelId : modelId,
+			type : $type,
+			mediaId : mediaId,
+			caption : caption,
+			isThumbnail : isThumbnail,
+			watermark : watermark
+		};
+
+		$.post("$baseUri/media/setconfigmedia",{
+			data: data
 		}).done(function(data) {
 			
 		});		
-	}
+		$('#modalConfigImage').modal('hide');
+	});
+
 });
 EOT;
 
@@ -176,12 +182,12 @@ $this->registerCss($css);
 					</div>		
 					<div class="row">
 						<div class="col-md-12">
-							<form class="form-horizontal" role="form">
+							<form class="form-horizontal" role="form" id="formConfigMedia">
 								<div class="form-body">
 									<div class="form-group">
 										<label class="col-md-3 control-label">Caption</label>
 										<div class="col-md-9">
-											<textarea class="form-control" rows="3"></textarea>
+											<textarea class="form-control" rows="3" name="textAreaCaption"></textarea>
 										</div>
 									</div>
 									<div class="form-group">
@@ -189,7 +195,7 @@ $this->registerCss($css);
 										<div class="col-md-9">
 											<div class="checkbox-list">
 												<label class="checkbox-inline">
-												<input type="checkbox" value="option1">
+												<input name="checkBoxSetThumbnail" type="checkbox">
 												</label>
 											</div>
 										</div>
@@ -199,13 +205,13 @@ $this->registerCss($css);
 										<div class="col-md-9">
 											<div class="radio-list">
 												<label class="radio-inline">
-												<input type="radio" name="optionsRadios" id="optionsRadios25" value="option1" checked> ไม่มี
+												<input type="radio" name="radioWatermark" id="radioWatermark1" value="<?= Workflow::WATER_MARK_NONE?>" checked> ไม่มี
 												</label>
 												<label class="radio-inline">
-												<input type="radio" name="optionsRadios" id="optionsRadios26" value="option2" > แบบที่ 1
+												<input type="radio" name="radioWatermark" id="radioWatermark2" value="<?= Workflow::WATER_MARK_1?>" > แบบที่ 1
 												</label>
 												<label class="radio-inline">
-												<input type="radio" name="optionsRadios" id="optionsRadios27" value="option3" > แบบที่ 2
+												<input type="radio" name="radioWatermark" id="radioWatermark3" value="<?= Workflow::WATER_MARK_2?>" > แบบที่ 2
 												</label>  
 											</div>
 										</div>
@@ -214,43 +220,21 @@ $this->registerCss($css);
 								<div class="form-actions fluid">
 									<div class="col-md-offset-3 col-md-9">
 										<button type="button" class="btn default" data-dismiss="modal" aria-hidden="true">Cancel</button> 
-										<button type="button" class="btn green" data-dismiss="modal" aria-hidden="true">Save</button>										                             
+										<button type="button" class="btn green btnSaveConfigImage" >Save</button>										                             
 									</div>
 								</div>
+								<input type="hidden" name="hiddenMediaId">
 							</form>
 						</div>
 					</div>
 						
 				</div><!-- 
-				<div class="modal-footer">
-					<a href="javascript:;" class="btn dark btn-block btn-lg setConfigImage" data-action="set"><i class="fa fa-picture-o"></i> Thumbnail</a>
-				</div> -->
 			</div>
 			<!-- /.modal-content -->
 		</div>
 		<!-- /.modal-dialog -->
 	</div>
-	
-	<div class="modal fade" id="modalPreview" tabindex="-1" role="basic" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title">Preview</h4>
-				</div>
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-md-6 col-md-offset-3">
-							<img  src="" class="img-responsive col-md-12 modal-image-preview" alt="">
-						</div>
-					</div>		
-						
-				</div>
-			</div>
-			<!-- /.modal-content -->
-		</div>
-		<!-- /.modal-dialog -->
-	</div>
+
 </div>
 
 

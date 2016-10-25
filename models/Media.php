@@ -20,6 +20,7 @@ use Yii;
  * @property string $folderPath
  * @property integer $showInContent
  * @property integer $watermarkNo
+ * @property string $caption
  */
 class Media extends \yii\db\ActiveRecord
 {
@@ -42,6 +43,7 @@ class Media extends \yii\db\ActiveRecord
             [['fileName', 'realFilename'], 'string', 'max' => 50],
             [['fullPath', 'folderPath'], 'string', 'max' => 500],
             [['thumbPath', 'srcPath'], 'string', 'max' => 900],
+            [['caption'], 'string', 'max' => 255],
         ];
     }
 
@@ -64,6 +66,7 @@ class Media extends \yii\db\ActiveRecord
             'folderPath' => 'Folder Path',
             'showInContent' => 'Show In Content',
             'watermarkNo' => 'Watermark No',
+            'caption' => 'Caption',
         ];
     }
 }

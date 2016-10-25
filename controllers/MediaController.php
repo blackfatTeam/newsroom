@@ -12,6 +12,7 @@ use app\models\Categories;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use app\models\Gallary;
+use function Faker\boolean;
 
 
 class MediaController extends Controller
@@ -19,6 +20,45 @@ class MediaController extends Controller
     public function actionIndex()
     {
     	$result = $this->doQuery(); 
+    }
+    public function actionSetconfigmedia(){
+    	$result = true;
+    	$data = Yii::$app->request->post('data');    	
+    	  
+    	//setting media detail
+    	$mediaModel = Media::findOne(['id'=>$data['mediaId']]);
+    	if($mediaModel){
+    		$mediaModel->caption = $data['caption'];
+    		$mediaModel->watermarkNo = $data['watermark'];
+    		if(!$mediaModel->save()){
+    			$result = false;
+    		}
+    	}    	
+    	
+    	//set thumbnail
+    	if($data['type'] == Workflow::TYPE_CONTENT){
+    		$model = Contents::find()->where(['id'=>$data['modelId']])->one();
+    	}elseif($data['type'] == workflow::TYPE_GALLARY){
+    		$model = Gallary::find()->where(['id'=>$data['modelId']])->one();
+    	}    
+
+    	if(!empty($model)){
+	    	if($data['isThumbnail']==="true"){
+	    			$model->thumbnail = $data['mediaId'];
+	    			if(!$model->save()){
+	    				$result = false;
+	    			}
+	    	}else{
+	    		if((int)$model->thumbnail === (int)$data['mediaId']){
+	    			$model->thumbnail = '';
+	    			if(!$model->save()){
+	    				$result = false;
+	    			}
+	    		}
+	    	}
+    	}
+    	header('Content-Type: application/json');
+    	echo json_encode($result);
     }
     public function actionSetthumbnail(){
 
