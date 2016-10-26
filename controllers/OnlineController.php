@@ -13,8 +13,7 @@ class OnlineController extends Controller{
     public function actionView()
     {
     	$web = Yii::$app->request->get('web');
-    	OnlineConfig::$arrSection;
-    	
+    	$baseUri = Yii::getAlias('@web');
     	$query = Online::find();
     	$query->andWhere('web = :web', [':web' => $web]);
     	$resultQuery = $query->all();
@@ -59,6 +58,7 @@ class OnlineController extends Controller{
     
     public function actionEdit()
     {
+    	$baseUri = Yii::getAlias('@web');
     	$web = Yii::$app->request->get('web');
     	$section = Yii::$app->request->get('section');
     	$sectionData = OnlineConfig::$arrSection[$section];
