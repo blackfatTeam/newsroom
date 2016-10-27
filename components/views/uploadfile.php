@@ -7,9 +7,10 @@ use yii\bootstrap\Html;
 use app\lib\Workflow;
 
 $baseUri = Yii::getAlias('@web');
-
+$waterMarkNone = Workflow::WATER_MARK_NONE;
 $str = <<<EOT
 $( document ).ready(function() {
+	var waterMarkNone = $waterMarkNone;
 	var currentThumb;
 	var btnThumb;
 	var btnThumbSet; 
@@ -25,6 +26,7 @@ $( document ).ready(function() {
 	});
 	$('.imageThumb').on('click',function(){
 
+		window.currentThumb = $(this);
 		imgPath = $(this).attr('src');
 		id = $(this).attr('data-id');
 		isthumb = $(this).attr('data-isthumb');
@@ -45,9 +47,12 @@ $( document ).ready(function() {
 		}
 		
 		//set radio watermark
+		if(typeof(watermark)==='undefined'){
+			watermark = waterMarkNone;
+		}
 		$('input[name="radioWatermark"]:checked').parent().removeClass('checked');
 		$('input[name="radioWatermark"]:checked').attr('checked',false);		
-		
+	
 		$('input[name="radioWatermark"][value='+ watermark +']').attr('checked',true);
 		$('input[name="radioWatermark"][value='+ watermark +']').parent().addClass('checked');
 
@@ -73,7 +78,16 @@ $( document ).ready(function() {
 		$.post("$baseUri/media/setconfigmedia",{
 			data: data
 		}).done(function(data) {
-			
+			$('.isThumb').remove();	//set icon thumbnail
+			if(isThumbnail){
+				isThumbnail = 1;
+				window.currentThumb.before('<button class="btn isThumb" style="position: absolute;top:1;background-color:#BE922A;"><i class="fa fa-picture-o"></i></button>');
+			}else{
+				isThumbnail = 0;
+			}
+			window.currentThumb.attr('data-isthumb',isThumbnail);
+			window.currentThumb.attr('data-caption',caption);
+			window.currentThumb.attr('data-watermark',watermark);
 		});		
 		$('#modalConfigImage').modal('hide');
 	});

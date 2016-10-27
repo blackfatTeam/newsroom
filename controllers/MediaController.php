@@ -21,6 +21,7 @@ class MediaController extends Controller
     {
     	$result = $this->doQuery(); 
     }
+
     public function actionSetconfigmedia(){
     	$result = true;
     	$data = Yii::$app->request->post('data');    	
@@ -28,9 +29,29 @@ class MediaController extends Controller
     	//setting media detail
     	$mediaModel = Media::findOne(['id'=>$data['mediaId']]);
     	if($mediaModel){
+    		$difWatermark = $mediaModel->watermarkNo;
     		$mediaModel->caption = $data['caption'];
     		$mediaModel->watermarkNo = $data['watermark'];
-    		if(!$mediaModel->save()){
+    		if($mediaModel->save()){
+    			if($difWatermark!=$mediaModel->watermarkNo){
+    				if($data['watermark']!=Workflow::WATER_MARK_NONE){
+    					$watermarkSrc = Workflow::$arrWaterMark[$data['watermark']];
+    					$watermarkFile = Yii::$app->image->load($watermarkSrc);
+    					$watermarkFile->resize(Workflow::SIZE_MID);
+  
+    					$path = json_decode($mediaModel->srcPath);
+    					
+    					$file = $path->{Workflow::SIZE_MID};    					
+    					$saveTo = $path->{Workflow::SIZE_WATERMARK};
+    					
+    					$origin = Yii::$app->image->load($file);    	
+
+    					$origin->watermark($watermarkFile, null, null, 50);    					
+    					$origin->save($saveTo);
+    				}
+    				
+    			}
+    		}else{
     			$result = false;
     		}
     	}    	
@@ -278,16 +299,19 @@ class MediaController extends Controller
     				$this->createThumbnail($imgUpPath,$realFileName,Workflow::SIZE_MID);
     			}
     			$arrThumb = [
-    			Workflow::SIZE_LIT=>$imgUpUrl.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_LIT.'_'.$realFileName,
-    			Workflow::SIZE_MID=>$imgUpUrl.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_MID.'_'.$realFileName,
-    			Workflow::SIZE_FULL=>$imgUpUrl.'/'.$realFileName,
+    				Workflow::SIZE_LIT=>$imgUpUrl.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_LIT.'_'.$realFileName,
+    				Workflow::SIZE_MID=>$imgUpUrl.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_MID.'_'.$realFileName,
+    				Workflow::SIZE_WATERMARK=>$imgUpUrl.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_WATERMARK.'_'.$realFileName,
+    				Workflow::SIZE_FULL=>$imgUpUrl.'/'.$realFileName,
+    				
     			];
     			$jsonThumb = json_encode($arrThumb);
     			 
     			$arrSrcPath = [
-    			'origin'=>$imgUpPath.'/'.$realFileName,
-    			Workflow::SIZE_LIT=>$imgUpPath.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_LIT.'_'.$realFileName,
-    			Workflow::SIZE_MID=>$imgUpPath.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_MID.'_'.$realFileName,
+    				'origin'=>$imgUpPath.'/'.$realFileName,
+    				Workflow::SIZE_LIT=>$imgUpPath.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_LIT.'_'.$realFileName,
+    				Workflow::SIZE_MID=>$imgUpPath.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_MID.'_'.$realFileName,
+    				Workflow::SIZE_WATERMARK=>$imgUpPath.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_WATERMARK.'_'.$realFileName,
     			];
     			$jsonSrcPath = json_encode($arrSrcPath);
 

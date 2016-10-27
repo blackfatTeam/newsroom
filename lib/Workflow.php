@@ -25,6 +25,7 @@ class Workflow {
 	const SIZE_LIT = 250;
 	const SIZE_MID = 450;
 	const SIZE_FULL = 'full';
+	const SIZE_WATERMARK = 'watermark';
 	
 	const ICON_THUMBNAIL = 'fa-camera';
 	const PAGE_SIZE = 30;
@@ -116,6 +117,11 @@ class Workflow {
 	const WATER_MARK_NONE = 0; 	//ไม่มีลายน้ำ
 	const WATER_MARK_1 = 1;		//ลายน้ำแบบที่ 1
 	const WATER_MARK_2 = 2;		//ลายน้ำแบบที่ 2
+	
+	public static $arrWaterMark = [
+		self::WATER_MARK_1 => '\www\newsroom\images\sample-trans1.png',
+		self::WATER_MARK_2 => '\www\newsroom\images\sample-trans2.png',
+	];
 	
 	/**
 	 *

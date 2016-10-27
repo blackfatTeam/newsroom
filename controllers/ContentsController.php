@@ -572,18 +572,14 @@ class ContentsController extends Controller
 		echo json_encode(array('result' => $result, 'resultFact' => $resultFact));
 	}
 	public function actionTest(){
-		$originModel = Media::findOne(13);
-		$watermarkModel = Media::findOne(14);
-	
+
+		$watermark =  Yii::$app->image->load('\www\newsroom\images\sample-trans1.png');
+		$originModel = Media::findOne(34);
 		$path = json_decode($originModel->srcPath);
 		$file = $path->{'origin'};
 		$origin = Yii::$app->image->load($file);
 	
-		$path = json_decode($watermarkModel->srcPath);
-		$file = $path->{'origin'};
-		$watermark = Yii::$app->image->load($file);
-	
-		$origin->watermark($watermark, NULL, NULL, 20);
+		$origin->watermark($watermark, NULL, NULL, 50);
 	
 		$origin->save( Workflow::getUploadPath('img'). '/test.png');
 	}
