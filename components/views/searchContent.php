@@ -21,9 +21,15 @@ $(document).delegate('.resetbtn','click',function(e){
 });
 
 
-$(document).keypress(function(e) {
+$('input[name=q]').keypress(function(e) {
     if(e.which == 13) {
         doSearch('content');
+    }
+});
+
+$('input[name=qGallery]').keypress(function(e) {
+    if(e.which == 13) {
+        doSearch('gallery');
     }
 });
 
@@ -42,7 +48,7 @@ function doSearch(type){
 		
 			var mainBody = $('.tbodyData[data-type='+type+']');
 			if(data.length){
-				var resultTr = getItem(data);
+				var resultTr = getItem(data, type);
 				$(mainBody).html(resultTr);
 			}else{
 				var noData = '<td colspan="2" height="100" class="text-center"><h2>ไม่มีข้อมูลที่คุณค้นหา</h2></td>';
@@ -61,7 +67,7 @@ function doReset(type){
 		}
 		var mainBody = $('.tbodyData[data-type='+type+']');
 		if(data.length){
-			var resultTr = getItem(data);
+			var resultTr = getItem(data, type);
 			$(mainBody).html(resultTr);
 		}else{
 			var noData = '<td colspan="2" height="100" class="text-center"><h2>ไม่มีข้อมูลที่คุณค้นหา</h2></td>';
@@ -71,7 +77,7 @@ function doReset(type){
 	
 }				
 				
-function getItem(data, cloneTr){
+function getItem(data, type){
 	var cloneDiv = $('#cloneTrData').clone();	
 	cloneHtml = '';
 	$.each(data, function( i, val ) {
@@ -80,7 +86,7 @@ function getItem(data, cloneTr){
 		tdHtml = tdHtml.replace('{title}', val.title);
 		tdHtml = tdHtml.replace('{time}', val.time);
 		tdHtml = tdHtml.replace('{status}', val.status);
-		cloneHtml += '<tr class="selectedTr" data-object="content" data-id="'+ data.id +'">'+ tdHtml + '</tr>';
+		cloneHtml += '<tr data-type="'+type+'" data-id="'+ val.id +'">'+ tdHtml + '</tr>';
 	});			
 	return cloneHtml;			
 }				
@@ -96,7 +102,7 @@ $this->registerJs($str);
 </style>
 <div class="portlet box grey tabbable">
 	<div class="portlet-title">
-		<div class="caption"><i class="fa fa-reorder"></i>Portlet</div>
+		<div class="caption"><i class="fa fa-reorder"></i>ค้นหาข่าวและแกลอรี่</div>
 	</div>
 	<div class="portlet-body">
 		<div class="tabbable portlet-tabs">

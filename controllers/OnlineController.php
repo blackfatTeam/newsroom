@@ -34,7 +34,7 @@ class OnlineController extends Controller{
     					if(!empty($queryContent->thumbnail)){
     						$img = $this->getThumbnail($queryContent->thumbnail, $lst->type);
     					}else{
-    						$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive">';
+    						$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive" width="80">';
     					}
     					
 	    				$arrItem[$lst->section][] = [
@@ -64,13 +64,14 @@ class OnlineController extends Controller{
     	$sectionData = OnlineConfig::$arrSection[$section];
     	$limit = OnlineConfig::$arrSection[$section]['limit'];
     	$arrContent = [];
+    	
+    	$totalCount = 0;
     	if (!empty($web) && !empty($section)){
 	    	$query = Online::find();
 	    	$query->andWhere('section = :section', [':section' => $section]);
 	    	$query->andWhere('web = :web', [':web' => $web]);
 	    	$query->orderBy('orderNo ASC');
 	    	$arrModel = $query->all();
-	    	
 	    	if (!empty($arrModel)){
 	    		foreach ($arrModel as $lst){
 	    			if (!empty($lst->contentId)){
@@ -85,7 +86,7 @@ class OnlineController extends Controller{
 	    				if(!empty($queryContent->thumbnail)){
 	    					$img = $this->getThumbnail($queryContent->thumbnail);
 	    				}else{
-	    					$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive">';
+	    					$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive" width="80">';
 	    				}
 	    				
 	    				$type = 'content';
@@ -108,6 +109,7 @@ class OnlineController extends Controller{
 		    					'img' => $img,
 		    					'type' => $type
 		    			];
+		    			$totalCount = count($arrContent);
 	    			}
 	    		}
 	    	}
@@ -119,13 +121,14 @@ class OnlineController extends Controller{
     			'section' => $section,
     			'sectionData' => $sectionData,
     			'arrContent' => $arrContent,
-    			'limit' => $limit
+    			'limit' => $limit,
+    			'totalCount' => $totalCount
     	]);
     }
     
     public function getThumbnail($thumbnailId){
     	$baseUri = Yii::getAlias('@web');
-    	$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive">';
+    	$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive" width="80">';
     
     	if (!empty($thumbnailId)){
     		$query = Media::find();
@@ -163,7 +166,8 @@ class OnlineController extends Controller{
     	$identity = \Yii::$app->user->getIdentity();
     	
     	$count = count($arrId);
-    	$result = 'บันทึกไม่สำเร็จ';
+    	$result = 'บันทึกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง';
+    	$resultFact = 0;
     	if (!empty($arrId) && !empty($web) && !empty($section)){
     		$i = 1;
     		$n = 0;
@@ -184,7 +188,8 @@ class OnlineController extends Controller{
     			$model->type = $type;
     			if ($model->save()){
     				if($count == $i){
-    					$result = 'บันทึกสำเร็จแล้ว';
+    					$result = 'บันทึกข้อมูลสำเร็จแล้ว';
+    					$resultFact = 1;
     				}
     				$i++;	
     			}
@@ -192,6 +197,6 @@ class OnlineController extends Controller{
     		}
     	}
     	header('Content-Type: application/json');
-    	echo json_encode($result);
+    	echo json_encode(array('result' => $result, 'resultFact' => $resultFact));
     }
 }

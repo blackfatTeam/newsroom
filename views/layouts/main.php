@@ -34,6 +34,7 @@ $thumbnailTmp = '';//Media::getTmp();
 	<link href="<?= $baseUriCss?>/plugins/jqvmap/jqvmap/jqvmap.css" rel="stylesheet" type="text/css"/>
 	<link href="<?= $baseUriCss?>/plugins/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css"/>
 	<link rel="stylesheet" type="text/css" href="<?= $baseUriCss?>/plugins/select2/select2_metro.css" />
+	<link rel="stylesheet" type="text/css" href="<?= $baseUriCss?>/plugins/bootstrap-toastr/toastr.min.css" />
 	<!-- END PAGE LEVEL PLUGIN STYLES -->
 	<!-- BEGIN THEME STYLES --> 
 	<link href="<?= $baseUriCss?>/css/style-metronic.css" rel="stylesheet" type="text/css"/>
@@ -150,6 +151,11 @@ table > thead > tr{
 	<script src="<?= $baseUriCss?>/plugins/jquery-easy-pie-chart/jquery.easy-pie-chart.js" type="text/javascript"></script>
 	<script src="<?= $baseUriCss?>/plugins/jquery.sparkline.min.js" type="text/javascript"></script>  
 	<!-- END PAGE LEVEL PLUGINS -->
+	
+	<script src="<?= $baseUriCss?>/plugins/bootstrap-toastr/toastr.min.js"></script>  
+	<!-- END PAGE LEVEL SCRIPTS -->     
+	<script src="<?= $baseUriCss?>/scripts/ui-toastr.js"></script>  
+	
 	<!-- BEGIN PAGE LEVEL SCRIPTS -->
 	<script src="<?= $baseUriCss?>/scripts/app.js" type="text/javascript"></script>
 	<script src="<?= $baseUriCss?>/scripts/index.js" type="text/javascript"></script>
@@ -160,7 +166,8 @@ table > thead > tr{
 	<!-- END PAGE LEVEL SCRIPTS -->  
 	<script>
 		jQuery(document).ready(function() {    
-		   App.init(); // initlayout and core plugins 
+		   App.init(); // initlayout and core plugins
+		   UIToastr.init(); 
 		});
 	</script>
 	

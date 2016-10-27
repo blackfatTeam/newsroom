@@ -8,65 +8,65 @@ use app\lib\Workflow;
 
 class OnlineConfig {
 	
-	const ONLINE_EDITORPICK = 'editorpick';
-	const ONLINE_PANORAMA = 'panorama';
-	const ONLINE_COLUMNPICK = 'columnpick';
-	const ONLINE_LIFE = 'life';
-	const ONLINE_SOCIAL = 'social';
-	const ONLINE_POL = 'pol';
+	const ONLINE_ISSUES = 'issues';
+	const ONLINE_HOTTOPIC = 'hottopic';
+	const ONLINE_OTHER = 'other';
+	const ONLINE_CSR = 'csr';
+	const ONLINE_HOWTO = 'howto';
+	const ONLINE_ADVERTISEMENT = 'advertisement';
 	
 	public static $arrSection = [
-			self::ONLINE_EDITORPICK => [
-					'section' => 'editorPick',
-					'title' => 'บก. แนะนำ',
-					'limit' => 5,
+			self::ONLINE_ISSUES => [
+					'section' => 'issues',
+					'title' => 'จุดประเด็น',
+					'limit' => 15,
 					'type' => [
 						'content',
 						'gallery'
 					]
 
 			],
-			self::ONLINE_PANORAMA => [
-				'section' => 'panorama',
-				'title' => 'ภาพสไลด์',
-				'limit' => 6,
+			self::ONLINE_HOTTOPIC => [
+				'section' => 'hotTopic',
+				'title' => 'เกาะกระแส',
+				'limit' => 15,
 				'type' => [
 						'content',
 						'gallery'
 				]
 			],
-			self::ONLINE_COLUMNPICK => [
-				'section' => 'columnPick',
-				'title' => 'คอลัมน์แนะนำ',
-				'limit' => 6,
+			self::ONLINE_OTHER => [
+				'section' => 'other',
+				'title' => 'ปกิณกะ',
+				'limit' => 15,
 				'type' => [
 						'content',
 						'gallery'
 				]
 			],
-			self::ONLINE_LIFE => [
-				'section' => 'life',
-				'title' => 'ไลฟ์สไตล์',
-				'limit' => 6,
+			self::ONLINE_CSR => [
+				'section' => 'csr',
+				'title' => 'Corporate Social Responsibility',
+				'limit' => 15,
 				'type' => [
 						'content',
 						'gallery'
 				]
 				
 				],
-			self::ONLINE_SOCIAL => [
-				'section' => 'social',
-				'title' => 'สังคม',
-				'limit' => 6,
+			self::ONLINE_HOWTO => [
+				'section' => 'howTo',
+				'title' => 'Howto',
+				'limit' => 15,
 				'type' => [
 						'content',
 						'gallery'
 				]
 			],
-			self::ONLINE_POL => [
-				'section' => 'pol',
-				'title' => 'การเมือง',
-				'limit' => 6,
+			self::ONLINE_ADVERTISEMENT => [
+				'section' => 'ads',
+				'title' => 'Advertisement',
+				'limit' => 15,
 				'type' => [
 						'content',
 						'gallery'

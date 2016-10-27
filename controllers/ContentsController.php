@@ -99,21 +99,51 @@ class ContentsController extends Controller
     	 
     	//relateContent
     	$queryRelate = RelateContent::find()->where(['contentId'=>$id])->all();
+
     	$relateData = [];
     	if(!empty($queryRelate)){
     		foreach ($queryRelate as $lst){
-    			$query = Contents::find()->where(['id'=>$lst->relateId])->one();
     			
-    			$relateData[] = [
-    					'contentId' => $lst->contentId,
-    					'relateId' => $lst->relateId,
-    					'title' => $query->title?$query->title:'',
-    					'orderNo' => $lst->orderNo,
-    					'lastUpdateTime' => $lst->lastUpdateTime,
-    			];
+    			if ($lst->type == Workflow::TYPE_CONTENT){
+    				$queryContent = Contents::find()->where(['id'=>$lst->relateId])->one();
+    			}elseif ($lst->type == Workflow::TYPE_GALLARY){
+    				$queryContent = Gallary::find()->where(['id'=>$lst->relateId])->one();
+    			}
+
+    			if (!empty($queryContent)){
+    				 
+	    			$type = 'content';
+	    			if (!empty($lst->type)){
+	    				switch ($lst->type){
+	    					case Workflow::TYPE_CONTENT:
+	    						$type = 'content';
+	    						break;
+	    					case Workflow::TYPE_GALLARY:
+	    						$type = 'gallery';
+	    						break;
+	    				}
+	    			}
+	    			
+	    			if(!empty($queryContent->thumbnail)){
+	    				$img = $this->getThumbnail($queryContent->thumbnail, $type);
+	    			}else{
+	    				$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive" width="80">';
+	    			}
+	    			
+	    			$relateData[] = [
+	    					'contentId' => $lst->contentId,
+	    					'relateId' => $lst->relateId,
+	    					'title' => $queryContent->title?$queryContent->title:'',
+	    					'orderNo' => $lst->orderNo,
+	    					'publishTime' => $queryContent->publishTime,
+	    					'lastUpdateTime' => $lst->lastUpdateTime,
+	    					'img' => $img,
+	    					'type' => $type
+	    			];
+	    		}
     		}
     	}
-    	
+    
     	if(\Yii::$app->request->post()){
 
     		$reqstContents = Yii::$app->request->post('Contents');
@@ -451,7 +481,7 @@ class ContentsController extends Controller
 			if(!empty($query->thumbnail)){
 				$img = $this->getThumbnail($query->thumbnail, $type);
 			}else{
-				$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive">';
+				$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive" width="80">';
 			}
 			
 			$result = [
@@ -469,7 +499,7 @@ class ContentsController extends Controller
 	
 	public function getThumbnail($thumbnailId, $type){
 		$baseUri = Yii::getAlias('@web');
-		$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive">';
+		$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive" width="80">';
 		
 		if ($type == 'content'){
 			$typeNo = Workflow::TYPE_CONTENT;
@@ -503,34 +533,43 @@ class ContentsController extends Controller
 	
 	public function actionSaverelate(){
 		$request = Yii::$app->request;
-		$id = $request->post('id');
-		$arrId = $request->post('arrId');
+		$id = $request->get('id');
+		$arrId = $request->get('arrId');
+		$arrType = $request->get('arrType');
 		$identity = \Yii::$app->user->getIdentity();
 		Relatecontent::deleteAll(['contentId'=>$id]);
 	
 		$count = count($arrId);
-		$result = 'บันทึกไม่สำเร็จ';
+		$result = 'บันทึกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง';
+		$resultFact = 0;
 		if (!empty($arrId) && !empty($id)){
 			$i = 1;
+			$n = 0;
 			foreach ($arrId as $relateId){
+				
+				$type = Workflow::TYPE_CONTENT;
+				if ($arrType[$n] == 'gallery'){
+					$type = Workflow::TYPE_GALLARY;;
+				}
 				$model = new Relatecontent();
 				$model->contentId = $id;
 				$model->relateId = $relateId;
 				$model->orderNo = $i;
 				$model->lastUpdateTime = date('Y-m-d H:i:s');
 				$model->lastUpdateBy = $identity->id;
+				$model->type = $type;
 				if ($model->save()){
 					if($count == $i){
-						$result = 'บันทึกสำเร็จแล้ว';
+						$result = 'บันทึกข้อมูลสำเร็จแล้ว';
+						$resultFact = 1;
 					}
-					$i++;
-					
-					
+					$i++;		
 				}
+				$n++;
 			}
 		}
 		header('Content-Type: application/json');
-		echo json_encode($result);
+		echo json_encode(array('result' => $result, 'resultFact' => $resultFact));
 	}
 	public function actionTest(){
 		$originModel = Media::findOne(13);

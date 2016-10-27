@@ -5,8 +5,13 @@ use yii\helpers\Url;
 $url = Url::toRoute(['contents/getitem']);
 $urlSave = Url::toRoute(['online/saveonline']);
 $str = <<<EOT
-$(document).delegate('.deleteTr','click',function(e){
+$(document).delegate('.deleteTr','click',function(e){			
 	$(this).parent().parent().parent().remove();
+	var countTr = $('tr[class=selectedTr]').length;
+	if(countTr == 0){
+		$('.tbodySelect').html('<tr class="dumpTr"><td colspan="2">ไม่มีรายการที่เลือกไว้</td></tr>');
+	}
+	$('.totalCount').html(countTr);
 });
 
 
@@ -37,7 +42,13 @@ $(document).delegate('.saveOnline','click',function(e){
 			if(typeof data == "string"){
 				var data = $.parseJSON(data);
 			}
-			alert(data);
+			toastr.options.positionClass = "toast-top-full-width";
+			toastr.options.timeOut = "4000";
+			if(data.resultFact === 1){
+				toastr.success(data.result);
+			}else{
+				toastr.warning(data.result);
+			}
 		
 		});
 	}
@@ -49,25 +60,36 @@ $( "tbody" ).sortable({
 	opacity: 0.5,
 
 	 receive: function(event, ui){
-		dropItem = $(ui.item[0]);
+	 	var countTr = $('tr[class=selectedTr]').length;
+	 	var limit = parseInt($('.saveOnline').attr('data-limit'));
+	 	
+	 	dropItem = $(ui.item[0]);
 		dropUi = ui;
-		currentTr = dropItem[0];
-		type = $(dropItem[0]).attr('data-type');
-		var tb = dropItem.parent('tbody');
+	 	if(countTr++ < limit){		
+			currentTr = dropItem[0];
+			type = $(dropItem[0]).attr('data-type');
+			var tb = dropItem.parent('tbody');
 
-		$.get('$url', {
-				id: dropItem.attr('data-id'),
-				type: type
-		}).done(function(data) {
-			if(typeof data == "string"){
-				var data = $.parseJSON(data);
-			}
-			var cloneTr = $('#cloneTrSelect').clone();
-			var dropHtml = dropData(data, cloneTr, type);
-			dropItem.after(dropHtml);
+			$.get('$url', {
+					id: dropItem.attr('data-id'),
+					type: type
+			}).done(function(data) {
+				if(typeof data == "string"){
+					var data = $.parseJSON(data);
+				}
+							
+				var cloneTr = $('#cloneTrSelect').clone();
+				var dropHtml = dropData(data, cloneTr, type);
+				dropItem.after(dropHtml);
+				dropItem.remove();
+				$('.tbodySelect').find('.dumpTr').remove();
+				$('.totalCount').html(countTr);	
+			});
+		}else{
 			dropItem.remove();
-			$('.tbodySelect').find('.dumpTr').remove();
-		});
+			alert('เกินจำนวนที่ตั้งไว้');
+		}		
+				
     }
 });
 
@@ -78,7 +100,6 @@ function dropData(data, cloneTr, type){
 	cloneHtml = cloneHtml.replace('{img}', data.img);
 	cloneHtml = cloneHtml.replace('{time}', data.time);
 	return '<tr class="selectedTr" data-type="'+type+'" data-id="'+ data.id +'">'+ cloneHtml + '</tr>';
-	debugger;
 }
 EOT;
 
@@ -97,7 +118,7 @@ $this->registerJs($str);
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="fa fa-reorder"></i>
-					<?php echo $sectionData['title']?> (3 of <?php echo $limit?>)
+					<?php echo $sectionData['title']?> (<span class="totalCount"><?php echo $totalCount ?></span> of <?php echo $limit?>)
 				</div>
 				<div class="actions">
 					<a href="javascript:;" class="btn green btn-sm saveOnline" data-limit="<?php echo $limit?>" data-web="<?php echo $web?>" data-section="<?php echo $section?>"><i class="fa fa-plus"></i> Save</a>
