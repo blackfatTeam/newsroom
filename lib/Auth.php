@@ -6,36 +6,73 @@ use \Yii;
 class Auth {
 	//role ตำแหน่ง
 	const ADMIN = 'role.admin';
+	const NEWS_MAN = 'role.news_man';
+	const REWRITE = 'role.rewrite';
+	const EDITOR = 'role.editor';
 
 	
 	//perm สิทธิ์ การกระทำ
+	const USER_LIST = 'user.list';
 	const USER_EDIT = 'user.edit';
 	const USER_DELETE = 'user.delete';
+	
 	const CONTENT_EDIT = 'content.edit';
 	const CONTENT_LIST = 'content.list';
 	const CONTENT_DELETE = 'content.delete';
 	
+	const GALLERY_EDIT = 'gallery.edit';
+	const GALLERY_LIST = 'gallery.list';
+	const GALLERY_DELETE = 'gallery.delete';
 
+	const ONLINE_EDIT = 'online.edit';
+	const ONLINE_LIST = 'online.list';
+	const ONLINE_DELETE = 'online.delete';
+	
 	
 	private $arrPerm = [
+			self::USER_LIST=>'เห้นรายการ user',
 			self::USER_EDIT=>'จัดการ user',
 			self::USER_DELETE=>'ลบ user',
+			
 			self::CONTENT_EDIT =>'แก้ไข content',	
 			self::CONTENT_LIST =>'ดูหน้า รายการ content',	
 			self::CONTENT_DELETE =>'ลบ content',		
+			
+			self::GALLERY_EDIT =>'แก้ไข gallery',
+			self::GALLERY_LIST =>'ดูหน้า รายการ  gallery',
+			self::GALLERY_DELETE =>'ลบ gallery',
+			
+			self::ONLINE_EDIT =>'แก้ไข หน้าเลือกข่าว Online',
+			self::ONLINE_LIST =>'ดูหน้า รายการ  เลือกข่าว Online',
+			self::ONLINE_DELETE =>'ลบ รายการเลือกข่าว Online',
 	];
 
 	public static $arrUserRole = [
-			self::ADMIN => 'admin',	
-	
+			self::ADMIN => 'Admin',	
+			self::NEWS_MAN => 'นักข่าว',
+			self::REWRITE => 'รีไรท์',
+			self::EDITOR => 'บก.',
 	];
 
 	private $arrRolePerm = [
 			self::ADMIN => [
-					self::USER_EDIT,self::USER_DELETE,
-					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE,
-		
+					self::USER_EDIT,self::USER_LIST,self::USER_DELETE,
+					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE,					
+					self::GALLERY_EDIT,	self::GALLERY_LIST,	self::GALLERY_DELETE,
+					self::ONLINE_EDIT,	self::ONLINE_LIST,	self::ONLINE_DELETE,
 			],			
+			self::NEWS_MAN => [
+					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE,
+			],
+			self::REWRITE => [
+					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE,
+					self::GALLERY_EDIT,	self::GALLERY_LIST,	self::GALLERY_DELETE,
+			],
+			self::EDITOR => [
+					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE,
+					self::GALLERY_EDIT,	self::GALLERY_LIST,	self::GALLERY_DELETE,
+					self::ONLINE_EDIT,	self::ONLINE_LIST,	self::ONLINE_DELETE,
+			],
 
 
 	];

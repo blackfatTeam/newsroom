@@ -19,7 +19,6 @@ class Sidebar extends Widget {
 		//default
 		foreach (ConfigController::getConfig() as $menu){
 			$can = false;
-			$can = true;
 			foreach($menu['authen'] as $authen){
 				if(\yii::$app->user->can($authen)){
 					$can = true;

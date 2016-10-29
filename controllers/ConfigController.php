@@ -4,6 +4,7 @@ namespace app\controllers;
 use Yii;
 use yii\helpers\Url;
 use yii\web\Controller;
+use app\lib\Auth;
 
 
 class ConfigController extends Controller
@@ -22,7 +23,10 @@ class ConfigController extends Controller
     					],
     					'sub'=>[],
     					'authen'=>[
-    	
+    						Auth::ADMIN,
+    						Auth::NEWS_MAN,
+    						Auth::REWRITE,
+    						Auth::EDITOR
     					]
     			],
     			[
@@ -35,7 +39,10 @@ class ConfigController extends Controller
     					],
     					'sub'=>[],
     					'authen'=>[
-    	
+    						Auth::ADMIN,
+    						
+    						Auth::REWRITE,
+    						Auth::EDITOR
     					]
     			],
     			[
@@ -74,7 +81,8 @@ class ConfigController extends Controller
     								
     					],
     					'authen'=>[
-    	
+    							Auth::ADMIN,
+    							Auth::EDITOR
     					]
     			],
     			[
@@ -87,7 +95,7 @@ class ConfigController extends Controller
     					],
     					'sub'=>[],
     					'authen'=>[
-    	
+    							Auth::ADMIN,
     					]
     			],
     	

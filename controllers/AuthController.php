@@ -47,5 +47,35 @@ class AuthController extends Controller {
         $user->setPassword('admin');
         $user->generateAuthKey();
         $user->save();
+        
+        $user = new User();
+        $user->username = 'news';
+        $user->firstName = 'news';
+        $user->lastName = '';
+        $user->role=Auth::NEWS_MAN;
+        $user->status = User::STATUS_ACTIVE;
+        $user->setPassword('1234');
+        $user->generateAuthKey();
+        $user->save();
+        
+        $user = new User();
+        $user->username = 'rewrite';
+        $user->firstName = 'rewrite';
+        $user->lastName = '';
+        $user->role=Auth::REWRITE;
+        $user->status = User::STATUS_ACTIVE;
+        $user->setPassword('1234');
+        $user->generateAuthKey();
+        $user->save();
+        
+        $user = new User();
+        $user->username = 'editor';
+        $user->firstName = 'editor';
+        $user->lastName = '';
+        $user->role=Auth::EDITOR;
+        $user->status = User::STATUS_ACTIVE;
+        $user->setPassword('1234');
+        $user->generateAuthKey();
+        $user->save();
 	}
 }

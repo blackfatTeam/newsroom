@@ -85,6 +85,7 @@ $( document ).ready(function() {
 			}else{
 				isThumbnail = 0;
 			}
+
 			window.currentThumb.attr('data-isthumb',isThumbnail);
 			window.currentThumb.attr('data-caption',caption);
 			window.currentThumb.attr('data-watermark',watermark);
