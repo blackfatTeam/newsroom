@@ -112,20 +112,20 @@ class ContentsController extends Controller
 
     			if (!empty($queryContent)){
     				 
-	    			$type = 'content';
+	    			$relateType = 'content';
 	    			if (!empty($lst->type)){
 	    				switch ($lst->type){
 	    					case Workflow::TYPE_CONTENT:
-	    						$type = 'content';
+	    						$relateType = 'content';
 	    						break;
 	    					case Workflow::TYPE_GALLARY:
-	    						$type = 'gallery';
+	    						$relateType = 'gallery';
 	    						break;
 	    				}
 	    			}
 	    			
 	    			if(!empty($queryContent->thumbnail)){
-	    				$img = $this->getThumbnail($queryContent->thumbnail, $type);
+	    				$img = $this->getThumbnail($queryContent->thumbnail, $relateType);
 	    			}else{
 	    				$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive" width="80">';
 	    			}
@@ -138,7 +138,7 @@ class ContentsController extends Controller
 	    					'publishTime' => $queryContent->publishTime,
 	    					'lastUpdateTime' => $lst->lastUpdateTime,
 	    					'img' => $img,
-	    					'type' => $type
+	    					'type' => $relateType
 	    			];
 	    		}
     		}
