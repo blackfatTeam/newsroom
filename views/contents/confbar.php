@@ -85,12 +85,7 @@ $this->registerCss($css);
 		</div>
 		<div class="portlet-body">
 			<div class="form-body">
-				<div class="form-group">
-					<label>โพสต์ไตเติ้ล</label>
-					<?= Html::activeTextarea($contents, 'postTitle',['maxlength'=>225,'rows'=>4,'class'=>'form-control', 
-						'placeholder'=> Workflow::POST_URL.'โพสต์ไตเติ้ล'])?>
-					<span class="help-block pull-right"> ระบุคำแสดงแทน เฉพาะโพสต์ไตเติ้ล  เท่านั้น</span>
-				</div>
+				<label>สถานะของข่าว:</label>
 				<div class="form-group">
 				<?= Html::activeDropDownList($contents, 'status',Workflow::$arrStatusTh,['class'=>'form-control'])?>
 					
@@ -184,3 +179,25 @@ $this->registerCss($css);
 		</div>
 	</div>
 </div>
+
+<div class="col-md-4">
+	<div class="portlet box grey tabbable">
+		<div class="portlet-title">
+			<div class="caption"><i class="fa fa-cog"></i>ชื่อของ URL</div>
+			<div class="tools">
+				<a href="javascript:;" class="collapse"></a>
+			</div>
+		</div>
+		<div class="portlet-body">
+			<div class="form-body">
+				<div class="form-group">
+					<label>โพสต์ไตเติ้ล</label>
+					<?= Html::activeTextarea($contents, 'postTitle',['maxlength'=>225,'rows'=>4,'class'=>'form-control', 
+						'placeholder'=> Workflow::POST_URL.'โพสต์ไตเติ้ล'])?>
+					<span class="help-block pull-right"> ระบุคำแสดงแทน เฉพาะโพสต์ไตเติ้ล  เท่านั้น</span>
+				</div>	
+			</div>
+		</div>
+	</div>
+</div>
+
