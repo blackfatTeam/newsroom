@@ -20,6 +20,7 @@ use app\models\Log;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use app\models\Tags;
+use app\models\Online;
 
 class ContentsController extends Controller
 {
@@ -386,8 +387,12 @@ class ContentsController extends Controller
 			Media::deleteAll(['refId'=>$conId,'type'=>$type]);
 		}
 		
-		//clear relation
-		Relation::deleteAll(['in','contentId',$arrContentId]);
+		//clear relate content
+		Relatecontent::deleteAll(['in','contentId',$arrContentId]);
+		
+		//clear online pick
+		Online::deleteAll(['in','contentId',$arrContentId,'type'=>Workflow::TYPE_CONTENT]);
+		
 		//ลบ contents
 		return Contents::deleteAll(['in','id',$arrContentId]);
 	}
