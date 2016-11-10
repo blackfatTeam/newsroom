@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = ['label' => $contents->title];
 		<div class="portlet-title">
 			<div class="caption">
 				<i class="fa fa-reorder"></i>
-				Content
+				Gallery
 			</div>
 		</div>
 		<div class="portlet-body">

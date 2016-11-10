@@ -20,6 +20,7 @@ use app\models\Log;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use app\models\Tags;
+use app\models\Online;
 
 class GallaryController extends Controller
 {
@@ -334,10 +335,14 @@ class GallaryController extends Controller
 			Media::deleteAll(['refId'=>$conId,'type'=>$type]);
 		}
 		
-		//clear relation
-		Relation::deleteAll(['in','contentId',$arrContentId]);
+		//clear relate content
+		Relatecontent::deleteAll(['in','contentId',$arrContentId,'type'=>Workflow::TYPE_GALLARY]);
+	
+		//clear online pick
+		Online::deleteAll(['in','contentId',$arrContentId,'type'=>Workflow::TYPE_GALLARY]);
+		
 		//ลบ contents
-		return Contents::deleteAll(['in','id',$arrContentId]);
+		return Gallary::deleteAll(['in','id',$arrContentId]);
 	}
 
 	public function actionGetitem(){

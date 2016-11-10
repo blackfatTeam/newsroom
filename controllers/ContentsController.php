@@ -388,7 +388,7 @@ class ContentsController extends Controller
 		}
 		
 		//clear relate content
-		Relatecontent::deleteAll(['in','contentId',$arrContentId]);
+		Relatecontent::deleteAll(['in','contentId',$arrContentId,'type'=>Workflow::TYPE_CONTENT]);
 		
 		//clear online pick
 		Online::deleteAll(['in','contentId',$arrContentId,'type'=>Workflow::TYPE_CONTENT]);
