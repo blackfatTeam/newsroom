@@ -109,6 +109,14 @@ class Workflow {
 			2 => 'Tile Gallery',
 	];
 	
+	/*------------------------------Hottopic(ประเด็นร้อน)-------------------------*/
+	const  HOTTOPIC_STATUS_REJECTED = -1;  //สถานะปิด
+	const  HOTTOPIC_STATUS_PUBLISHED = 10; //สถานะเปิด
+	public static $arrHottopicStatus = [
+			self::HOTTOPIC_STATUS_REJECTED => 'ปิด',
+			self::HOTTOPIC_STATUS_PUBLISHED => 'เปิด',
+	];
+	
 	/*------------------------------Media----------------------------*/
 	const UPLOAD_FOLDER='uploads';
 	const UPLOAD_IMAGES_FOLDER = 'images';

@@ -14,7 +14,7 @@ $(function() {
 			toolbar : "bold italic underline forecolor backcolor strikethrough styleselect | alignleft aligncenter alignright alignjustify | bullist numlist link | social-feed youtube_link | cms.media | cms.facebook | code",
 				
 			//valid_styles: { '*': 'text-align,text-decoration,color' },
-		    valid_elements : 'br,span[style|class],div[style|class],p[style|class],pre[style],blockquote[style],img[style|src|alt|width|height],h1,h2,h3,h4,h5,h6,strong,em,sup,sub,code,a[href|title|target],ol[class],ul[class],li[class],table[class],thead,tbody,tr,td,th',
+		    valid_elements : 'br,span[style|class],div[style|class],p[style|class],pre[style],blockquote[style],img[class|style|src|alt|width|height],h1,h2,h3,h4,h5,h6,strong,em,sup,sub,code,a[href|title|target],ol[class],ul[class],li[class],table[class],thead,tbody,tr,td,th',
 			valid_children: 'div[iframe]',
 			
 			extended_valid_elements : 'iframe[title|width|height|src|frameborder|allowfullscreen],'+

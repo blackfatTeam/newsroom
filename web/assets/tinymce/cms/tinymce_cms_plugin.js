@@ -183,7 +183,7 @@ tinymce.create('tinymce.plugins.cmsPlugin',{
 							editor.insertContent(html);*/
 							var html = '<instagram class="facebook-post" data-html="'+result.html+'">'+result.title+'</instagram>';	
 							//var html = result.html;		
-						debugger;
+
 							editor.insertContent(html);
 						}).fail(function(result) {
 							var instagramNewUrl = window.instagramNewUrl;
@@ -293,7 +293,7 @@ $('#embeded-media-items').on('click', 'td .media-select', function() {
 		imgId = $(this).attr('data-refid');
 	}
 	
-	var html = '<img class="imgInContent" data-imgId="xxy'+imgId+'yxx" src="'+imgSrc+'">';
+	var html = '<img class="img-responsive" data-imgId="xxy'+imgId+'yxx" src="'+imgSrc+'">';
 
 	insertContent(html);
 });

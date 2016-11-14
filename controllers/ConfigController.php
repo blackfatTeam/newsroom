@@ -86,6 +86,46 @@ class ConfigController extends Controller
     					]
     			],
     			[
+    			
+	    			'title' => 'Hot Topic',
+	    			'icon' => 'fa fa-globe',
+	    			'uri' => 'online/view',
+	    			'group' => [
+	    					'hottopic/edit',
+	    			],
+	    			'sub'=>[
+    					[
+    							'title'=>'กรุงเทพ',
+    							'icon'=>'',
+    							'uri'=> Url::toRoute(["hottopic/edit", 'web' => 'bkk']),
+    							'group'=> [
+    									Url::toRoute(["hottopic/edit"]),
+    							],
+    					],
+    					[
+    							'title'=>'กาญจนบุรี',
+    							'icon'=>'',
+    							'uri'=>Url::toRoute(["hottopic/edit", 'web' => 'kri']),
+    							'group'=> [
+    									Url::toRoute(["hottopic/edit"])
+    							],
+    					],
+    					[
+    							'title'=>'นครราชสีมา',
+    							'icon'=>'',
+    							'uri'=>Url::toRoute(["hottopic/edit", 'web' => 'nma']),
+    							'group'=> [
+    									Url::toRoute(["hottopic/edit"])
+    							],
+    					],
+    						
+    			],
+    			'authen'=>[
+    					Auth::ADMIN,
+    					Auth::EDITOR
+    				]
+    			],
+    			[
     					'title' => 'User Management',
     					'icon' => 'fa fa-user',
     					'uri' => 'user/list',
@@ -98,6 +138,7 @@ class ConfigController extends Controller
     							Auth::ADMIN,
     					]
     			],
+    			
     	
     	];
     	return $arrMenu;
