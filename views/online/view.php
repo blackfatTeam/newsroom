@@ -105,7 +105,7 @@ $baseUri = Yii::getAlias('@web');
 				<?php endforeach;?>
 			</div>
 			
-			<?php $arrSection = array_splice($arrItem, 0,2);?>
+			<?php $arrSection = array_splice($arrItem, 0,3);?>
 			<div class="col-md-4">
 				<?php foreach ($arrSection as $key => $lst):?>
 				<div class="portlet box grey">
