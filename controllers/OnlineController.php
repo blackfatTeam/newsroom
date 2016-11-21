@@ -10,6 +10,11 @@ use app\models\Media;
 use app\lib\Workflow;
 
 class OnlineController extends Controller{
+	public function beforeAction($event)
+	{
+		$this->enableCsrfValidation = false;
+		return parent::beforeAction($event);
+	}
     public function actionView()
     {
     	$web = Yii::$app->request->get('web');

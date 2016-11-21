@@ -140,6 +140,18 @@ class Workflow {
 	];
 	
 	/*------------------------------Media----------------------------*/
+	public static function getUripreview($params = []){
+		$mId = isset($params['mediaId'])?$params['mediaId']:null;
+		$w = isset($params['width'])?$params['width']:null;
+		$h = isset($params['height'])?$params['height']:null;
+		$wtm = isset($params['wartermark'])?$params['wartermark']:null;
+	
+		//$baseUrl = \Yii::getAlias('@webUrl');
+		$baseUrl = 'http://localhost/newsroom/web';
+		return $baseUrl.'/'.'media/genmedia'.'?'.'w='.$w.'&'.'h='.$h.'&'.'wtm='.$wtm.'&'.'mId='.$mId;
+	
+	}
+	
 	const UPLOAD_FOLDER='uploads';
 	const UPLOAD_IMAGES_FOLDER = 'images';
 	const UPLOAD_THUMBNAIL_FOLDER ='thumbnail';

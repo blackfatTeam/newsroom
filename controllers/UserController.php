@@ -13,6 +13,11 @@ use yii\web\Controller;
 
 class UserController extends Controller
 {
+	public function beforeAction($event)
+	{
+		$this->enableCsrfValidation = false;
+		return parent::beforeAction($event);
+	}
 	public function behaviors()
 	{
 

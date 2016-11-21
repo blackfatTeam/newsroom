@@ -9,7 +9,11 @@ use app\lib\Auth;
 
 class ConfigController extends Controller
 {
-	
+	public function beforeAction($event)
+	{
+		$this->enableCsrfValidation = false;
+		return parent::beforeAction($event);
+	}
     public static function getConfig(){
     	$arrMenu = [
     	

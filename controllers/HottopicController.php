@@ -11,6 +11,11 @@ use app\lib\Workflow;
 
 class HottopicController extends Controller
 {
+	public function beforeAction($event)
+	{
+		$this->enableCsrfValidation = false;
+		return parent::beforeAction($event);
+	}
 	public function behaviors()
 	{
 		return [

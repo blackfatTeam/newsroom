@@ -18,55 +18,52 @@ use yii\bootstrap\Html;
 
 class MediaController extends Controller
 {
+	public function beforeAction($event)
+	{
+		$this->enableCsrfValidation = false;
+		return parent::beforeAction($event);
+	}
 	public function actionGenmedia(){
-
+	
 		$w = \Yii::$app->request->get('w');
 		$h = \Yii::$app->request->get('h');
 		$wtm = \Yii::$app->request->get('wtm');
 		$mId = \Yii::$app->request->get('mId');
-		
+	
 		$mediaId = $mId;
-		$wartermark = $wtm;
+		$watermark = $wtm;
 		$width =  $w;
 		$height = $h;
-		
-		
+	
+	
 		$media = Media::find()->where(['id'=>$mediaId])->one();
-		
+	
 		if($media){
 			$arrpathath = json_decode($media->srcPath);
 			$originPath = $arrpathath->{'origin'};
-				
+	
 			$image = Yii::$app->image->load($originPath);
-				
-				
+	
+	
 			if(!empty($width)&&!empty($height)){
 				$image->resize($width,$height,\yii\image\drivers\Image::CROP);
+			}elseif(!empty($width)){
+				$image->resize($width,$height,\yii\image\drivers\Image::WIDTH);
+			}elseif(!empty($height)){
+				$image->resize($width,$height,\yii\image\drivers\Image::HEIGHT);
 			}
-		
-		
-			if(!empty($option['wartermark'])){
-				$watermarkSrc = Workflow::$arrWaterMark[$option['wartermark']];
-				$watermark = Yii::$app->image->load($watermarkSrc);
-				$watermark->resize($image->width,$image->height,\yii\image\drivers\Image::CROP);
-				$image->watermark($watermark, NULL, NULL, 50);
+	
+	
+			if(!empty($watermark)){
+				$watermarkSrc = Workflow::$arrWaterMark[$watermark];
+				$watermarkFile = Yii::$app->image->load($watermarkSrc);
+				$watermarkFile->resize($image->width,$image->height,\yii\image\drivers\Image::CROP);
+				$image->watermark($watermarkFile, NULL, NULL, 50);
 			}
-
-			header("Content-Type: ".$image->mime);	
-			echo $image->render(); 
+	
+			header("Content-Type: ".$image->mime);
+			echo $image->render();
 		}
-	}
-
-	public static function getUripreview($option = []){
-	
-		$mId = $option['mediaId'];
-		$w = $option['width'];
-		$h = $option['height'];
-		$wtm = $option['wartermark'];
-	
-		$baseUrl = \Yii::getAlias('@webUrl');		
-		return $baseUrl.'/'.'media/genmedia'.'?'.'w='.$w.'&'.'h='.$h.'&'.'wtm='.$wtm.'&'.'mId='.$mId; 
-	
 	}
     public function actionIndex()
     {
@@ -84,7 +81,8 @@ class MediaController extends Controller
     		$mediaModel->caption = $data['caption'];
     		$mediaModel->watermarkNo = $data['watermark'];
     		if($mediaModel->save()){
-    			if($difWatermark!=$mediaModel->watermarkNo){
+    			//ไม่ต้อง gen รูปลายน้ำเก็บไว้แล้ว เพราะมีฟังชัน getPreviewuri
+    			/* if($difWatermark!=$mediaModel->watermarkNo){
     				if($data['watermark']!=Workflow::WATER_MARK_NONE){
     					$watermarkSrc = Workflow::$arrWaterMark[$data['watermark']];
     					$watermarkFile = Yii::$app->image->load($watermarkSrc);
@@ -101,7 +99,7 @@ class MediaController extends Controller
     					$origin->save($saveTo);
     				}
     				
-    			}
+    			} */
     		}else{
     			$result = false;
     		}
