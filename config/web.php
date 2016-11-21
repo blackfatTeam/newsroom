@@ -72,7 +72,10 @@ $config = [
 	'aliases' => [
 			'@uploadUrl' => 'http://localhost/newsroom/images/uploads',
 			'@uploadPath' => '/www/newsroom/images/uploads',
-			//'@uploadUrl' => 'http://2016.hisoparty.com/backend/web/uploads',
+			'@webUrl'=> 'http://localhost/newsroom/web'
+			
+			//'@uploadUrl' => 'http://cms.arawannews.com/images/uploads',
+			//'@uploadPath' => '/home/mlogwis/domains/arawannews.com/public_html/cms/images/uploads',
 	],
 	'timeZone' => 'Asia/Bangkok',
 	'language' => 'th',

@@ -168,6 +168,10 @@ $this->registerCss($css);
 			<div class="form-body">
 				<div class="form-group">
 					<label>รูปแบบ Theme</label>
+					<?= Html::activeDropDownList($contents, 'categoryId',['']+Workflow::$arrCategory,['class'=>'form-control'])?>
+				</div>	
+				<div class="form-group">
+					<label>รูปแบบ Theme</label>
 					<?= Html::activeDropDownList($contents, 'theme',Workflow::$theme,['class'=>'form-control'])?>
 				</div>	
 	

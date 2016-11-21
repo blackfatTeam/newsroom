@@ -36,7 +36,8 @@ class Hottopic extends \yii\db\ActiveRecord
         return [
             [['orderNo', 'status', 'createBy', 'lastUpdateBy'], 'integer'],
             [['createTime', 'lastUpdateTime'], 'safe'],
-            [['title', 'link', 'web'], 'string', 'max' => 50],
+            [['title', 'web'], 'string', 'max' => 50],
+            [['link'], 'string', 'max' => 300],
         ];
     }
 

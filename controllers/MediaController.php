@@ -13,10 +13,61 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use app\models\Gallary;
 use function Faker\boolean;
+use yii\bootstrap\Html;
 
 
 class MediaController extends Controller
 {
+	public function actionGenmedia(){
+
+		$w = \Yii::$app->request->get('w');
+		$h = \Yii::$app->request->get('h');
+		$wtm = \Yii::$app->request->get('wtm');
+		$mId = \Yii::$app->request->get('mId');
+		
+		$mediaId = $mId;
+		$wartermark = $wtm;
+		$width =  $w;
+		$height = $h;
+		
+		
+		$media = Media::find()->where(['id'=>$mediaId])->one();
+		
+		if($media){
+			$arrpathath = json_decode($media->srcPath);
+			$originPath = $arrpathath->{'origin'};
+				
+			$image = Yii::$app->image->load($originPath);
+				
+				
+			if(!empty($width)&&!empty($height)){
+				$image->resize($width,$height,\yii\image\drivers\Image::CROP);
+			}
+		
+		
+			if(!empty($option['wartermark'])){
+				$watermarkSrc = Workflow::$arrWaterMark[$option['wartermark']];
+				$watermark = Yii::$app->image->load($watermarkSrc);
+				$watermark->resize($image->width,$image->height,\yii\image\drivers\Image::CROP);
+				$image->watermark($watermark, NULL, NULL, 50);
+			}
+
+			header("Content-Type: ".$image->mime);	
+			echo $image->render(); 
+		}
+	}
+
+	public static function getUripreview($option = []){
+	
+		$mId = $option['mediaId'];
+		$w = $option['width'];
+		$h = $option['height'];
+		$wtm = $option['wartermark'];
+	
+		$baseUrl = \Yii::getAlias('@webUrl');		
+		return $baseUrl.'/'.'media/genmedia'.'?'.'w='.$w.'&'.'h='.$h.'&'.'wtm='.$wtm.'&'.'mId='.$mId; 
+	
+	}
     public function actionIndex()
     {
     	$result = $this->doQuery(); 
@@ -229,7 +280,7 @@ class MediaController extends Controller
     }
     private function CreateDir($basePath = null,$folderName) {
     	if($basePath == null){
-    		$basePath = Media::getUploadPath();
+    		$basePath = Workflow::getUploadPath();
     	}
     	if ($folderName != NULL) {
     		 
@@ -378,8 +429,8 @@ class MediaController extends Controller
 			$identity = \Yii::$app->user->getIdentity();
 	    	$dateCreate = date('Y-m-d H:i:s',time());
 	    	$date = date('Ym',strtotime($dateCreate));
-	    	$imgUpPath = Media::getUploadPath('img');
-	    	$imgUpUrl = Media::getUploadUrl('img');
+	    	$imgUpPath = Workflow::getUploadPath('img');
+	    	$imgUpUrl = Workflow::getUploadUrl('img');
 	    	 
 	    	 
 	    	//สร้าง folder แยกตามวัน
@@ -416,8 +467,8 @@ class MediaController extends Controller
 	    		$this->createThumbnail($imgUpPath,$realFileName,Workflow::SIZE_MID);
 	
 				$arrThumb = [
-	    			Workflow::SIZE_LIT=>$imgUpUrl.'/'.Media::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_LIT.'_'.$realFileName,
-	    			Workflow::SIZE_MID=>$imgUpUrl.'/'.Media::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_MID.'_'.$realFileName,
+	    			Workflow::SIZE_LIT=>$imgUpUrl.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_LIT.'_'.$realFileName,
+	    			Workflow::SIZE_MID=>$imgUpUrl.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_MID.'_'.$realFileName,
 	    			Workflow::SIZE_FULL=>$imgUpUrl.'/'.$realFileName,
 	    			'old'=>$oldUrl,
 	    		];
@@ -425,8 +476,8 @@ class MediaController extends Controller
 	    			 
 	    		$arrSrcPath = [
 	    			'origin'=>$imgUpPath.'/'.$realFileName,
-	    			Workflow::SIZE_LIT=>$imgUpPath.'/'.Media::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_LIT.'_'.$realFileName,
-	    			Workflow::SIZE_MID=>$imgUpPath.'/'.Media::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_MID.'_'.$realFileName,
+	    			Workflow::SIZE_LIT=>$imgUpPath.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_LIT.'_'.$realFileName,
+	    			Workflow::SIZE_MID=>$imgUpPath.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER.'/'.Workflow::SIZE_MID.'_'.$realFileName,
 	    		];
 	    		$jsonSrcPath = json_encode($arrSrcPath);
 	    			
@@ -456,8 +507,6 @@ class MediaController extends Controller
     	//var_dump($tmpp);
 		
 	}
-	public function actionTest(){
-		echo \Yii::getAlias('@web');
-	}
+
 	
 }

@@ -104,10 +104,32 @@ class Workflow {
 
 		
 	/*------------------------------Contents----------------------------*/
+	const CONTENT_TYPE_POL = 1; 
+	const CONTENT_TYPE_SPORT = 2;
+	const CONTENT_TYPE_ENT = 3;
+	const CONTENT_TYPE_LIFESTYLE = 4;
+	const CONTENT_TYPE_ECO = 5;
+	const CONTENT_TYPE_OVERSEA = 6;
+	const CONTENT_TYPE_THAI = 7;
+	const CONTENT_TYPE_ROYAL = 8;
+	const CONTENT_TYPE_CRIME = 9;
+	
+	public static $arrCategory = [
+		self::CONTENT_TYPE_POL => 'การเมือง',
+		self::CONTENT_TYPE_SPORT => 'กีฬา',
+		self::CONTENT_TYPE_ENT => 'บันเทิง',
+		self::CONTENT_TYPE_LIFESTYLE => 'ไลฟ์สไตล์',
+		self::CONTENT_TYPE_ECO => 'เศรษฐกิจ',
+		self::CONTENT_TYPE_OVERSEA => 'ต่างประเทศ',
+		self::CONTENT_TYPE_THAI => 'ทั่วไทย',
+		self::CONTENT_TYPE_ROYAL => 'ข่าวในพระราชสำนัก',
+		self::CONTENT_TYPE_CRIME => 'อาชญากรรม',
+	];
 	public static $theme = [
 			1 => 'Full Panorama',
 			2 => 'Tile Gallery',
 	];
+	
 	
 	/*------------------------------Hottopic(ประเด็นร้อน)-------------------------*/
 	const  HOTTOPIC_STATUS_REJECTED = -1;  //สถานะปิด
@@ -130,6 +152,33 @@ class Workflow {
 		self::WATER_MARK_1 => '\www\newsroom\images\sample-trans1.png',
 		self::WATER_MARK_2 => '\www\newsroom\images\sample-trans2.png',
 	];
+	
+	public static function getPreview($media,$options = array()) {
+
+		if ($media == null)
+			return null;
+
+			return Html::img(\Yii::getAlias('@uploadPath').'/'.self::getPublishUri($media,$options));
+			
+	}
+	
+	/**
+	 * ให้ค่า url สำหรับเรียกใช้งาน media
+	 * @return string
+	 */
+	public function getPublishUri($model,$options = array()) {
+
+		$encodeId = $model->refId;
+		if(is_numeric($model->refId))
+			$encodeId = strpos($model->refId, '.')?strval($model->refId):intval($model->refId);
+	
+			$params = $options;
+	
+			$enc = new TrEnc(\Yii::$app->params['crypto'][0][0],\Yii::$app->params['crypto'][0][1]);
+			
+			return ($enc->encode($params));
+			//return $enc->encode($params) . '.' . substr($this->mime, strrpos($this->mime, '/') + 1);
+	}
 	
 	/**
 	 *
@@ -239,7 +288,7 @@ class Workflow {
 	}
 	private function CreateDir($basePath = null,$folderName) {
 		if($basePath == null){
-			$basePath = Media::getUploadPath();
+			$basePath = Workflow::getUploadPath();
 		}
 		if ($folderName != NULL) {
 			 
@@ -252,8 +301,8 @@ class Workflow {
 	
 	private function createThumbnail($imgUpPath, $fileName, $width = 250) {
 	
-		$this->CreateDir($imgUpPath,Media::UPLOAD_THUMBNAIL_FOLDER);
-		$uploadPath = $imgUpPath.'/'.Media::UPLOAD_THUMBNAIL_FOLDER;
+		$this->CreateDir($imgUpPath,Workflow::UPLOAD_THUMBNAIL_FOLDER);
+		$uploadPath = $imgUpPath.'/'.Workflow::UPLOAD_THUMBNAIL_FOLDER;
 		$file = $imgUpPath .'/'. $fileName;
 	
 	

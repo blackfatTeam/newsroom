@@ -13,6 +13,7 @@ use Yii;
  * @property string $content
  * @property integer $status
  * @property string $tags
+ * @property integer $categoryId
  * @property integer $thumbnail
  * @property string $publishTime
  * @property string $createTime
@@ -44,7 +45,7 @@ class Contents extends \yii\db\ActiveRecord
         return [
             [['title'], 'required'],
             [['content'], 'string'],
-            [['status', 'thumbnail', 'createBy', 'lastUpdateBy', 'theme', 'viewCount'], 'integer'],
+            [['status', 'categoryId', 'thumbnail', 'createBy', 'lastUpdateBy', 'theme', 'viewCount'], 'integer'],
             [['publishTime', 'createTime', 'lastUpdateTime', 'expireTime'], 'safe'],
             [['title', 'postTitle', 'credit'], 'string', 'max' => 300],
             [['abstract'], 'string', 'max' => 400],
@@ -65,6 +66,7 @@ class Contents extends \yii\db\ActiveRecord
             'content' => 'Content',
             'status' => 'Status',
             'tags' => 'Tags',
+            'categoryId' => 'Category ID',
             'thumbnail' => 'Thumbnail',
             'publishTime' => 'Publish Time',
             'createTime' => 'Create Time',

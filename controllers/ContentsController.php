@@ -39,6 +39,9 @@ class ContentsController extends Controller
 				 
 		];
 	}
+	public function actionTest(){
+		return $this->render('test');
+	}
 	public function actionTagapi() {
 		$request = Yii::$app->request;
 		
@@ -576,7 +579,7 @@ class ContentsController extends Controller
 		header('Content-Type: application/json');
 		echo json_encode(array('result' => $result, 'resultFact' => $resultFact));
 	}
-	public function actionTest(){
+	/* public function actionTest(){
 
 		$watermark =  Yii::$app->image->load('\www\newsroom\images\sample-trans1.png');
 		$originModel = Media::findOne(34);
@@ -587,5 +590,5 @@ class ContentsController extends Controller
 		$origin->watermark($watermark, NULL, NULL, 50);
 	
 		$origin->save( Workflow::getUploadPath('img'). '/test.png');
-	}
+	} */
 }
