@@ -84,7 +84,7 @@ class HottopicController extends Controller
 				}
 			}elseif($op == 'add'){
 				$title = Yii::$app->request->post('title');
-				$link = Yii::$app->request->post('link');
+				$tags = Yii::$app->request->post('tags');
 				$status = Yii::$app->request->post('status');
 				
 				$tmp = Hottopic::find()->where(['web'=>$web])->orderBy('orderNo desc')->one();
@@ -92,7 +92,7 @@ class HottopicController extends Controller
 				
 				$model = new Hottopic();
 				$model->title = $title;
-				$model->link = $link;
+				$model->tags = $tags;
 				$model->orderNo = $num;
 				$model->web = $web;
 				$model->status = $status;
@@ -112,14 +112,14 @@ class HottopicController extends Controller
 			}elseif($op == 'edit'){
 				$id = Yii::$app->request->post('id');
 				$title = Yii::$app->request->post('title');
-				$link = Yii::$app->request->post('link');
+				$tags = Yii::$app->request->post('tags');
 				$status = Yii::$app->request->post('status');
 								
 				$model = Hottopic::findOne($id);
 
 				if(!empty($model)){
 					$model->title = $title;
-					$model->link = $link;
+					$model->tags = $tags;
 					$model->status = $status;
 					$model->lastUpdateBy = $identity->id;
 					$model->lastUpdateTime = date('Y-m-d H:i:s',time());

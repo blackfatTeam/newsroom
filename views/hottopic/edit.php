@@ -8,12 +8,14 @@ use app\models\Hottopic;
 use app\lib\Workflow;
 
 $baseUri = Yii::getAlias('@web');
-$str = <<<EOT
-$( "tbody.orderAble" ).sortable();
+$tagSearchUri = Url::toRoute(['contents/tagapi']);
 
+$str = <<<EOT
+
+initTags();
+$( "tbody.orderAble" ).sortable();
 		
- $('.saveBtn').on('click',function(){
-     
+ $('.saveBtn').on('click',function(){     
      data = [];
     
      $("tbody.orderAble tr").each(function(i) { 
@@ -29,26 +31,33 @@ $( "tbody.orderAble" ).sortable();
  });
 
 $('#btn-addItem').on('click',function(){
+
 	$('#hottopicFormAdd').find('button[type="submit"]').text("Add")
 	$('#hottopicFormAdd').find('input[name="op"]').val('add');
 	$('#hottopicFormAdd').find('input[name="title"]').val('');
-	$('#hottopicFormAdd').find('input[name="link"]').val('');
-	$('#hottopicFormAdd').find('select[name="status"]').val('');		
+	$('#hottopicFormAdd').find('input[name="tags"]').val('');
+	//$('.select2-choices').children().remove();
+	$('#hottopicFormAdd').find('select[name="status"]').val('');	
+	$('#modal-hottopicFormAdd').modal('show');
+	
 });
 
 $('.edit-form').on('dblclick',function(){
 	id = $(this).data('id');
 	title = $(this).data('title');
-	link = $(this).data('link');
+	tags = $(this).data('tags');
 	status = $(this).data('status');
-	
+
 	$('#hottopicFormAdd').find('button[type="submit"]').text("Edit")
 	$('#hottopicFormAdd').find('input[name="op"]').val('edit');
 		
 	$('#hottopicFormAdd').find('input[name="id"]').val(id);
 	$('#hottopicFormAdd').find('input[name="title"]').val(title);
-	$('#hottopicFormAdd').find('input[name="link"]').val(link);
+	$('#hottopicFormAdd').find('input[name="tags"]').val(tags);
 	$('#hottopicFormAdd').find('select[name="status"]').val(status);
+						
+	//init tags
+	initTags();
 	$('#modal-hottopicFormAdd').modal('show');
 	
 });
@@ -61,6 +70,59 @@ $('.btn-delete').on('click',function(){
 	}
 	
 });
+function initTags(){
+	 $('#tagSug').select2({
+	 		tags: true,
+	 		multiple: true,
+	 		//tokenSeparators: [',', ' '],
+		    //minimumInputLength: 2,
+		    
+		   	createSearchChoice : function (term) { return {id: term, text: term}; },
+		   	ajax: {
+				url: '$tagSearchUri',
+				dataType: 'json',
+				data: function (params) {
+			      return {
+			        q: params
+			      };
+			    },		
+				results: function(data) {	
+					return {
+						results: $.map(data, function(item) {
+							return {
+								id: item.value,
+								//slug: item.value,
+								text: item.value
+							};
+						}),
+					};
+				}
+			},
+			// Take default tags from the input value
+		    initSelection: function (element, callback) {
+		        var data = [];
+		
+		        function splitVal(string, separator) {
+		            var val, i, l;
+		            if (string === null || string.length < 1) return [];
+		            val = string.split(separator);
+		            for (i = 0, l = val.length; i < l; i = i + 1) val[i] = $.trim(val[i]);
+		            return val;
+		        }
+		
+		        $(splitVal(element.val(), ",")).each(function () {
+		            data.push({
+		                id: this,
+		                text: this
+		            });
+		        });
+		
+		        callback(data);
+		    }, 
+			
+        });
+		
+}
 EOT;
 $this->registerJs($str);
 $css = <<<EOT
@@ -77,7 +139,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => [$uri]];
 		<div class="portlet-title">
 			<div class="caption"><i class="fa fa-reorder"></i>Hot Topic</div>
 			<div class="actions">
-				<a data-toggle="modal" href="#modal-hottopicFormAdd"  class="btn green" id="btn-addItem"><i class="fa fa-plus"></i> Add</a>
+				<a   class="btn green" id="btn-addItem"><i class="fa fa-plus"></i> Add</a>
 				<a href="javascript:;" class="btn btn-info saveBtn"><i class="fa fa-save"></i> Order Save</a>				
 			</div>
 		</div>
@@ -89,16 +151,16 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => [$uri]];
 						<tr>
 							<th>No.</th>
 							<th>Title</th>
-							<th>Link</th>
+							<th>Tags</th>
 							<th>Status</th>
 							<th>Action</th>
 						</tr>
 						<tbody class="orderAble">
 							<?php foreach($arrHottopic as $i => $hot){?>
-							<tr data-id="<?= $hot->id?>" data-title="<?= $hot->title?>" data-link="<?= $hot->link?>" data-status="<?= $hot->status?>" class="edit-form">
+							<tr data-id="<?= $hot->id?>" data-title="<?= $hot->title?>" data-tags="<?= $hot->tags?>" data-status="<?= $hot->status?>" class="edit-form">
 								<td><?php echo $i+1?></td>
 								<td><?php echo $hot->title?></td>
-								<td><?php echo $hot->link?></td>
+								<td><?php echo $hot->tags?></td>
 								<td><?php echo isset(Workflow::$arrHottopicStatus[$hot->status])?Workflow::$arrHottopicStatus[$hot->status]:''?></td>
 								<td><a class="btn red btn-xs pull-right btn-delete" data-id="<?= $hot->id?>"><i class="fa fa-minus " title="ลบ"></i></a></td>
 							</tr>
@@ -136,13 +198,13 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => [$uri]];
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="link" class="col-md-2 control-label">Link</label>
+					<label for="tags" class="col-md-2 control-label">Tags</label>
 					<div class="col-md-10">
-						<input type="text" name="link" class="form-control" id="link" placeholder="link">
+						<input type="text" name="tags" class="form-control" id="tagSug" placeholder="tags">
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="link" class="col-md-2 control-label">Status</label>
+					<label for="status" class="col-md-2 control-label">Status</label>
 					<div class="col-md-10">
 						<?= Html::dropDownList('status','',Workflow::$arrHottopicStatus, ['class'=>'form-control'])?>
 					</div>

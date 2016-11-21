@@ -9,7 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $title
- * @property string $link
+ * @property string $tags
  * @property integer $orderNo
  * @property string $web
  * @property integer $status
@@ -34,10 +34,11 @@ class Hottopic extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['title', 'tags'], 'required'],
             [['orderNo', 'status', 'createBy', 'lastUpdateBy'], 'integer'],
             [['createTime', 'lastUpdateTime'], 'safe'],
             [['title', 'web'], 'string', 'max' => 50],
-            [['link'], 'string', 'max' => 300],
+            [['tags'], 'string', 'max' => 300],
         ];
     }
 
@@ -49,7 +50,7 @@ class Hottopic extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'title' => 'Title',
-            'link' => 'Link',
+            'tags' => 'Tags',
             'orderNo' => 'Order No',
             'web' => 'Web',
             'status' => 'Status',
