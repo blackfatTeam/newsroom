@@ -24,6 +24,7 @@ use Yii;
  * @property string $postTitle
  * @property string $credit
  * @property string $viewCount
+ * @property string $web
  * @property string $expireTime
  * @property string $remark
  */
@@ -50,6 +51,7 @@ class Contents extends \yii\db\ActiveRecord
             [['title', 'postTitle', 'credit'], 'string', 'max' => 300],
             [['abstract'], 'string', 'max' => 400],
             [['tags'], 'string', 'max' => 250],
+            [['web'], 'string', 'max' => 10],
             [['remark'], 'string', 'max' => 255],
         ];
     }
@@ -77,6 +79,7 @@ class Contents extends \yii\db\ActiveRecord
             'postTitle' => 'Post Title',
             'credit' => 'Credit',
             'viewCount' => 'View Count',
+            'web' => 'Web',
             'expireTime' => 'Expire Time',
             'remark' => 'Remark',
         ];

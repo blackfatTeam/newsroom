@@ -50,7 +50,7 @@ class Workflow {
 	const META_AUTHOR = 'www.hisoparty.com';
 	
 	const INSTAGRAM_CATEGORYID = 1000;
-	const POST_URL = "www.hisoparty.com/content/";
+	const POST_URL = "www.bkk.arawannews.com/web/content/";
 	const POST_URL_UNCATE = "www.your-url.com/";
 	
 	const ACTION_CREATE = 'create';
@@ -114,6 +114,15 @@ class Workflow {
 	const CONTENT_TYPE_ROYAL = 8;
 	const CONTENT_TYPE_CRIME = 9;
 	
+	const CONTENT_WEB_1 = 'bkk';
+	const CONTENT_WEB_2 = 'kri';
+	const CONTENT_WEB_3 = 'nma';
+	
+	public static $arrWeb = [
+		self::CONTENT_WEB_1 => 'กรุงเทพ',
+		self::CONTENT_WEB_2 => 'กาญจนบุรี',
+		self::CONTENT_WEB_3 => 'นครราชสีมา',
+	];
 	public static $arrCategory = [
 		self::CONTENT_TYPE_POL => 'การเมือง',
 		self::CONTENT_TYPE_SPORT => 'กีฬา',

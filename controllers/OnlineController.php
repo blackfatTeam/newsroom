@@ -8,12 +8,40 @@ use app\models\Gallary;
 use app\lib\OnlineConfig;
 use app\models\Media;
 use app\lib\Workflow;
+use yii\filters\AccessControl;
+use yii\filters\AccessRule;
+use app\lib\Auth;
 
 class OnlineController extends Controller{
 	public function beforeAction($event)
 	{
 		$this->enableCsrfValidation = false;
 		return parent::beforeAction($event);
+	}
+	public function behaviors()
+	{
+
+		return [
+				'access'=>[
+						'class'=>AccessControl::className(),
+						'ruleConfig'=>[
+								'class'=>AccessRule::className()
+						],
+						//'only'=>[''],
+						'rules'=>[
+								[
+									'allow'=> true,
+									'roles'=>[
+											
+											//Auth::NEWS_MAN,
+											Auth::ADMIN,
+											Auth::EDITOR,
+											//Auth::REWRITE
+									]
+								],
+						]
+				],
+		];
 	}
     public function actionView()
     {

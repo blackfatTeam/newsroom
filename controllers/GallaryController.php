@@ -21,6 +21,8 @@ use yii\web\Controller;
 use yii\filters\AccessControl;
 use app\models\Tags;
 use app\models\Online;
+use yii\filters\AccessRule;
+use app\lib\Auth;
 
 class GallaryController extends Controller
 {
@@ -32,16 +34,24 @@ class GallaryController extends Controller
 	public function behaviors()
 	{
 		return [
-				'access' => [
-						'class' => AccessControl::className(),
-						'rules' => [
-								[
-										'allow' => true,
-										'roles' => ['@'],
-								],
+				'access'=>[
+						'class'=>AccessControl::className(),
+						'ruleConfig'=>[
+								'class'=>AccessRule::className()
 						],
+						//'only'=>[''],
+						'rules'=>[
+								[
+									'allow'=> true,
+									'roles'=>[
+											//Auth::NEWS_MAN,
+											Auth::ADMIN,
+											Auth::EDITOR,
+											Auth::REWRITE
+									]
+								],
+						]
 				],
-				 
 		];
 	}
 	public function actionTagapi() {

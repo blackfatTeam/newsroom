@@ -14,6 +14,9 @@ use yii\web\Controller;
 use app\models\Gallary;
 use function Faker\boolean;
 use yii\bootstrap\Html;
+use app\lib\Auth;
+use yii\filters\AccessControl;
+use yii\filters\AccessRule;
 
 
 class MediaController extends Controller
@@ -23,6 +26,32 @@ class MediaController extends Controller
 		$this->enableCsrfValidation = false;
 		return parent::beforeAction($event);
 	}
+	public function behaviors()
+	{
+
+		return [
+				'access'=>[
+						'class'=>AccessControl::className(),
+						'ruleConfig'=>[
+								'class'=>AccessRule::className()
+						],
+						//'only'=>[''],
+						'rules'=>[
+								[
+									'allow'=> true,
+									'roles'=>[
+											
+											Auth::NEWS_MAN,
+											Auth::ADMIN,
+											Auth::EDITOR,
+											Auth::REWRITE
+									]
+								],
+						]
+				],
+		];
+	}
+	
 	public function getWatermark($mark = null,$getAll = false){
 		$arr = [];
 		$arr[Workflow::WATER_MARK_NONE] = null;
@@ -34,7 +63,7 @@ class MediaController extends Controller
 		}
 		return $arr[$mark];
 	}
-public function actionGenmedia(){
+	public function actionGenmedia(){
 	
 		$w = \Yii::$app->request->get('w');
 		$h = \Yii::$app->request->get('h');

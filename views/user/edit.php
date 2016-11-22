@@ -90,6 +90,10 @@ $this->params['breadcrumbs'][] = ['label' => $user->username];
 					<?= Html::activeDropDownList($user, 'role', Auth::$arrUserRole,['class'=>'form-control'])?>
 				</div>
 				<?php }?>
+				<div class="form-group">
+					<label>Web</label>
+					<?= Html::activeDropDownList($user, 'web', ['']+Workflow::$arrWeb,['class'=>'form-control'])?>
+				</div>
 				<?php if($arrSetting['view.status']){?>
 				<div class="form-group">
 					<label>Status</label>

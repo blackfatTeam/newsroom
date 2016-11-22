@@ -27,7 +27,6 @@ class UserController extends Controller
 						'ruleConfig'=>[
 								'class'=>AccessRule::className()
 						],
-						'only' => ['list'],
 						'rules'=>[
 								[
 										'allow'=> true,

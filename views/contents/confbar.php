@@ -167,6 +167,10 @@ $this->registerCss($css);
 		<div class="portlet-body">
 			<div class="form-body">
 				<div class="form-group">
+					<label>Web</label>
+					<?= Html::activeDropDownList($contents, 'web',Workflow::$arrWeb,['class'=>'form-control'])?>
+				</div>	
+				<div class="form-group">
 					<label>ประเภทข่าว</label>
 					<?= Html::activeDropDownList($contents, 'categoryId',['']+Workflow::$arrCategory,['class'=>'form-control'])?>
 				</div>	
