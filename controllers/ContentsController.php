@@ -45,6 +45,8 @@ class ContentsController extends Controller
 		];
 	}
 	public function actionTest(){
+		$t = Workflow::getWatermark();
+		var_dump($t);exit;
 		return $this->render('test');
 	}
 	public function actionTagapi() {

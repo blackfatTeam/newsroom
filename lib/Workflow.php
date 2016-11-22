@@ -145,10 +145,17 @@ class Workflow {
 		$w = isset($params['width'])?$params['width']:null;
 		$h = isset($params['height'])?$params['height']:null;
 		$wtm = isset($params['wartermark'])?$params['wartermark']:null;
+		$wtmNo = Workflow::WATER_MARK_NONE;
 	
+		if($wtm){
+			$media = Media::findOne(['id'=>$mId]);
+			if($media){
+				$wtmNo = $media->watermarkNo;
+			}
+		}
 		//$baseUrl = \Yii::getAlias('@webUrl');
 		$baseUrl = 'http://localhost/newsroom/web';
-		return $baseUrl.'/'.'media/genmedia'.'?'.'w='.$w.'&'.'h='.$h.'&'.'wtm='.$wtm.'&'.'mId='.$mId;
+		return $baseUrl.'/'.'media/genmedia'.'?'.'w='.$w.'&'.'h='.$h.'&'.'wtm='.$wtmNo.'&'.'mId='.$mId;
 	
 	}
 	
@@ -160,10 +167,18 @@ class Workflow {
 	const WATER_MARK_1 = 1;		//ลายน้ำแบบที่ 1
 	const WATER_MARK_2 = 2;		//ลายน้ำแบบที่ 2
 	
+	/* public  function getWatermark($mark = self::WATER_MARK_NONE){
+		$arr = [];
+		$arr[self::WATER_MARK_NONE] = null;
+		$arr[self::WATER_MARK_1] = \Yii::getAlias('@webroot').'/images/sample-trans1.png';
+		$arr[self::WATER_MARK_1] = \Yii::getAlias('@webroot').'/images/sample-trans2.png';
+		
+		return $arr[$mark];
+	}
 	public static $arrWaterMark = [
-		self::WATER_MARK_1 => '\www\newsroom\images\sample-trans1.png',
-		self::WATER_MARK_2 => '\www\newsroom\images\sample-trans2.png',
-	];
+		self::WATER_MARK_1 => self::getWatermark(0),
+		self::WATER_MARK_2 => self::WEBROOT
+	]; */
 	
 	public static function getPreview($media,$options = array()) {
 

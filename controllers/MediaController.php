@@ -23,7 +23,18 @@ class MediaController extends Controller
 		$this->enableCsrfValidation = false;
 		return parent::beforeAction($event);
 	}
-	public function actionGenmedia(){
+	public function getWatermark($mark = null,$getAll = false){
+		$arr = [];
+		$arr[Workflow::WATER_MARK_NONE] = null;
+		$arr[Workflow::WATER_MARK_1] = \Yii::getAlias('@webroot').'/assets/watermark/sample-trans1.png';
+		$arr[Workflow::WATER_MARK_2] = \Yii::getAlias('@webroot').'/assets/watermark/sample-trans2.png';
+	
+		if($getAll){
+			return $arr;
+		}
+		return $arr[$mark];
+	}
+public function actionGenmedia(){
 	
 		$w = \Yii::$app->request->get('w');
 		$h = \Yii::$app->request->get('h');
@@ -55,7 +66,7 @@ class MediaController extends Controller
 	
 	
 			if(!empty($watermark)){
-				$watermarkSrc = Workflow::$arrWaterMark[$watermark];
+				$watermarkSrc = MediaController::getWatermark($watermark);
 				$watermarkFile = Yii::$app->image->load($watermarkSrc);
 				$watermarkFile->resize($image->width,$image->height,\yii\image\drivers\Image::CROP);
 				$image->watermark($watermarkFile, NULL, NULL, 50);
