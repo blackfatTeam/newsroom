@@ -58,7 +58,9 @@ $this->params['breadcrumbs'][] = ['label' => $contents->title];
 								<a href="<?= Url::toRoute('contents/edit')?>" class="btn btn-warning pull-right" <?= $disable?>><i class="fa fa-plus"></i> New Content </a>
 								<a href="#uploadContentImg" class="btn btn-success pull-right" data-toggle="modal" <?= $disable?>><i class="fa  fa-cloud-upload"></i> Upload Image</a>
 							</div>
-							<?php if(!empty($contents->id)){?>
+							<?php 
+if(false){
+//if(!empty($contents->id)){?>
 							<div class="form-group">
 								<label>URL</label>
 								<div class="input-group">
