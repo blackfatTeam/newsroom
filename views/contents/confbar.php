@@ -168,7 +168,7 @@ $this->registerCss($css);
 			<div class="form-body">
 				<div class="form-group">
 					<label>Web</label>
-					<?= Html::activeDropDownList($contents, 'web',Workflow::$arrWeb,['class'=>'form-control'])?>
+					<?= Html::activeDropDownList($contents, 'web',['' => '-- เลือกเว็บไซต์ที่ต้องการแสดงข้อมูล --'] + Workflow::$arrWeb,['class'=>'form-control'])?>
 				</div>	
 				<div class="form-group">
 					<label>ประเภทข่าว</label>
