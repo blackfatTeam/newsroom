@@ -54,6 +54,18 @@ $('[name^="selectContent"]').on('click',function(){
 
 EOT;
 $this->registerJs($str);
+
+$jProvinces = json_encode($provinces);
+$str = <<<EOT
+province = $jProvinces;
+
+	 $('#tagSug').select2({
+	 		tags: true,
+	 		multiple: true,
+			data: province,
+        });
+EOT;
+$this->registerJs($str);
 $css = <<<EOT
 
 EOT;
@@ -92,6 +104,14 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => [$uri]];
 										<div class="form-group">
 											<?= Html::dropDownList('status',$search['status'],[''=>'ทุกสถานะ']+Workflow::$arrStatusTh,['class'=>'form-control']);?>
 											<span class="help-block">Status (สถานะ)</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-body">
+										<div class="form-group">
+											<?= Html::textInput('web',$search['web'],['class'=>'form-control select2','id'=>'tagSug'])?>
+											<span class="help-block">Province (จังหวัด)</span>
 										</div>
 									</div>
 								</div>
@@ -138,6 +158,9 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => [$uri]];
 							<th class="text-center">เวลาแสดง</th>
 							<th class="text-center">จำนวนรูปที่อัพโหลด</th>							
 							<th class="text-center">อัพเดทล่าสุด</th>
+							<th class="text-center">จังหวัด</th>
+							<th class="text-center">สร้างโดย</th>
+							<th class="text-center">หมวดหมู่</th>
 							<th class="text-center">Action</th>
 						</tr>
 					</thead>
@@ -164,6 +187,9 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => [$uri]];
 							<td align="center"><?= date('d/m/Y H:i',strtotime($model['publishTime']))?></td>
 							<td align="center"><?= $model['amountImage']?></td>
 							<td align="center"><?= date('d/m/Y H:i',strtotime($model['lastUpdateTime']))?></td>
+							<td align="center"><?= isset(Workflow::$arrWeb[$model['web']])?Workflow::$arrWeb[$model['web']]:'-'?></td>
+							<td align="center"><?= $model['createByStr']?></td>
+							<td align="center"><?= isset(Workflow::$arrCategory[$model['categoryId']])?Workflow::$arrCategory[$model['categoryId']]:'-' ?></td>
 							<td align="center">
 								<a class="btn btn-sm btn-warning" href="<?= Url::toRoute(['contents/edit','id'=>$model['id']])?>"><i class="fa fa-edit"></i> Edit</a>
 							</td>

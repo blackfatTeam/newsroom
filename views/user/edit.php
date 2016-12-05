@@ -21,7 +21,20 @@ EOT;
 
 $this->registerJs($str);
 
+$jProvinces = json_encode($provinces);
+$str = <<<EOT
+province = $jProvinces;
 
+	 $('#tagSug').select2({
+	 		//tags: true,
+	 		//multiple: true,
+			data: province,
+			maximumSelectionLength: 1
+        });
+
+
+EOT;
+$this->registerJs($str);
 $css = <<<EOT
 
 EOT;
@@ -91,8 +104,9 @@ $this->params['breadcrumbs'][] = ['label' => $user->username];
 				</div>
 				<?php }?>
 				<div class="form-group">
-					<label>Web</label>
-					<?= Html::activeDropDownList($user, 'web', ['']+Workflow::$arrWeb,['class'=>'form-control'])?>
+					<label>จังหวัดที่สังกัด</label>
+					<?php //= Html::activeDropDownList($user, 'web', ['']+Workflow::$arrWeb,['class'=>'form-control'])?>
+					<?= Html::activeHiddenInput($user, 'web',['class'=>'form-control select2','id'=>'tagSug'])?>
 				</div>
 				<?php if($arrSetting['view.status']){?>
 				<div class="form-group">

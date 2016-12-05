@@ -8,6 +8,7 @@ use app\components\TinyMCE;
 use app\lib\Workflow;
 use app\components\Uploadfile;
 use app\components\LogWidget;
+use app\lib\Auth;
 
 $baseUri = Yii::getAlias('@web');
 $postUrl = empty($liveInCate)?Workflow::POST_URL_UNCATE:Workflow::POST_URL;
@@ -44,9 +45,11 @@ $this->params['breadcrumbs'][] = ['label' => $contents->title];
 		<div class="portlet-body">
 			<div class=" portlet-tabs">
 				<ul class="nav nav-tabs">
+				<?php if(\yii::$app->user->can(Auth::CONTENT_EDIT_CONFIG)){?>
 					<li><a href="#portlet_log" data-toggle="tab">Log</a></li>
 					<li><a href="#portlet_tab3" data-toggle="tab">ตั้งค่า</a></li>
 					<li><a href="#portlet_relate" data-toggle="tab">ข่าวที่เกี่ยวข้อง</a></li>
+				<?php }?>
 					<li class="active"><a href="#portlet_tab1" data-toggle="tab">Content</a></li>					
 				</ul>
 				<div class="tab-content">

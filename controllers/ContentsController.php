@@ -23,6 +23,7 @@ use app\models\Tags;
 use app\models\Online;
 use yii\filters\AccessRule;
 use app\lib\Auth;
+use app\models\User;
 
 class ContentsController extends Controller
 {
@@ -116,6 +117,12 @@ class ContentsController extends Controller
     	$contents = Contents::find()->where(['id'=>$id])->one();
     	if(empty($contents)){
     		$contents = new Contents();	
+    		
+    		//ตั้งค่าจังหวัดเริ่มต้นตอนสร้างข่าว โดยใช้จังหวัดที่ประจำอยู่ของ user
+    		if(!empty($identity->web)){
+    			$web = explode(',', $identity->web);
+    			$contents->web = isset($web[0])?$web[0]:'';
+    		}    		
 
     	}	   	
     	 
@@ -331,7 +338,9 @@ class ContentsController extends Controller
     			$title =  Yii::$app->request->post('title');
     			$status =  Yii::$app->request->post('status');
     			$publishTime =  Yii::$app->request->post('publishTime');
-
+    			$web =  Yii::$app->request->post('web');
+    			$arrWeb = explode(',', $web);
+    			
     			$query = Contents::find();
     			if($title!=null){
     				$query->andWhere(['like','title',$title]); 
@@ -341,12 +350,16 @@ class ContentsController extends Controller
     			}
     			if($publishTime!=null){
     				$query->andWhere(['like','publishTime',$publishTime]);    
-    			}    			
+    			}    
+    			if($web!=null){
+    				$query->andWhere(['in','web',$arrWeb]);
+    			}
 
     			\Yii::$app->session['contents/list.query'] = $query;
     			\Yii::$app->session['contents/list.query.title'] = $title;
     			\Yii::$app->session['contents/list.query.status'] = $status;
     			\Yii::$app->session['contents/list.query.publishTime'] = $publishTime;
+    			\Yii::$app->session['contents/list.query.web'] = $web;
 
     			
     		}else if($op == 'resetSearch'){
@@ -355,6 +368,7 @@ class ContentsController extends Controller
     			\Yii::$app->session['contents/list.query.title'] = '';
     			\Yii::$app->session['contents/list.query.status'] = '';
     			\Yii::$app->session['contents/list.query.publishTime'] = '';
+    			\Yii::$app->session['contents/list.query.web'] = '';
     		}
     	}
     	
@@ -362,6 +376,13 @@ class ContentsController extends Controller
     	$search['title'] = isset(\Yii::$app->session['contents/list.query.title'])?\Yii::$app->session['contents/list.query.title']:'';
     	$search['status'] = isset(\Yii::$app->session['contents/list.query.status'])?\Yii::$app->session['contents/list.query.status']:'';
     	$search['publishTime'] = isset(\Yii::$app->session['contents/list.query.publishTime'])?\Yii::$app->session['contents/list.query.publishTime']:'';
+    	$search['web'] = isset(\Yii::$app->session['contents/list.query.web'])?\Yii::$app->session['contents/list.query.web']:'';
+    	
+    	//กำหนดสิทธิ์ให้เห้นเฉพาะคนที่สร้าง
+    	if(!\yii::$app->user->can(Auth::CONTENT_LIST_ALL)){
+    		$query->andWhere(['createBy'=>$identity->id]);
+    	}    	
+    	
     	
     	$query->orderBy('id DESC');
     	$count = $query->count();
@@ -379,16 +400,25 @@ class ContentsController extends Controller
     	
     	$contentList = [];
     	foreach($models as $model){
-  		
+  			$creBy = User::findIdentity($model->createBy);
     		$amountImage = Media::find()->where(['refId'=>$model->id,'type'=>Workflow::TYPE_CONTENT])->count();
     		$contentList[]=$model->getAttributes()
-    		+['amountImage'=>$amountImage];
+    		+['amountImage'=>$amountImage]
+    		+['createByStr'=>$creBy->firstName.' '.$creBy->lastName];
+    	}
+    	//display
+    	//จังหวัดนักข่าว
+
+    	$provinces = [];
+    	foreach(Workflow::$arrWeb as $key => $web){
+    		$provinces[] = ['id'=>$key,'text'=>$web];
     	}
 
     	return $this->render('list',[
     		'pages'=>$pages,
     		'search'=>$search,
 			'contentList'=>$contentList,
+    		'provinces'=>$provinces,
     	]);
     }
 	public function doDelete($arrContentId,$type){

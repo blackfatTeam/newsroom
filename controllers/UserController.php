@@ -9,6 +9,8 @@ use app\lib\Auth;
 use yii\filters\AccessRule;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use app\models\Province;
+use yii\helpers\ArrayHelper;
 
 
 class UserController extends Controller
@@ -195,8 +197,12 @@ class UserController extends Controller
     		$viewRole = true;
     	}
     	
-    	
-    	
+    	//จังหวัดนักข่าว
+    	$provinces = [];
+    	foreach(Workflow::$arrWeb as $key => $web){
+    		$provinces[] = ['id'=>$key,'text'=>$web];
+    	}
+ 
     	
     	$arrSetting = [
 			'edit.username'=>$editUser,
@@ -211,6 +217,7 @@ class UserController extends Controller
     	return $this->render('edit',[
     			'arrSetting'=>$arrSetting,
     			'user'=>$user,
+    			'provinces'=>$provinces,
     	]);
     }
 }

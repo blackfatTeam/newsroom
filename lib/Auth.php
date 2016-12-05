@@ -19,6 +19,9 @@ class Auth {
 	const CONTENT_EDIT = 'content.edit';
 	const CONTENT_LIST = 'content.list';
 	const CONTENT_DELETE = 'content.delete';
+	const CONTENT_LIST_ALL = 'content.list.all'; //ดู เนื้อหาทั้งหมด
+	const CONTENT_EDIT_CONFIG = 'content.edit.config'; //ตั้งค่าเนื้อหา
+	
 	
 	const GALLERY_EDIT = 'gallery.edit';
 	const GALLERY_LIST = 'gallery.list';
@@ -37,6 +40,8 @@ class Auth {
 			self::CONTENT_EDIT =>'แก้ไข content',	
 			self::CONTENT_LIST =>'ดูหน้า รายการ content',	
 			self::CONTENT_DELETE =>'ลบ content',		
+			self::CONTENT_LIST_ALL =>'ดูเนื้อหาทั้งหมด',
+			self::CONTENT_EDIT_CONFIG => 'ใช้งาน tab ตั้งค่าเนื้อหา',
 			
 			self::GALLERY_EDIT =>'แก้ไข gallery',
 			self::GALLERY_LIST =>'ดูหน้า รายการ  gallery',
@@ -57,7 +62,7 @@ class Auth {
 	private $arrRolePerm = [
 			self::ADMIN => [
 					self::USER_EDIT,self::USER_LIST,self::USER_DELETE,
-					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE,					
+					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE, self::CONTENT_LIST_ALL, self::CONTENT_EDIT_CONFIG,					
 					self::GALLERY_EDIT,	self::GALLERY_LIST,	self::GALLERY_DELETE,
 					self::ONLINE_EDIT,	self::ONLINE_LIST,	self::ONLINE_DELETE,
 			],			
@@ -65,11 +70,11 @@ class Auth {
 					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE,
 			],
 			self::REWRITE => [
-					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE,
+					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE,self::CONTENT_LIST_ALL,
 					self::GALLERY_EDIT,	self::GALLERY_LIST,	self::GALLERY_DELETE,
 			],
 			self::EDITOR => [
-					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE,
+					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE, self::CONTENT_LIST_ALL, self::CONTENT_EDIT_CONFIG,
 					self::GALLERY_EDIT,	self::GALLERY_LIST,	self::GALLERY_DELETE,
 					self::ONLINE_EDIT,	self::ONLINE_LIST,	self::ONLINE_DELETE,
 			],
