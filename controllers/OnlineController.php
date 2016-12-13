@@ -61,7 +61,7 @@ class OnlineController extends Controller{
     				if ($lst->type == Workflow::TYPE_CONTENT){
     					$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
     				}elseif ($lst->type == Workflow::TYPE_GALLARY){
-    					$queryContent = Gallary::find()->where(['id'=>$lst->contentId])->one();
+    					$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
     				}
     				if (!empty($queryContent)){
     					if(!empty($queryContent->thumbnail)){
@@ -111,7 +111,7 @@ class OnlineController extends Controller{
 		    			if ($lst->type == Workflow::TYPE_CONTENT){
 	    					$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
 	    				}elseif ($lst->type == Workflow::TYPE_GALLARY){
-	    					$queryContent = Gallary::find()->where(['id'=>$lst->contentId])->one();
+	    					$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
 	    				}
 	    			}
 	    			if (!empty($queryContent)){

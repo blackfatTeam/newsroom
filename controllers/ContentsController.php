@@ -455,13 +455,15 @@ class ContentsController extends Controller
 		$type = $request->get('type');
 		
 		if ($type == 'gallery'){
-			$query = Gallary::find();
+			$query = Contents::find();
 			$query->orWhere(['like', 'title', $qGallery]);
 			$query->orWhere('id =:id', [':id' => $qGallery]);
+			$query->andWhere('theme =:theme', [':theme' => 2]);
 		}else{
 			$query = Contents::find();
 			$query->orWhere(['like', 'title', $q]);
 			$query->orWhere('id =:id', [':id' => $q]);
+			$query->andWhere('theme =:theme', [':theme' => 1]);
 		}
 
 		$query->limit(30);
@@ -491,8 +493,10 @@ class ContentsController extends Controller
 		
 		if ($type == 'content'){
 			$query = Contents::find();
+			$query->andWhere('theme =:theme', [':theme' => 1]);
 		}else{
-			$query = Gallary::find();
+			$query = Contents::find();
+			$query->andWhere('theme =:theme', [':theme' => 2]);
 		}
 
 		$query->limit(30);
@@ -528,7 +532,7 @@ class ContentsController extends Controller
 		if ($type == 'content'){
 			$query = Contents::find()->where(['id'=>$id])->one();
 		}elseif ($type == 'gallery'){
-			$query = Gallary::find()->where(['id'=>$id])->one();
+			$query = Contents::find()->where(['id'=>$id])->one();
 		}
 		
 		$result = [];

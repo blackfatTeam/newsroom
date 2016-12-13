@@ -3,7 +3,7 @@
 namespace app\lib;
 
 use \Yii;
-use app\Auth;
+use app\lib\Auth;
 use app\lib\Workflow;
 
 class OnlineConfig {

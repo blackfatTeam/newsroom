@@ -13,10 +13,12 @@ class SearchContent extends Widget {
 	public function run() {
 		$query = Contents::find();
 		$query->orderBy('publishTime desc');
+		$query->andWhere('theme =:theme', [':theme' => 1]);
 		$contentList = $query->all();
 		
-		$queryGallery = Gallary::find();
+		$queryGallery = Contents::find();
 		$queryGallery->orderBy('publishTime desc');
+		$queryGallery->andWhere('theme =:theme', [':theme' => 2]);
 		$galleryList = $queryGallery->all();
 		
 		echo $this->render('searchContent', [

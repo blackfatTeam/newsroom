@@ -33,7 +33,7 @@ class ConfigController extends Controller
     						Auth::EDITOR
     					]
     			],
-    			[
+    			/* [
     					'title' => 'Gallary',
     					'icon' => 'fa fa-picture-o',
     					'uri' => 'gallary/list',
@@ -48,7 +48,7 @@ class ConfigController extends Controller
     						Auth::REWRITE,
     						Auth::EDITOR
     					]
-    			],
+    			], */
     			[
     					'title' => 'Online',
     					'icon' => 'fa fa-globe',
