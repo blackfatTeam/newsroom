@@ -35,7 +35,7 @@ class MediaController extends Controller
 						'ruleConfig'=>[
 								'class'=>AccessRule::className()
 						],
-						//'only'=>[''],
+						'only'=>['setconfigmedia','setthumbnail','uploadajax','deletefileajax','manage'],
 						'rules'=>[
 								[
 									'allow'=> true,
@@ -122,24 +122,6 @@ class MediaController extends Controller
     		$mediaModel->watermarkNo = $data['watermark'];
     		if($mediaModel->save()){
     			//ไม่ต้อง gen รูปลายน้ำเก็บไว้แล้ว เพราะมีฟังชัน getPreviewuri
-    			/* if($difWatermark!=$mediaModel->watermarkNo){
-    				if($data['watermark']!=Workflow::WATER_MARK_NONE){
-    					$watermarkSrc = Workflow::$arrWaterMark[$data['watermark']];
-    					$watermarkFile = Yii::$app->image->load($watermarkSrc);
-    					$watermarkFile->resize(Workflow::SIZE_MID);
-  
-    					$path = json_decode($mediaModel->srcPath);
-    					
-    					$file = $path->{Workflow::SIZE_MID};    					
-    					$saveTo = $path->{Workflow::SIZE_WATERMARK};
-    					
-    					$origin = Yii::$app->image->load($file);    	
-
-    					$origin->watermark($watermarkFile, null, null, 50);    					
-    					$origin->save($saveTo);
-    				}
-    				
-    			} */
     		}else{
     			$result = false;
     		}
