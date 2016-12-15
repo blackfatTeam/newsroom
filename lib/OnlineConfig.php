@@ -20,7 +20,7 @@ class OnlineConfig {
 			self::ONLINE_HOME => [
 					'section' => 'home',
 					'title' => 'ข่าวหน้าหลัก',
-					'limit' => 3,
+					'limit' => 4,
 					'type' => [
 							'content',
 							'gallery'
