@@ -30,6 +30,7 @@ $( document ).ready(function() {
 		imgPath = $(this).attr('src');
 		id = $(this).attr('data-id');
 		isthumb = $(this).attr('data-isthumb');
+		isgal = $(this).attr('data-isgal');
 		caption = $(this).attr('data-caption');
 		watermark = $(this).attr('data-watermark');
 		
@@ -44,6 +45,15 @@ $( document ).ready(function() {
 		}else{
 			$('#formConfigMedia').find('input[name="checkBoxSetThumbnail"]').attr('checked', false);
 			$('#formConfigMedia').find('input[name="checkBoxSetThumbnail"]').parent().removeClass('checked');
+		}
+		
+		//set checkbox gallery
+		if(isgal == '1'){
+			$('#formConfigMedia').find('input[name="checkBoxSetGallery"]').attr('checked', true);
+			$('#formConfigMedia').find('input[name="checkBoxSetGallery"]').parent().addClass('checked');
+		}else{
+			$('#formConfigMedia').find('input[name="checkBoxSetGallery"]').attr('checked', false);
+			$('#formConfigMedia').find('input[name="checkBoxSetGallery"]').parent().removeClass('checked');
 		}
 		
 		//set radio watermark
@@ -65,13 +75,14 @@ $( document ).ready(function() {
 		watermark = $('#formConfigMedia').find('input[name="radioWatermark"]:checked').val();
 		modelId = $('input[name="id"]').val();
 		mediaId = $('input[name="hiddenMediaId"]').val();
-
+		isGallery = $('#formConfigMedia').find('input[name="checkBoxSetGallery"]')[0].checked;
 		data = {
 			modelId : modelId,
 			type : $type,
 			mediaId : mediaId,
 			caption : caption,
 			isThumbnail : isThumbnail,
+			isGallery : isGallery,
 			watermark : watermark
 		};
 
@@ -85,8 +96,17 @@ $( document ).ready(function() {
 			}else{
 				isThumbnail = 0;
 			}
+				
+			$('.isGal').remove();
+			if(isGallery){
+				isGallery = 1;
+				window.currentThumb.before('<button class="btn isGal" style="position: absolute;top:50px;background-color:#BE922A;"><i class="fa fa-th"></i></button>');
+			}else{
+				isGallery = 0;
+			}
 
 			window.currentThumb.attr('data-isthumb',isThumbnail);
+			window.currentThumb.attr('data-isgal',isGallery);
 			window.currentThumb.attr('data-caption',caption);
 			window.currentThumb.attr('data-watermark',watermark);
 		});		
@@ -211,6 +231,16 @@ $this->registerCss($css);
 											<div class="checkbox-list">
 												<label class="checkbox-inline">
 												<input name="checkBoxSetThumbnail" type="checkbox">
+												</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label  class="col-md-3 control-label">Gallery</label>
+										<div class="col-md-9">
+											<div class="checkbox-list">
+												<label class="checkbox-inline">
+												<input name="checkBoxSetGallery" type="checkbox">
 												</label>
 											</div>
 										</div>

@@ -111,13 +111,15 @@ class MediaController extends Controller
     }
 
     public function actionSetconfigmedia(){
+
     	$result = true;
     	$data = Yii::$app->request->post('data');    	
-    	  
+
     	//setting media detail
     	$mediaModel = Media::findOne(['id'=>$data['mediaId']]);
     	if($mediaModel){
     		$difWatermark = $mediaModel->watermarkNo;
+    		$mediaModel->isGallery = ($data['isGallery']==='true')?1:0;
     		$mediaModel->caption = $data['caption'];
     		$mediaModel->watermarkNo = $data['watermark'];
     		if($mediaModel->save()){

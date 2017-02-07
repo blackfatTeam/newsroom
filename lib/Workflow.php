@@ -285,11 +285,15 @@ class Workflow {
 	
 		$arrThumb = json_decode($model->thumbPath);
 		$thumPath = isset($arrThumb->{Workflow::SIZE_LIT})?$arrThumb->{Workflow::SIZE_LIT}:null;
-	
+
+		$gal = '';
+		if($model->isGallery===1){
+			$gal = '<button class="btn isGal" style="position: absolute;top:50px;background-color:#BE922A;"><i class="fa fa-th"></i></button>';
+		}
 		//$isImage = Media::isImage ( $thumPath );
 		$isImage = 1;
 		//$modalId = '#modalPreview'; //สำหรับไว้ดูรูปอย่างเดียว
-	
+
 		$modalId = '#modalConfigImage';
 		if ($isImage) {	
 			$thumb='';
@@ -303,6 +307,7 @@ class Workflow {
 					'class' => 'file-preview-image imageThumb',
 					'data-id' => $model->id,
 					'data-isThumb' => $isThumb,
+					'data-isGal' =>$model->isGallery,
 					'data-watermark' => $model->watermarkNo,
 					'data-caption' => $model->caption,						
 					'alt' => $model->realFilename,
@@ -311,6 +316,7 @@ class Workflow {
 	
 			$file = '<a class="thumbPreview" data-toggle="modal" href="'.$modalId.'">'.
 					$thumb.
+					$gal.
 					$file.'</a>';
 	
 		} else {

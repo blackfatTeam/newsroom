@@ -21,6 +21,7 @@ use Yii;
  * @property integer $showInContent
  * @property integer $watermarkNo
  * @property string $caption
+ * @property integer $isGallery
  */
 class Media extends \yii\db\ActiveRecord
 {
@@ -38,7 +39,7 @@ class Media extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['createBy', 'type', 'refId', 'showInContent', 'watermarkNo'], 'integer'],
+            [['createBy', 'type', 'refId', 'showInContent', 'watermarkNo', 'isGallery'], 'integer'],
             [['createTime'], 'safe'],
             [['fileName', 'realFilename'], 'string', 'max' => 50],
             [['fullPath', 'folderPath'], 'string', 'max' => 500],
@@ -67,6 +68,7 @@ class Media extends \yii\db\ActiveRecord
             'showInContent' => 'Show In Content',
             'watermarkNo' => 'Watermark No',
             'caption' => 'Caption',
+            'isGallery' => 'Is Gallery',
         ];
     }
 }
