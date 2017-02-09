@@ -288,7 +288,7 @@ class Workflow {
 
 		$gal = '';
 		if($model->isGallery===1){
-			$gal = '<button class="btn isGal" style="position: absolute;top:50px;background-color:#BE922A;"><i class="fa fa-th"></i></button>';
+			$gal = '<button class="btn isGal" style="position:absolute;top:1;right:0;margin-right:6px;background-color:#BE922A;"><i class="fa fa-th"></i></button>';
 		}
 		//$isImage = Media::isImage ( $thumPath );
 		$isImage = 1;

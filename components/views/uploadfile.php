@@ -100,7 +100,7 @@ $( document ).ready(function() {
 			$('.isGal').remove();
 			if(isGallery){
 				isGallery = 1;
-				window.currentThumb.before('<button class="btn isGal" style="position: absolute;top:50px;background-color:#BE922A;"><i class="fa fa-th"></i></button>');
+				window.currentThumb.before('<button class="btn isGal" style="position:absolute;top:1;right:0;margin-right:6px;background-color:#BE922A;"><i class="fa fa-th"></i></button>');
 			}else{
 				isGallery = 0;
 			}
