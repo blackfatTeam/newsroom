@@ -77,6 +77,13 @@ $config = [
 			//'@uploadUrl' => 'http://cms.arawannews.com/images/uploads',
 			//'@uploadPath' => '/home/mlogwis/domains/arawannews.com/public_html/cms/images/uploads',
 	],
+	'modules' => [
+			'treemanager' =>  [
+					'class' => '\kartik\tree\Module',
+					
+			]
+	],
+		
 	'timeZone' => 'Asia/Bangkok',
 	'language' => 'th',
     'params' => $params,	

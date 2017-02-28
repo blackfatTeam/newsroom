@@ -101,7 +101,6 @@ if(false){
 						<?= yii\base\View::render('confbar',[
 								'form'=>$form,
 								'contents'=>$contents,
-									
 						]); ?>
 						
 						

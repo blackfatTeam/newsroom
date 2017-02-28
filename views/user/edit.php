@@ -108,12 +108,17 @@ $this->params['breadcrumbs'][] = ['label' => $user->username];
 					<?php //= Html::activeDropDownList($user, 'web', ['']+Workflow::$arrWeb,['class'=>'form-control'])?>
 					<?= Html::activeHiddenInput($user, 'web',['class'=>'form-control select2','id'=>'tagSug'])?>
 				</div>
+				<div class="form-group">
+					<label>โต๊ะ</label>
+					<?= Html::activeDropDownList($user, 'section', Workflow::$arrUserSection,['class'=>'form-control'])?>
+				</div>
 				<?php if($arrSetting['view.status']){?>
 				<div class="form-group">
 					<label>Status</label>
 					<?= Html::activeDropDownList($user, 'status', [Workflow::STATUS_PUBLISHED=>'เปิด',Workflow::STATUS_REJECTED=>'ปิด'],['class'=>'form-control'])?>
 				</div>
 				<?php }?>
+				
 			</div>
 			
 			<div class="form-actions text-center">                           

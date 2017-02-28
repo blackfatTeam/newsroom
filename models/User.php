@@ -25,6 +25,7 @@ use yii\web\IdentityInterface;
  * @property string $createTime
  * @property string $lastUpdateTime
  * @property string $web
+ * @property integer $section
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -48,7 +49,7 @@ class User extends ActiveRecord implements IdentityInterface
     	return [
     	['status', 'default', 'value' => self::STATUS_ACTIVE],
     	[['username', 'auth_key', 'password_hash', 'role'], 'required'],
-    	[['status', 'createBy', 'lastUpdateBy'], 'integer'],
+    	[['status', 'createBy', 'lastUpdateBy','section'], 'integer'],
     	[['createTime', 'lastUpdateTime'], 'safe'],
     	[['username', 'password_hash', 'password_reset_token', 'email', 'firstName', 'lastName', 'nickName', 'role'], 'string', 'max' => 255],
     	[['auth_key'], 'string', 'max' => 32],

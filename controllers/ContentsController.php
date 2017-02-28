@@ -15,7 +15,7 @@ use app\lib\Workflow;
 use yii\helpers\ArrayHelper;
 
 use yii\data\Pagination;
-
+use app\models\Category;
 use app\models\Log;
 use yii\web\Controller;
 use yii\filters\AccessControl;
@@ -217,6 +217,7 @@ class ContentsController extends Controller
     		$contents->setAttributes($reqstContents, false);
     		$contents->publishTime = $publicDate.' '.$publicTime;
     		$contents->expireTime = $expireDate.' '.$expireTime;
+    		$contents->categoryId = $reqstContents['category'];
 
     	
     		if(!empty($reqstContents['postTitle'])){    			
@@ -291,10 +292,10 @@ class ContentsController extends Controller
     		}
     	}
 
-    	return $this->render('edit',[
+       	return $this->render('edit',[
     			'type'=>$type,
     			'contents'=>$contents,
-    			'relateData'=>$relateData
+    			'relateData'=>$relateData,
     	]);
     }
     public function actionList(){

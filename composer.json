@@ -21,7 +21,8 @@
         "kartik-v/yii2-widgets": "*",
 		"yurkinx/yii2-image": "dev-master",
 		"2amigos/yii2-date-picker-widget" : "~1.0",
-		"2amigos/yii2-gallery-widget" : "*"
+		"2amigos/yii2-gallery-widget" : "*",
+        "kartik-v/yii2-tree-manager": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

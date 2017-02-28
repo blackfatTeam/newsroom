@@ -138,7 +138,30 @@ class Workflow {
 			1 => 'Full Panorama',
 			2 => 'Tile Gallery',
 	];
+	/*------------------------------User-------------------------*/
 	
+	
+	const  SECTION_1 = 1;
+	const  SECTION_2 = 2;
+	const  SECTION_3 = 3;
+	const  SECTION_4 = 4;
+	const  SECTION_5 = 5;
+	const  SECTION_6 = 6;
+	const  SECTION_7 = 7;
+	const  SECTION_8 = 8;
+	
+	
+	public static $arrUserSection = [
+			self::SECTION_1 => 'พระราชสำนัก',
+			self::SECTION_2 => 'การเมือง',
+			self::SECTION_3 => 'บันเทิง',
+			self::SECTION_4 => 'กีฬา',
+			self::SECTION_5 => 'อาชญากรรม',
+			self::SECTION_6 => 'ต่างประเทศ',
+			self::SECTION_7 => 'ภูมิภาค',
+			self::SECTION_8 => 'ทั่วไป',
+	
+	];
 	
 	/*------------------------------Hottopic(ประเด็นร้อน)-------------------------*/
 	const  HOTTOPIC_STATUS_REJECTED = -1;  //สถานะปิด

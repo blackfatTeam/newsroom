@@ -3,12 +3,11 @@ use kartik\date\DatePicker;
 use kartik\widgets\TimePicker;
 use yii\base\Widget;
 use yii\bootstrap\Html;
-
+use app\models\Category;
 use app\models\Contents;
 use app\lib\Workflow;
-use backend\components\Category;
 use yii\helpers\Url;
-
+use kartik\tree\TreeViewInput;
 $baseUri = Yii::getAlias('@web');
 $tagSearchUri = Url::toRoute(['contents/tagapi']);
 
@@ -155,7 +154,39 @@ $this->registerCss($css);
 		</div>
 	</div>
 </div>
-
+<div class="col-md-4">
+	<div class="portlet box grey tabbable">
+		<div class="portlet-title">
+			<div class="caption"><i class="fa fa-cog"></i> หมวดหมู่</div>
+			<div class="tools">
+				<a href="javascript:;" class="collapse"></a>
+			</div>
+		</div>
+		<div class="portlet-body">
+			<div class="form-body">
+				<div class="form-group">
+					<?php 					
+					echo TreeViewInput::widget([
+							// single query fetch to render the tree
+							'query'             => Category::find()->addOrderBy('root, lft'),
+							'headingOptions'    => ['label' => 'รายการหมวดหมู่'],
+							'name'              => 'Contents[category]',    // input name
+							'value'             => $contents->categoryId,         // values selected (comma separated for multiple select)
+							'asDropdown'        => false,            // will render the tree input widget as a dropdown.
+							'multiple'          => false,            // set to false if you do not need multiple selection
+							'fontAwesome'       => true,            // render font awesome icons
+							'rootOptions'       => [
+									'label' => '<i class="fa fa-tree"></i>',
+									'class'=>'text-success'
+							],                                      // custom root label
+							//'options'         => ['disabled' => true],
+					]);
+					?>
+				</div>							
+			</div>
+		</div>
+	</div>
+</div>
 <div class="col-md-4">
 	<div class="portlet box grey tabbable">
 		<div class="portlet-title">
@@ -170,10 +201,10 @@ $this->registerCss($css);
 					<label>Web</label>
 					<?= Html::activeDropDownList($contents, 'web',['' => '-- เลือกเว็บไซต์ที่ต้องการแสดงข้อมูล --'] + Workflow::$arrWeb,['class'=>'form-control'])?>
 				</div>	
-				<div class="form-group">
+				<!-- <div class="form-group">
 					<label>ประเภทข่าว</label>
 					<?= Html::activeDropDownList($contents, 'categoryId',['']+Workflow::$arrCategory,['class'=>'form-control'])?>
-				</div>	
+				</div> -->	
 				<div class="form-group">
 					<label>รูปแบบ Theme</label>
 					<?= Html::activeDropDownList($contents, 'theme',Workflow::$theme,['class'=>'form-control'])?>
@@ -208,4 +239,5 @@ $this->registerCss($css);
 		</div>
 	</div>
 </div>
+
 
