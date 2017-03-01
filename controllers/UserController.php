@@ -11,6 +11,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use app\models\Province;
 use yii\helpers\ArrayHelper;
+use app\models\Category;
 
 
 class UserController extends Controller
@@ -125,7 +126,7 @@ class UserController extends Controller
 	}
 	public function actionEdit(){
 
-    	$error=[];
+		
     	//request
     	$id = Yii::$app->request->post('id');
 		if(empty($id)){ 
@@ -203,7 +204,6 @@ class UserController extends Controller
     		$provinces[] = ['id'=>$key,'text'=>$web];
     	}
  
-    	
     	$arrSetting = [
 			'edit.username'=>$editUser,
 			'edit.content'=>$editContent,
@@ -212,12 +212,19 @@ class UserController extends Controller
 			'view.role'=>$viewRole,
     	];
 
-    	
+    	//get category
+    	$query = Category::find()->where(['lvl'=>0]);
+    	$models = $query->all();
+    	$arrCate = [];
+    	foreach ($models as $model){
+    		$arrCate[$model->id] = $model->name;
+    	}   	
 		
     	return $this->render('edit',[
     			'arrSetting'=>$arrSetting,
     			'user'=>$user,
     			'provinces'=>$provinces,
+    			'arrCate'=>$arrCate
     	]);
     }
 }
