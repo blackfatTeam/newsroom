@@ -14,10 +14,17 @@ $baseUri = Yii::getAlias('@web');
 		<div class="row">
 			<?php $arrSection = array_splice($arrItem, 0,6);?>
 			<div class="col-md-4">
-				<?php foreach ($arrSection as $key => $lst):?>
+				<?php 
+				foreach ($arrSection as $key => $lst):
+				$arrColumn = [17,18,19,20];
+				$limit = 4;
+				if (in_array($lst['categoryId'], $arrColumn)){
+					$limit = 1;
+				}
+				?>
 				<div class="portlet box grey">
 					<div class="portlet-title">
-						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (<?php echo count($lst)?> of <?php //echo OnlineConfig::$arrSection[$key]['limit']?>)</div>
+						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (<?php echo count($lst['data'])?> of <?php echo $limit ?>)</div>
 						<div class="actions">
 							<a href="<?= Url::toRoute(['online/edit', 'section' => $lst['categoryId'], 'web' => $web])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
 						</div>
@@ -61,10 +68,17 @@ $baseUri = Yii::getAlias('@web');
 		
 			<?php $arrSection = array_splice($arrItem, 0,6);?>
 			<div class="col-md-4">
-				<?php foreach ($arrSection as $key => $lst):?>
+				<?php 
+				foreach ($arrSection as $key => $lst):
+				$arrColumn = [17,18,19,20];
+				$limit = 4;
+				if (in_array($lst['categoryId'], $arrColumn)){
+					$limit = 1;
+				}
+				?>
 				<div class="portlet box grey">
 					<div class="portlet-title">
-						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (<?php echo count($lst)?> of <?php //echo OnlineConfig::$arrSection[$key]['limit']?>)</div>
+						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (<?php echo count($lst['data'])?> of <?php echo $limit?>)</div>
 						<div class="actions">
 							<a href="<?= Url::toRoute(['online/edit', 'section' => $lst['categoryId'], 'web' => $web])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
 						</div>
@@ -107,10 +121,17 @@ $baseUri = Yii::getAlias('@web');
 			
 			<?php $arrSection = array_splice($arrItem, 0,6);?>
 			<div class="col-md-4">
-				<?php foreach ($arrSection as $key => $lst):?>
+				<?php 
+				foreach ($arrSection as $key => $lst):
+				$arrColumn = [17,18,19,20];
+				$limit = 4;
+				if (in_array($lst['categoryId'], $arrColumn)){
+					$limit = 1;
+				}
+				?>
 				<div class="portlet box grey">
 					<div class="portlet-title">
-						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (<?php echo count($lst)?> of <?php //echo OnlineConfig::$arrSection[$key]['limit']?>)</div>
+						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (<?php echo count($lst['data'])?> of <?php echo $limit?>)</div>
 						<div class="actions">
 							<a href="<?= Url::toRoute(['online/edit', 'section' => $lst['categoryId'], 'web' => $web])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
 						</div>
