@@ -3,6 +3,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use Yii;
 use app\models\Contents;
+use app\models\Category;
 use app\models\Online;
 use app\models\Gallary;
 use app\lib\OnlineConfig;
@@ -51,18 +52,23 @@ class OnlineController extends Controller{
     	$query->andWhere('web = :web', [':web' => $web]);
     	$resultQuery = $query->all();
     	
+    	$categoryQuery = Category::find();
+    	$categoryQuery->andWhere('selected = :selected', [':selected' => 1]);
+    	$resultCategory = $categoryQuery->all();
+    	
     	$arrItem = [];
-    	foreach (OnlineConfig::$arrSection as $key => $lst){
-    		$arrItem[$key] = [];
+    	foreach ($resultCategory as $lst){
+    		$arrItem[$lst->id] = [
+    				'title' => $lst->name,
+    				'categoryId' => $lst->id
+    		];
     	}
     	if (!empty($resultQuery)){
     		foreach ($resultQuery as $lst){
     			if (!empty($lst->contentId)){
-    				if ($lst->type == Workflow::TYPE_CONTENT){
-    					$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
-    				}elseif ($lst->type == Workflow::TYPE_GALLARY){
-    					$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
-    				}
+    				
+    				$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
+
     				if (!empty($queryContent)){
     					if(!empty($queryContent->thumbnail)){
     						$img = $this->getThumbnail($queryContent->thumbnail, $lst->type);
@@ -70,19 +76,21 @@ class OnlineController extends Controller{
     						$img = '<img src="'.$baseUri.'/assets/img/no-thumbnail.jpg" class="img-responsive" width="80">';
     					}
     					
-	    				$arrItem[$lst->section][] = [
-	    						'id' => $queryContent->id,
-	    						'title' => $queryContent->title,
-	    						'time' => $queryContent->publishTime?date('Y-m-d | H:i', strtotime($queryContent->publishTime)):'',
-	    						'img' => $img
-	    				];
+    					if(!empty($lst->categoryId)){
+		    				$arrItem[$lst->categoryId]['data'][] = [
+		    						'id' => $queryContent->id,
+		    						'title' => $queryContent->title,
+		    						'time' => $queryContent->publishTime?date('Y-m-d | H:i', strtotime($queryContent->publishTime)):'',
+		    						'img' => $img
+		    				];
+    					}
     				}
     			}
     			
     			
     		}
     	}
-
+    	//var_dump($arrItem);exit;
     	return $this->render('view', [
     			'web' => $web,
     			'arrItem' => $arrItem
@@ -94,25 +102,35 @@ class OnlineController extends Controller{
     	$baseUri = Yii::getAlias('@web');
     	$web = Yii::$app->request->get('web');
     	$section = Yii::$app->request->get('section');
-    	$sectionData = OnlineConfig::$arrSection[$section];
-    	$limit = OnlineConfig::$arrSection[$section]['limit'];
+    	//$sectionData = OnlineConfig::$arrSection[$section];
+   
+    	$categoryQuery = Category::find();
+    	$categoryQuery->andWhere('selected = :selected', [':selected' => 1]);
+    	$categoryQuery->andWhere('id = :id', [':id' => $section]);
+    	$resultCategory = $categoryQuery->one();
+    	$sectionData = $resultCategory->name?$resultCategory->name:'';
+    	//$limit = OnlineConfig::$arrSection[$section]['limit'];
+    	$arrColumn = [17,18,19,20];
+    	$limit = 4;
+    	if (in_array($section, $arrColumn)){
+    		$limit = 1;
+    	}
+
     	$arrContent = [];
     	
     	$totalCount = 0;
     	if (!empty($web) && !empty($section)){
 	    	$query = Online::find();
-	    	$query->andWhere('section = :section', [':section' => $section]);
+	    	$query->andWhere('categoryId = :categoryId', [':categoryId' => $section]);
 	    	$query->andWhere('web = :web', [':web' => $web]);
-	    	$query->orderBy('orderNo ASC');
+	    	//$query->orderBy('orderNo ASC');
 	    	$arrModel = $query->all();
+
 	    	if (!empty($arrModel)){
 	    		foreach ($arrModel as $lst){
 	    			if (!empty($lst->contentId)){
-		    			if ($lst->type == Workflow::TYPE_CONTENT){
-	    					$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
-	    				}elseif ($lst->type == Workflow::TYPE_GALLARY){
-	    					$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
-	    				}
+	    				$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
+	    			
 	    			}
 	    			if (!empty($queryContent)){
 	    				
@@ -192,9 +210,8 @@ class OnlineController extends Controller{
     	$section = $request->get('section');
     	$arrId = $request->get('arrId');
     	$arrType = $request->get('arrType');
-    	
     	if (!empty($web) && !empty($section)){
-    		Online::deleteAll(['web'=>$web, 'section' => $section]);
+    		Online::deleteAll(['web'=>$web, 'categoryId' => $section]);
     	}
     	$identity = \Yii::$app->user->getIdentity();
     	
@@ -214,8 +231,10 @@ class OnlineController extends Controller{
     			$model = new Online();
     			$model->web = $web;
     			$model->section = $section;
+    			$model->categoryId = $section;
     			$model->contentId = $id;
     			$model->orderNo = $i;
+    			$model->date = date('Y-m-d');
     			$model->lastUpdateTime = date('Y-m-d H:i:s');
     			$model->lastUpdateBy = $identity->id;
     			$model->type = $type;

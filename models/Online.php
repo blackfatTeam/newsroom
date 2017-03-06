@@ -15,6 +15,8 @@ use Yii;
  * @property string $lastUpdateTime
  * @property integer $lastUpdateBy
  * @property integer $type
+ * @property integer $categoryId
+ * @property string $date
  */
 class Online extends \yii\db\ActiveRecord
 {
@@ -33,8 +35,8 @@ class Online extends \yii\db\ActiveRecord
     {
         return [
             [['section', 'contentId', 'web', 'orderNo'], 'required'],
-            [['contentId', 'orderNo', 'lastUpdateBy', 'type'], 'integer'],
-            [['lastUpdateTime'], 'safe'],
+            [['contentId', 'orderNo', 'lastUpdateBy', 'type', 'categoryId'], 'integer'],
+            [['lastUpdateTime', 'date'], 'safe'],
             [['section', 'web'], 'string', 'max' => 50],
         ];
     }
@@ -53,6 +55,8 @@ class Online extends \yii\db\ActiveRecord
             'lastUpdateTime' => 'Last Update Time',
             'lastUpdateBy' => 'Last Update By',
             'type' => 'Type',
+            'categoryId' => 'Category ID',
+            'date' => 'Date',
         ];
     }
 }

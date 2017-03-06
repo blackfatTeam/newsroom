@@ -12,22 +12,22 @@ $baseUri = Yii::getAlias('@web');
 	</div>
 	<div class="portlet-body">
 		<div class="row">
-			<?php $arrSection = array_splice($arrItem, 0,2);?>
+			<?php $arrSection = array_splice($arrItem, 0,6);?>
 			<div class="col-md-4">
 				<?php foreach ($arrSection as $key => $lst):?>
 				<div class="portlet box grey">
 					<div class="portlet-title">
-						<div class="caption"><i class="fa fa-edit"></i> <?php echo OnlineConfig::$arrSection[$key]['title']?> (<?php echo count($lst)?> of <?php echo OnlineConfig::$arrSection[$key]['limit']?>)</div>
+						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (<?php echo count($lst)?> of <?php //echo OnlineConfig::$arrSection[$key]['limit']?>)</div>
 						<div class="actions">
-							<a href="<?= Url::toRoute(['online/edit', 'section' => $key, 'web' => $web])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
+							<a href="<?= Url::toRoute(['online/edit', 'section' => $lst['categoryId'], 'web' => $web])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
 						</div>
 					</div>
 					<div class="portlet-body">
 						<div class="table">
 					<table class="table table-striped table-bordered">
 						<tbody class="tbodySelect">
-							<?php if (!empty($lst)){?>
-							<?php foreach ($lst as $data):?>
+							<?php if (!empty($lst['data'])){?>
+							<?php foreach ($lst['data'] as $data):?>
 							<tr data-object="content" data-id="<?php echo $data['id']?>">
 								<td width="100">
 									<?php echo $data['img']?>
@@ -59,22 +59,22 @@ $baseUri = Yii::getAlias('@web');
 			</div>
 			
 		
-			<?php $arrSection = array_splice($arrItem, 0,2);?>
+			<?php $arrSection = array_splice($arrItem, 0,6);?>
 			<div class="col-md-4">
 				<?php foreach ($arrSection as $key => $lst):?>
 				<div class="portlet box grey">
 					<div class="portlet-title">
-						<div class="caption"><i class="fa fa-edit"></i> <?php echo OnlineConfig::$arrSection[$key]['title']?> (<?php echo count($lst)?> of <?php echo OnlineConfig::$arrSection[$key]['limit']?>)</div>
+						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (<?php echo count($lst)?> of <?php //echo OnlineConfig::$arrSection[$key]['limit']?>)</div>
 						<div class="actions">
-							<a href="<?= Url::toRoute(['online/edit', 'section' => $key, 'web' => $web])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
+							<a href="<?= Url::toRoute(['online/edit', 'section' => $lst['categoryId'], 'web' => $web])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
 						</div>
 					</div>
 					<div class="portlet-body">
 						<div class="table">
 					<table class="table table-striped table-bordered">
 						<tbody class="tbodySelect">
-							<?php if (!empty($lst)){?>
-							<?php foreach ($lst as $data):?>
+							<?php if (!empty($lst['data'])){?>
+							<?php foreach ($lst['data'] as $data):?>
 							<tr data-object="content" data-id="<?php echo $data['id']?>">
 								<td width="100">
 									<?php echo $data['img']?>
@@ -105,22 +105,22 @@ $baseUri = Yii::getAlias('@web');
 				<?php endforeach;?>
 			</div>
 			
-			<?php $arrSection = array_splice($arrItem, 0,3);?>
+			<?php $arrSection = array_splice($arrItem, 0,6);?>
 			<div class="col-md-4">
 				<?php foreach ($arrSection as $key => $lst):?>
 				<div class="portlet box grey">
 					<div class="portlet-title">
-						<div class="caption"><i class="fa fa-edit"></i> <?php echo OnlineConfig::$arrSection[$key]['title']?> (<?php echo count($lst)?> of <?php echo OnlineConfig::$arrSection[$key]['limit']?>)</div>
+						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (<?php echo count($lst)?> of <?php //echo OnlineConfig::$arrSection[$key]['limit']?>)</div>
 						<div class="actions">
-							<a href="<?= Url::toRoute(['online/edit', 'section' => $key, 'web' => $web])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
+							<a href="<?= Url::toRoute(['online/edit', 'section' => $lst['categoryId'], 'web' => $web])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
 						</div>
 					</div>
 					<div class="portlet-body">
 						<div class="table">
 					<table class="table table-striped table-bordered">
 						<tbody class="tbodySelect">
-							<?php if (!empty($lst)){?>
-							<?php foreach ($lst as $data):?>
+							<?php if (!empty($lst['data'])){?>
+							<?php foreach ($lst['data'] as $data):?>
 							<tr data-object="content" data-id="<?php echo $data['id']?>">
 								<td width="100">
 									<?php echo $data['img']?>

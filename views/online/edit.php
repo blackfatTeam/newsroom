@@ -118,7 +118,7 @@ $this->registerJs($str);
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="fa fa-reorder"></i>
-					<?php echo $sectionData['title']?> (<span class="totalCount"><?php echo $totalCount ?></span> of <?php echo $limit?>)
+					<?php echo $sectionData?> (<span class="totalCount"><?php echo $totalCount ?></span> of <?php echo $limit?>)
 				</div>
 				<div class="actions">
 					<a href="javascript:;" class="btn green btn-sm saveOnline" data-limit="<?php echo $limit?>" data-web="<?php echo $web?>" data-section="<?php echo $section?>"><i class="fa fa-plus"></i> Save</a>
