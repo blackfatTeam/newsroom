@@ -186,9 +186,15 @@ $this->registerJs($str);
 						<table class="table table-striped table-bordered">
 							<tbody class="tbodyData" data-type="gallery">
 								<?php if (!empty($galleryList)){?>
-								<?php foreach ($galleryList as $lst):?>
+								<?php foreach ($galleryList as $lst):
+								$category = null;
+								if (!empty($lst->categoryId)){
+									$category = Category::find()->where(['id'=>$lst->categoryId])->one();
+								}
+								?>
 								<tr data-type="gallery" data-id="<?php echo $lst->id?>">
 									<td><?php echo $lst->id;?>. <?php echo $lst->title?$lst->title:''?></td>
+									<td><?php echo $category?$category->name:''?></td>
 									<td width="200" class="text-right">
 										<?php echo date('Y-m-d | H:i', strtotime($lst->publishTime))?> <img src="<?php echo $baseUri?>/assets/img/<?php echo Workflow::$arrStatusIcon[$lst->status]?>">
 									</td>
@@ -196,7 +202,7 @@ $this->registerJs($str);
 								<?php endforeach;?>
 								<?php }else{?>
 								<tr>
-									<td colspan="2"><h3 class="text-center">ไม่มีข้อมูลที่จะแสดง</h3></td>
+									<td colspan="3"><h3 class="text-center">ไม่มีข้อมูลที่จะแสดง</h3></td>
 								</tr>
 								<?php } ?>
 							
