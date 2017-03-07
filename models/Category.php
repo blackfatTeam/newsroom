@@ -45,35 +45,9 @@ class Category extends \kartik\tree\models\Tree
     {
         $rules = parent::rules();
         $rules[] = ['description', 'safe'];
+        $rules[] = ['nameEn', 'safe'];
+        $rules[] = ['limit', 'safe']; 
+        $rules[] = ['highlight', 'safe'];
         return $rules;
     }
-
-    /**
-     * @inheritdoc
-     */
-    /* public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'root' => 'Root',
-            'lft' => 'Lft',
-            'rgt' => 'Rgt',
-            'lvl' => 'Lvl',
-            'name' => 'Name',
-            'icon' => 'Icon',
-            'icon_type' => 'Icon Type',
-            'active' => 'Active',
-            'selected' => 'Selected',
-            'disabled' => 'Disabled',
-            'readonly' => 'Readonly',
-            'visible' => 'Visible',
-            'collapsed' => 'Collapsed',
-            'movable_u' => 'Movable U',
-            'movable_d' => 'Movable D',
-            'movable_l' => 'Movable L',
-            'movable_r' => 'Movable R',
-            'removable' => 'Removable',
-            'removable_all' => 'Removable All',
-        ];
-    } */
 }

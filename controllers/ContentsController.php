@@ -415,11 +415,19 @@ class ContentsController extends Controller
     		$provinces[] = ['id'=>$key,'text'=>$web];
     	}
 
+    	//get category
+    	$query = Category::find()->where(['lvl'=>0]);
+    	$models = $query->all();
+    	$arrCate = [];
+    	foreach ($models as $model){
+    		$arrCate[$model->id] = $model->name;
+    	}
     	return $this->render('list',[
     		'pages'=>$pages,
     		'search'=>$search,
 			'contentList'=>$contentList,
     		'provinces'=>$provinces,
+    		'arrCate'=>$arrCate
     	]);
     }
 	public function doDelete($arrContentId,$type){

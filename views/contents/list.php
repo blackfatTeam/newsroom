@@ -189,7 +189,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => [$uri]];
 							<td align="center"><?= date('d/m/Y H:i',strtotime($model['lastUpdateTime']))?></td>
 							<td align="center"><?= isset(Workflow::$arrWeb[$model['web']])?Workflow::$arrWeb[$model['web']]:'-'?></td>
 							<td align="center"><?= $model['createByStr']?></td>
-							<td align="center"><?= isset(Workflow::$arrCategory[$model['categoryId']])?Workflow::$arrCategory[$model['categoryId']]:'-' ?></td>
+							<td align="center"><?= isset($arrCate[$model['categoryId']])?$arrCate[$model['categoryId']]:'-' ?></td>
 							<td align="center">
 								<a class="btn btn-sm btn-warning" href="<?= Url::toRoute(['contents/edit','id'=>$model['id']])?>"><i class="fa fa-edit"></i> Edit</a>
 							</td>
