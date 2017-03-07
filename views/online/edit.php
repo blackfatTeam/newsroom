@@ -183,7 +183,7 @@ $this->registerJs($str);
 	<div class="col-md-8">
 
 		<!-- Query news -->
-		<?= SearchContent::widget() ?>
+		<?= SearchContent::widget(['section' => $section]) ?>
 		<!-- Query news -->
 		
 	</div>

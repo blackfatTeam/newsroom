@@ -453,20 +453,24 @@ class ContentsController extends Controller
 		$request = Yii::$app->request;
 		$q = $request->get('q')?$request->get('q'):'';
 		$qGallery = $request->get('qGallery')?$request->get('qGallery'):'';
+		$categoryId = $request->get('categoryId')?$request->get('categoryId'):'';
 		$type = $request->get('type');
 		
+		$query = Contents::find();
 		if ($type == 'gallery'){
-			$query = Contents::find();
 			$query->orWhere(['like', 'title', $qGallery]);
 			$query->orWhere('id =:id', [':id' => $qGallery]);
 			$query->andWhere('theme =:theme', [':theme' => 2]);
 		}else{
-			$query = Contents::find();
 			$query->orWhere(['like', 'title', $q]);
 			$query->orWhere('id =:id', [':id' => $q]);
 			$query->andWhere('theme =:theme', [':theme' => 1]);
 		}
 
+		if (!empty($categoryId)){
+			$query->andWhere('categoryId =:categoryId', [':categoryId' => $categoryId]);
+		}
+		
 		$query->limit(30);
 		$query->orderBy('publishTime DESC');
 		//$query->andWhere('status  = :status',[':status' => Workflow::STATUS_PUBLISHED]);
@@ -475,10 +479,15 @@ class ContentsController extends Controller
 		$result = [];
 		if(!empty($resultQuery)){
 			foreach ($resultQuery as $lst){
+				$category = null;
+				if (!empty($lst->categoryId)){
+					$category = Category::find()->where(['id'=>$lst->categoryId])->one();
+				}
 				$result[] = [
 						'id' => $lst->id,
 						'title' => $lst->title,
 						'time' => $lst->publishTime?date('Y-m-d | H:i', strtotime($lst->publishTime)):'',
+						'category' => $category?$category->name:'',
 						'status' => '<img src="'.$baseUri.'/assets/img/'.Workflow::$arrStatusIcon[$lst->status].'"'
 				];
 			}
@@ -507,10 +516,15 @@ class ContentsController extends Controller
 		$result = [];
 		if(!empty($resultQuery)){
 			foreach ($resultQuery as $lst){
+				$category = null;
+				if (!empty($lst->categoryId)){
+					$category = Category::find()->where(['id'=>$lst->categoryId])->one();
+				}
 				$result[] = [
 						'id' => $lst->id,
 						'title' => $lst->title,
 						'time' => $lst->publishTime?date('Y-m-d | H:i', strtotime($lst->publishTime)):'',
+						'category' => $category?$category->name:'',
 						'status' => '<img src="'.$baseUri.'/assets/img/'.Workflow::$arrStatusIcon[$lst->status].'"'
 				];
 			}

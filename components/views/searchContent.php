@@ -1,7 +1,9 @@
 <?php
 $baseUri = Yii::getAlias('@web');
+use app\models\Category;
 use app\lib\Workflow;
 use yii\helpers\Url;
+use yii\helpers\Html;
 $url = Url::toRoute(['contents/generatecontent']);
 $urlReset = Url::toRoute(['contents/resetcontent']);
 $str = <<<EOT
@@ -18,6 +20,7 @@ $(document).delegate('.resetbtn','click',function(e){
 	doReset(type);
 	$('input[name=q]').val('');
 	$('input[name=qGallery]').val('');
+	$('select[name=categoryId]').val('');
 });
 
 
@@ -36,11 +39,14 @@ $('input[name=qGallery]').keypress(function(e) {
 function doSearch(type){
 	var q = $('input[name=q]').val();
 	var qGallery = $('input[name=qGallery]').val();
-	if(q.length || qGallery.length){
+	var categoryId = $('select[name=categoryId]').val();
+
+	if(q.length || qGallery.length || categoryId.length){
 		$.get('$url', {
 				q: q,
 				qGallery: qGallery,
-				type: type
+				type: type,
+				categoryId: categoryId
 		}).done(function(data) {
 			if(typeof data == "string"){
 				var data = $.parseJSON(data);
@@ -84,6 +90,7 @@ function getItem(data, type){
 		var tdHtml = $(cloneDiv).html();
 		tdHtml = tdHtml.replace('{id}', val.id);
 		tdHtml = tdHtml.replace('{title}', val.title);
+		tdHtml = tdHtml.replace('{category}', val.category);
 		tdHtml = tdHtml.replace('{time}', val.time);
 		tdHtml = tdHtml.replace('{status}', val.status);
 		cloneHtml += '<tr data-type="'+type+'" data-id="'+ val.id +'">'+ tdHtml + '</tr>';
@@ -111,8 +118,10 @@ $this->registerJs($str);
 				<li class="active"><a href="#content" data-toggle="tab">Content</a></li>
 			</ul>
 			<div class="tab-content">
+				<?= Html::dropDownList('categoryId','',[''=> 'เลือกหมวดที่ต้องการค้นหา']+$arrCategory,['class'=>'form-control selectCategory']) ?>
 				<div class="tab-pane active" id="content">
 					<div class="scroller" style="height:663px">
+					
 					<div class="input-group">
 						<input type="text" class="form-control" placeholder="กรอก ID หรือชื่อข่าวลงที่นี่" name="q">
 						<span class="input-group-btn">
@@ -128,9 +137,15 @@ $this->registerJs($str);
 						<table class="table table-striped table-bordered">
 							<tbody class="tbodyData" data-type="content">
 								<?php if (!empty($contentList)){?>
-								<?php foreach ($contentList as $lst):?>
+								<?php foreach ($contentList as $lst):
+								$category = null;
+								if (!empty($lst->categoryId)){
+									$category = Category::find()->where(['id'=>$lst->categoryId])->one();
+								}
+								?>
 								<tr data-type="content" data-id="<?php echo $lst->id?>">
 									<td><?php echo $lst->id;?>. <?php echo $lst->title?$lst->title:''?></td>
+									<td><?php echo $category?$category->name:''?></td>
 									<td width="200" class="text-right">
 										<?php echo date('Y-m-d | H:i', strtotime($lst->publishTime))?> <img src="<?php echo $baseUri?>/assets/img/<?php echo Workflow::$arrStatusIcon[$lst->status]?>">
 									</td>
@@ -138,13 +153,14 @@ $this->registerJs($str);
 								<?php endforeach;?>
 								<?php }else{?>
 								<tr>
-									<td colspan="2"><h3 class="text-center">ไม่มีข้อมูลที่จะแสดง</h3></td>
+									<td colspan="3"><h3 class="text-center">ไม่มีข้อมูลที่จะแสดง</h3></td>
 								</tr>
 								<?php } ?>
 							
 							</tbody>
 							<tr id="cloneTrData" data-object="" data-id="">
 									<td>{id}. {title}</td>
+									<td>{category}</td>
 									<td width="200" class="text-right">
 										{time} {status}
 									</td>
