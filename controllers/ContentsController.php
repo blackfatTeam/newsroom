@@ -49,7 +49,9 @@ class ContentsController extends Controller
 											Auth::NEWS_MAN,
 											Auth::ADMIN,
 											Auth::EDITOR,
-											Auth::REWRITE
+											Auth::REWRITE,
+											Auth::REWRITE_CENTER,
+											Auth::EDITOR_CENTER
 									]
 								],
 						]
@@ -379,9 +381,19 @@ class ContentsController extends Controller
     	$search['publishTime'] = isset(\Yii::$app->session['contents/list.query.publishTime'])?\Yii::$app->session['contents/list.query.publishTime']:'';
     	$search['web'] = isset(\Yii::$app->session['contents/list.query.web'])?\Yii::$app->session['contents/list.query.web']:'';
     	
-    	//กำหนดสิทธิ์ให้เห้นเฉพาะคนที่สร้าง
+    	
+    	if(!\yii::$app->user->can(Auth::CONTENT_VIEW_ALL)){
+    		//เห็นในจังหวัดตัวเอง
+    		$query->andWhere(['web'=>$identity->web]);    		 
+    	}
+    	
+    	//เห็นข่าวที่ตัวเองสร้างสร้าง
     	if(!\yii::$app->user->can(Auth::CONTENT_LIST_ALL)){
     		$query->andWhere(['createBy'=>$identity->id]);
+    		//เห็นใน โตีะตัวเอง
+    		/* $queryCategory = Category::find()->where(['root'=>$identity->section]);
+    		$arrCategoryId = ArrayHelper::map($queryCategory->all(), 'id', 'id');
+    		$query->andWhere(['in','categoryId',$arrCategoryId]); */
     	}    	
     	
     	

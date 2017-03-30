@@ -5,10 +5,15 @@ use \Yii;
 
 class Auth {
 	//role ตำแหน่ง
+
 	const ADMIN = 'role.admin';
 	const NEWS_MAN = 'role.news_man';
 	const REWRITE = 'role.rewrite';
 	const EDITOR = 'role.editor';
+	
+	const REWRITE_CENTER = 'role.rewrite_center';
+	const EDITOR_CENTER = 'role.editor_center';
+	
 
 	
 	//perm สิทธิ์ การกระทำ
@@ -21,6 +26,8 @@ class Auth {
 	const CONTENT_DELETE = 'content.delete';
 	const CONTENT_LIST_ALL = 'content.list.all'; //ดู เนื้อหาทั้งหมด
 	const CONTENT_EDIT_CONFIG = 'content.edit.config'; //ตั้งค่าเนื้อหา
+	
+	const CONTENT_VIEW_ALL = 'content.view.all'; //ดูทุกจังหวัด ทุกหมวด
 	
 	
 	const GALLERY_EDIT = 'gallery.edit';
@@ -42,6 +49,7 @@ class Auth {
 			self::CONTENT_DELETE =>'ลบ content',		
 			self::CONTENT_LIST_ALL =>'ดูเนื้อหาทั้งหมด',
 			self::CONTENT_EDIT_CONFIG => 'ใช้งาน tab ตั้งค่าเนื้อหา',
+			self::CONTENT_VIEW_ALL => 'ดูข่าวทุกจังหวัด ทุกหมวด',
 			
 			self::GALLERY_EDIT =>'แก้ไข gallery',
 			self::GALLERY_LIST =>'ดูหน้า รายการ  gallery',
@@ -57,12 +65,14 @@ class Auth {
 			self::NEWS_MAN => 'นักข่าว',
 			self::REWRITE => 'รีไรท์',
 			self::EDITOR => 'บก.',
+			self::REWRITE_CENTER => 'รีไรท์ กลาง',
+			self::EDITOR_CENTER => 'บก. กลาง',
 	];
 
 	private $arrRolePerm = [
 			self::ADMIN => [
 					self::USER_EDIT,self::USER_LIST,self::USER_DELETE,
-					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE, self::CONTENT_LIST_ALL, self::CONTENT_EDIT_CONFIG,					
+					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE, self::CONTENT_LIST_ALL, self::CONTENT_EDIT_CONFIG,self::CONTENT_VIEW_ALL,					
 					self::GALLERY_EDIT,	self::GALLERY_LIST,	self::GALLERY_DELETE,
 					self::ONLINE_EDIT,	self::ONLINE_LIST,	self::ONLINE_DELETE,
 			],			
@@ -78,7 +88,15 @@ class Auth {
 					self::GALLERY_EDIT,	self::GALLERY_LIST,	self::GALLERY_DELETE,
 					self::ONLINE_EDIT,	self::ONLINE_LIST,	self::ONLINE_DELETE,
 			],
-
+			self::REWRITE_CENTER => [
+					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE,self::CONTENT_LIST_ALL,self::CONTENT_VIEW_ALL,
+					self::GALLERY_EDIT,	self::GALLERY_LIST,	self::GALLERY_DELETE,
+			],
+			self::EDITOR_CENTER => [
+					self::CONTENT_EDIT,	self::CONTENT_LIST,	self::CONTENT_DELETE, self::CONTENT_LIST_ALL, self::CONTENT_EDIT_CONFIG,self::CONTENT_VIEW_ALL,
+					self::GALLERY_EDIT,	self::GALLERY_LIST,	self::GALLERY_DELETE,
+					self::ONLINE_EDIT,	self::ONLINE_LIST,	self::ONLINE_DELETE,
+			],
 
 	];
 

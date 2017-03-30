@@ -38,6 +38,8 @@ class OnlineController extends Controller{
 											Auth::ADMIN,
 											Auth::EDITOR,
 											//Auth::REWRITE
+											Auth::REWRITE_CENTER,
+											Auth::EDITOR_CENTER
 									]
 								],
 						]

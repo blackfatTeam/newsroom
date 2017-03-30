@@ -30,7 +30,9 @@ class ConfigController extends Controller
     						Auth::ADMIN,
     						Auth::NEWS_MAN,
     						Auth::REWRITE,
-    						Auth::EDITOR
+    						Auth::EDITOR,
+    						Auth::REWRITE_CENTER,
+    						Auth::EDITOR_CENTER
     					]
     			],
     			/* [
@@ -86,7 +88,9 @@ class ConfigController extends Controller
     					],
     					'authen'=>[
     							Auth::ADMIN,
-    							Auth::EDITOR
+    							Auth::EDITOR,
+    							Auth::REWRITE_CENTER,
+    							Auth::EDITOR_CENTER
     					]
     			],
     			[
@@ -126,7 +130,9 @@ class ConfigController extends Controller
     			],
     			'authen'=>[
     					Auth::ADMIN,
-    					Auth::EDITOR
+    					Auth::EDITOR,
+    					Auth::REWRITE_CENTER,
+    					Auth::EDITOR_CENTER
     				]
     			],
     			[

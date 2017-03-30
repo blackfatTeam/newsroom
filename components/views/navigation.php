@@ -34,7 +34,7 @@ $user = \Yii::$app->user;
 					<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a href="<?php echo Url::toRoute(['user/edit','id'=>$identity->id])?>"><i class="fa fa-user"></i> My Profile</a></li>
+						<li><a href="<?php echo Url::toRoute(['useronly/edit','id'=>$identity->id])?>"><i class="fa fa-user"></i> My Profile</a></li>
 						<li><a href="<?php echo Url::toRoute('site/logout')?>"><i class="fa fa-key"></i> Log Out</a></li>
 					</ul>
 				</li>
