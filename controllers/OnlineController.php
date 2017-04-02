@@ -113,10 +113,10 @@ class OnlineController extends Controller{
     	$sectionData = $resultCategory->name?$resultCategory->name:'';
     	//$limit = OnlineConfig::$arrSection[$section]['limit'];
     	$arrColumn = [17,18,19,20];
-    	$limit = 4;
-    	if (in_array($section, $arrColumn)){
+    	$limit = 12;
+    	/* if (in_array($section, $arrColumn)){
     		$limit = 1;
-    	}
+    	} */
 
     	$arrContent = [];
     	

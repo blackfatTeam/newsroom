@@ -17,14 +17,14 @@ $baseUri = Yii::getAlias('@web');
 				<?php 
 				foreach ($arrSection as $key => $lst):
 				$arrColumn = [17,18,19,20];
-				$limit = 4;
-				if (in_array($lst['categoryId'], $arrColumn)){
+				$limit = 12;
+				/* if (in_array($lst['categoryId'], $arrColumn)){
 					$limit = 1;
-				}
+				} */
 				?>
 				<div class="portlet box grey">
 					<div class="portlet-title">
-						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (<?php echo count($lst['data'])?> of <?php echo $limit ?>)</div>
+						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (<?php echo isset($lst['data'])?count($lst['data']):'0'?> of <?php echo $limit ?>)</div>
 						<div class="actions">
 							<a href="<?= Url::toRoute(['online/edit', 'section' => $lst['categoryId'], 'web' => $web])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
 						</div>
@@ -71,14 +71,14 @@ $baseUri = Yii::getAlias('@web');
 				<?php 
 				foreach ($arrSection as $key => $lst):
 				$arrColumn = [17,18,19,20];
-				$limit = 4;
-				if (in_array($lst['categoryId'], $arrColumn)){
+				$limit = 12;
+				/* if (in_array($lst['categoryId'], $arrColumn)){
 					$limit = 1;
-				}
+				} */
 				?>
 				<div class="portlet box grey">
 					<div class="portlet-title">
-						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (<?php echo count($lst['data'])?> of <?php echo $limit?>)</div>
+						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (<?php echo isset($lst['data'])?count($lst['data']):'0'?> of <?php echo $limit?>)</div>
 						<div class="actions">
 							<a href="<?= Url::toRoute(['online/edit', 'section' => $lst['categoryId'], 'web' => $web])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
 						</div>
@@ -124,14 +124,14 @@ $baseUri = Yii::getAlias('@web');
 				<?php 
 				foreach ($arrSection as $key => $lst):
 				$arrColumn = [17,18,19,20];
-				$limit = 4;
-				if (in_array($lst['categoryId'], $arrColumn)){
+				$limit = 12;
+				/* if (in_array($lst['categoryId'], $arrColumn)){
 					$limit = 1;
-				}
+				} */
 				?>
 				<div class="portlet box grey">
 					<div class="portlet-title">
-						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (<?php echo count($lst['data'])?> of <?php echo $limit?>)</div>
+						<div class="caption"><i class="fa fa-edit"></i> <?php echo $lst['title']?> (<?php echo isset($lst['data'])?count($lst['data']):'0'?> of <?php echo $limit?>)</div>
 						<div class="actions">
 							<a href="<?= Url::toRoute(['online/edit', 'section' => $lst['categoryId'], 'web' => $web])?>" class="btn green"><i class="fa fa-pencil"></i> แก้ไข</a>
 						</div>
