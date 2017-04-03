@@ -417,7 +417,7 @@ class ContentsController extends Controller
     		$amountImage = Media::find()->where(['refId'=>$model->id,'type'=>Workflow::TYPE_CONTENT])->count();
     		$contentList[]=$model->getAttributes()
     		+['amountImage'=>$amountImage]
-    		+['createByStr'=>$creBy->firstName.' '.$creBy->lastName];
+    		+['createByStr'=>!empty($creBy)?$creBy->firstName.' '.$creBy->lastName:''];
     	}
     	//display
     	//จังหวัดนักข่าว
