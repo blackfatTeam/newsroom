@@ -55,7 +55,7 @@ class OnlineController extends Controller{
     	$resultQuery = $query->all();
     	
     	$categoryQuery = Category::find();
-    	$categoryQuery->andWhere('selected = :selected', [':selected' => 1]);
+    	//$categoryQuery->andWhere('selected = :selected', [':selected' => 1]);
     	$resultCategory = $categoryQuery->all();
     	
     	$arrItem = [];
@@ -105,7 +105,6 @@ class OnlineController extends Controller{
     	$web = Yii::$app->request->get('web');
     	$section = Yii::$app->request->get('section');
     	//$sectionData = OnlineConfig::$arrSection[$section];
-   
     	$categoryQuery = Category::find();
     	$categoryQuery->andWhere('selected = :selected', [':selected' => 1]);
     	$categoryQuery->andWhere('id = :id', [':id' => $section]);
@@ -119,7 +118,7 @@ class OnlineController extends Controller{
     	} */
 
     	$arrContent = [];
-    	
+    	$arrId = [];
     	$totalCount = 0;
     	if (!empty($web) && !empty($section)){
 	    	$query = Online::find();
@@ -162,6 +161,7 @@ class OnlineController extends Controller{
 		    					'img' => $img,
 		    					'type' => $type
 		    			];
+		    			$arrId[] = $queryContent->id;
 		    			$totalCount = count($arrContent);
 	    			}
 	    		}
@@ -175,7 +175,8 @@ class OnlineController extends Controller{
     			'sectionData' => $sectionData,
     			'arrContent' => $arrContent,
     			'limit' => $limit,
-    			'totalCount' => $totalCount
+    			'totalCount' => $totalCount,
+    			'arrId' => $arrId
     	]);
     }
     

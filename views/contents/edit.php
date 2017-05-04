@@ -94,7 +94,9 @@ if(false){
 					<div class="tab-pane" id="portlet_relate">
 						<?= yii\base\View::render('relatecontent', [
 								'contents' => $contents,
-								'relateData' => $relateData
+								'relateData' => $relateData,
+								'section' => $section,
+								'arrId' => $arrId
 						]); ?>
 					</div>
 					<div class="tab-pane" id="portlet_tab3">

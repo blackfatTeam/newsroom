@@ -40,13 +40,19 @@ function doSearch(type){
 	var q = $('input[name=q]').val();
 	var qGallery = $('input[name=qGallery]').val();
 	var categoryId = $('select[name=categoryId]').val();
+	var arrSelectedTr = $('.selectedTr');
+	arrId = [];
+	$.each(arrSelectedTr, function( i, tr ) {
+		arrId.push($(tr).attr('data-id'));
+	});
 
 	if(q.length || qGallery.length || categoryId.length){
 		$.get('$url', {
 				q: q,
 				qGallery: qGallery,
 				type: type,
-				categoryId: categoryId
+				categoryId: categoryId,
+				arrId: arrId
 		}).done(function(data) {
 			if(typeof data == "string"){
 				var data = $.parseJSON(data);
@@ -118,7 +124,7 @@ $this->registerJs($str);
 				<li class="active"><a href="#content" data-toggle="tab">Content</a></li>
 			</ul>
 			<div class="tab-content">
-				<?= Html::dropDownList('categoryId','',[''=> 'เลือกหมวดที่ต้องการค้นหา']+$arrCategory,['class'=>'form-control selectCategory']) ?>
+				<?= Html::dropDownList('categoryId', $section,[''=> 'เลือกหมวดที่ต้องการค้นหา']+$arrCategory,['class'=>'form-control selectCategory']) ?>
 				<div class="tab-pane active" id="content">
 					<div class="scroller" style="height:663px">
 					

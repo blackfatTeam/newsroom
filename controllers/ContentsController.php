@@ -294,10 +294,15 @@ class ContentsController extends Controller
     		}
     	}
 
+    	$section = null;
+    	$arrId = null;
+    	
        	return $this->render('edit',[
     			'type'=>$type,
     			'contents'=>$contents,
     			'relateData'=>$relateData,
+       			'section' => $section,
+       			'arrId' => $arrId
     	]);
     }
     public function actionList(){
@@ -475,6 +480,7 @@ class ContentsController extends Controller
 		$qGallery = $request->get('qGallery')?$request->get('qGallery'):'';
 		$categoryId = $request->get('categoryId')?$request->get('categoryId'):'';
 		$type = $request->get('type');
+		$arrId = $request->get('arrId');
 		
 		$query = Contents::find();
 		if ($type == 'gallery'){
@@ -490,7 +496,7 @@ class ContentsController extends Controller
 		if (!empty($categoryId)){
 			$query->andWhere('categoryId =:categoryId', [':categoryId' => $categoryId]);
 		}
-		
+		$query->andWhere(['not in','id',$arrId]);
 		$query->limit(30);
 		$query->orderBy('publishTime DESC');
 		//$query->andWhere('status  = :status',[':status' => Workflow::STATUS_PUBLISHED]);
