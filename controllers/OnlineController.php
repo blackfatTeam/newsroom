@@ -92,7 +92,7 @@ class OnlineController extends Controller{
     			
     		}
     	}
-    	//var_dump($arrItem);exit;
+    	
     	return $this->render('view', [
     			'web' => $web,
     			'arrItem' => $arrItem
@@ -130,7 +130,7 @@ class OnlineController extends Controller{
 	    	if (!empty($arrModel)){
 	    		foreach ($arrModel as $lst){
 	    			if (!empty($lst->contentId)){
-	    				$queryContent = Contents::find()->where(['id'=>$lst->contentId])->one();
+	    				$queryContent = Contents::find()->where(['id'=>$lst->contentId, 'status' => Workflow::STATUS_PUBLISHED])->one();
 	    			
 	    			}
 	    			if (!empty($queryContent)){

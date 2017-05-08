@@ -17,7 +17,8 @@ $(document).delegate('.findGallery','click',function(e){
 
 $(document).delegate('.resetbtn','click',function(e){
 	var type = $(this).attr('data-type');
-	doReset(type);
+	var section = $(this).attr('data-section');
+	doReset(type, section);
 	$('input[name=q]').val('');
 	$('input[name=qGallery]').val('');
 	$('select[name=categoryId]').val('');
@@ -70,9 +71,10 @@ function doSearch(type){
 	}
 }		
 
-function doReset(type){
+function doReset(type, section){
 	$.get('$urlReset', {
-				type: type
+				type: type,
+				section: section
 		}).done(function(data) {
 		if(typeof data == "string"){
 			var data = $.parseJSON(data);
@@ -105,7 +107,6 @@ function getItem(data, type){
 }				
 
 EOT;
-
 $this->registerJs($str);
 ?>
 <style>
@@ -134,7 +135,7 @@ $this->registerJs($str);
 						<a class="btn green findConent" href="javascript:;">ค้นหา</a>
 						</span>
 						<span class="input-group-btn">
-						<a class="btn yellow resetbtn" data-type="content" href="javascript:;">รีเซ็ต</a>
+						<a class="btn yellow resetbtn" data-type="content" href="javascript:;" data-section="<?php echo $section?$section:'';?>">รีเซ็ต</a>
 						</span>
 					</div>
 					
@@ -183,7 +184,7 @@ $this->registerJs($str);
 						<a class="btn green findGallery" href="javascript:;">ค้นหา</a>
 						</span>
 						<span class="input-group-btn">
-						<a class="btn yellow resetbtn" data-type="gallery" href="javascript:;">รีเซ็ต</a>
+						<a class="btn yellow resetbtn" data-type="gallery" href="javascript:;" data-section="<?php echo $section?$section:'';?>">รีเซ็ต</a>
 						</span>
 					</div>
 					

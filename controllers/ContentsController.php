@@ -493,10 +493,19 @@ class ContentsController extends Controller
 			$query->andWhere('theme =:theme', [':theme' => 1]);
 		}
 
+		$categoryIdResult = null;
 		if (!empty($categoryId)){
-			$query->andWhere('categoryId =:categoryId', [':categoryId' => $categoryId]);
+			$arrCategory = [1,2];
+			if (!in_array((int)$categoryId, $arrCategory)){
+				$categoryIdResult = (int)$categoryId;
+			}
+		}
+		
+		if (!empty($categoryIdResult)){
+			$query->andWhere('categoryId =:categoryId', [':categoryId' => $categoryIdResult]);
 		}
 		$query->andWhere(['not in','id',$arrId]);
+		$query->andWhere('status =:status', [':status' => Workflow::STATUS_PUBLISHED]);
 		$query->limit(30);
 		$query->orderBy('publishTime DESC');
 		//$query->andWhere('status  = :status',[':status' => Workflow::STATUS_PUBLISHED]);
@@ -526,6 +535,7 @@ class ContentsController extends Controller
 	public function actionResetcontent(){
 		$request = Yii::$app->request;
 		$type = $request->get('type')?$request->get('type'):'';
+		$section = $request->get('section')?$request->get('section'):'';
 		
 		if ($type == 'content'){
 			$query = Contents::find();
@@ -535,6 +545,18 @@ class ContentsController extends Controller
 			$query->andWhere('theme =:theme', [':theme' => 2]);
 		}
 
+		$categoryId = null;
+		if (!empty($section)){
+			$arrCategory = [1,2];
+			if (!in_array((int)$section, $arrCategory)){
+				$categoryId = (int)$section;
+			}
+		}
+		
+		if (!empty($categoryId)){
+			$query->andWhere('categoryId =:categoryId', [':categoryId' => $categoryId]);
+		}	
+		$query->andWhere('status =:status', [':status' => Workflow::STATUS_PUBLISHED]);
 		$query->limit(30);
 		$query->orderBy('publishTime DESC');
 		$resultQuery = $query->all();

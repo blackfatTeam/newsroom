@@ -7,8 +7,8 @@ use yii\base\Widget;
 
 use app\lib\Conf;
 use yii\helpers\Url;
-use app\Auth;
-use app\Workflow;
+use app\lib\Auth;
+use app\lib\Workflow;
 
 class SearchContent extends Widget {
 	public $section;
@@ -31,6 +31,7 @@ class SearchContent extends Widget {
 		if (!empty($categoryId)){
 			$query->andWhere('categoryId =:categoryId', [':categoryId' => $categoryId]);
 		}
+		$query->andWhere('status =:status', [':status' => Workflow::STATUS_PUBLISHED]);
 		$query->limit(30);
 		$contentList = $query->all();
 		
@@ -43,6 +44,7 @@ class SearchContent extends Widget {
 		if (!empty($categoryId)){
 			$queryGallery->andWhere('categoryId =:categoryId', [':categoryId' => $categoryId]);
 		}
+		$queryGallery->andWhere('status =:status', [':status' => Workflow::STATUS_PUBLISHED]);
 		$queryGallery->limit(30);
 		$galleryList = $queryGallery->all();
 		
