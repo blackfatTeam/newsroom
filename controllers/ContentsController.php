@@ -536,6 +536,7 @@ class ContentsController extends Controller
 		$request = Yii::$app->request;
 		$type = $request->get('type')?$request->get('type'):'';
 		$section = $request->get('section')?$request->get('section'):'';
+		$arrId = $request->get('arrId')?$request->get('arrId'):[];
 		
 		if ($type == 'content'){
 			$query = Contents::find();
@@ -556,6 +557,10 @@ class ContentsController extends Controller
 		if (!empty($categoryId)){
 			$query->andWhere('categoryId =:categoryId', [':categoryId' => $categoryId]);
 		}	
+		
+		if (!empty($arrId)){
+			$query->andWhere(['not in','id',$arrId]);
+		}
 		$query->andWhere('status =:status', [':status' => Workflow::STATUS_PUBLISHED]);
 		$query->limit(30);
 		$query->orderBy('publishTime DESC');

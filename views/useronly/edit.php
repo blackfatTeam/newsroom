@@ -99,7 +99,7 @@ $this->params['breadcrumbs'][] = ['label' => $user->username];
 			</div>
 			
 			<div class="form-actions text-center">                           
-				<a type="button" class="btn default" href="<?= Url::toRoute('user/list')?>">ยกเลิก</a>  
+				<a type="button" class="btn default" href="<?= Url::toRoute('/')?>">ยกเลิก</a>  
 				<button type="submit" class="btn green">บันทึก</button>                            
 			</div>
 			

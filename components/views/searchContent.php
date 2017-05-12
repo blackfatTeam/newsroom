@@ -18,10 +18,15 @@ $(document).delegate('.findGallery','click',function(e){
 $(document).delegate('.resetbtn','click',function(e){
 	var type = $(this).attr('data-type');
 	var section = $(this).attr('data-section');
-	doReset(type, section);
+	var arrSelectedTr = $('.selectedTr');
+	arrId = [];
+	$.each(arrSelectedTr, function( i, tr ) {
+		arrId.push($(tr).attr('data-id'));
+	});
+	doReset(type, section, arrId);
 	$('input[name=q]').val('');
 	$('input[name=qGallery]').val('');
-	$('select[name=categoryId]').val('');
+	/* $('select[name=categoryId]').val(''); */
 });
 
 
@@ -71,10 +76,11 @@ function doSearch(type){
 	}
 }		
 
-function doReset(type, section){
+function doReset(type, section, arrId){
 	$.get('$urlReset', {
 				type: type,
-				section: section
+				section: section,
+				arrId: arrId
 		}).done(function(data) {
 		if(typeof data == "string"){
 			var data = $.parseJSON(data);
