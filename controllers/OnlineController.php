@@ -107,7 +107,7 @@ class OnlineController extends Controller{
     	$section = Yii::$app->request->get('section');
     	//$sectionData = OnlineConfig::$arrSection[$section];
     	$categoryQuery = Category::find();
-    	$categoryQuery->andWhere('selected = :selected', [':selected' => 1]);
+    	//$categoryQuery->andWhere('selected = :selected', [':selected' => 1]);
     	$categoryQuery->andWhere('id = :id', [':id' => $section]);
     	$resultCategory = $categoryQuery->one();
     	$sectionData = $resultCategory->name?$resultCategory->name:'';
