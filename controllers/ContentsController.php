@@ -479,8 +479,8 @@ class ContentsController extends Controller
 		$q = $request->get('q')?$request->get('q'):'';
 		$qGallery = $request->get('qGallery')?$request->get('qGallery'):'';
 		$categoryId = $request->get('categoryId')?$request->get('categoryId'):'';
-		$type = $request->get('type');
-		$arrId = $request->get('arrId');
+		$type = $request->get('type')?$request->get('type'):'';
+		$arrId = $request->get('arrId')?$request->get('arrId'):[];
 		
 		$query = Contents::find();
 		if ($type == 'gallery'){
@@ -504,7 +504,10 @@ class ContentsController extends Controller
 		if (!empty($categoryIdResult)){
 			$query->andWhere('categoryId =:categoryId', [':categoryId' => $categoryIdResult]);
 		}
-		$query->andWhere(['not in','id',$arrId]);
+		
+		if (!empty($arrId)){
+			$query->andWhere(['not in','id',$arrId]);
+		}
 		$query->andWhere('status =:status', [':status' => Workflow::STATUS_PUBLISHED]);
 		$query->limit(30);
 		$query->orderBy('publishTime DESC');
