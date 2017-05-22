@@ -12,7 +12,7 @@ $baseUri = Yii::getAlias('@web');
 	</div>
 	<div class="portlet-body">
 		<div class="row">
-			<?php $arrSection = array_splice($arrItem, 0,6);?>
+			<?php $arrSection = array_splice($arrItem, 0,8);?>
 			<div class="col-md-4">
 				<?php 
 				foreach ($arrSection as $key => $lst):
@@ -66,7 +66,7 @@ $baseUri = Yii::getAlias('@web');
 			</div>
 			
 		
-			<?php $arrSection = array_splice($arrItem, 0,6);?>
+			<?php $arrSection = array_splice($arrItem, 0,8);?>
 			<div class="col-md-4">
 				<?php 
 				foreach ($arrSection as $key => $lst):
@@ -119,7 +119,7 @@ $baseUri = Yii::getAlias('@web');
 				<?php endforeach;?>
 			</div>
 			
-			<?php $arrSection = array_splice($arrItem, 0,6);?>
+			<?php $arrSection = array_splice($arrItem, 0,8);?>
 			<div class="col-md-4">
 				<?php 
 				foreach ($arrSection as $key => $lst):

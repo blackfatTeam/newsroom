@@ -17,7 +17,8 @@ $(document).delegate('.findGallery','click',function(e){
 
 $(document).delegate('.resetbtn','click',function(e){
 	var type = $(this).attr('data-type');
-	var section = $(this).attr('data-section');
+	/* var section = $(this).attr('data-section'); */
+	var section = $('select[name=categoryId]').val();
 	var arrSelectedTr = $('.selectedTr');
 	arrId = [];
 	$.each(arrSelectedTr, function( i, tr ) {

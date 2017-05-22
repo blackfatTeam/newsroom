@@ -65,6 +65,7 @@ class OnlineController extends Controller{
     				'categoryId' => $lst->id
     		];
     	}
+    	
     	if (!empty($resultQuery)){
     		foreach ($resultQuery as $lst){
     			if (!empty($lst->contentId)){
