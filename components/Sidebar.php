@@ -17,6 +17,7 @@ class Sidebar extends Widget {
 		$arrMenu = [];
 		
 		//default
+		$arrMenuCountry = ['Online', 'Hot Topic'];
 		foreach (ConfigController::getConfig() as $menu){
 			$can = false;
 			foreach($menu['authen'] as $authen){
@@ -25,10 +26,26 @@ class Sidebar extends Widget {
 					break;
 				}
 			}
+			
 			if($can){
-				$arrMenu[] = $menu;
+				if (!in_array($menu['title'], $arrMenuCountry)){
+					$arrMenu[] = $menu;
+				}else{
+					$arrCountry = [];
+					foreach ($menu['sub'] as $lst){
+						if (!empty($lst['titleEn'])){
+							if ($lst['titleEn'] == $identity->web){
+								$arrCountry[] = $lst;
+							}
+						}
+					}
+					unset($menu['sub']);
+					$menu['sub'] = $arrCountry;
+					$arrMenu[] = $menu;
+				}
 			}
 		}
+
 				
 		echo $this->render('sidebar',[
 				'arrMenu'=>$arrMenu

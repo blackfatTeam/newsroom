@@ -81,41 +81,41 @@ $this->params['breadcrumbs'][] = ['label' => $user->username];
 			?>
 				<div class="form-group">
 					<label>Username</label>
-					<?= Html::activeInput('text', $user, 'username',['class'=>'form-control','readonly'=>$disp])?>
+					<?= Html::activeInput('text', $user, 'username',['class'=>'form-control','readonly'=>$disp, 'required' => 'required'])?>
 					<span class="help-block pull-right"> </span>
 				</div>
 				<div class="form-group">
 					<label>Password</label>
-					<?= Html::textInput('password','',['class'=>'form-control','readonly'=>$disp3,'placeholder'=>'********'])?>
+					<?= Html::textInput('password','',['class'=>'form-control','readonly'=>$disp3,'placeholder'=>'********', 'required' => 'required'])?>
 					<span class="help-block pull-right"> </span>
 				</div>
 				<div class="form-group">
 					<label>First Name</label>
-					<?= Html::activeInput('text', $user, 'firstName',['class'=>'form-control','readonly'=>$disp2])?>
+					<?= Html::activeInput('text', $user, 'firstName',['class'=>'form-control','readonly'=>$disp2, 'required' => 'required'])?>
 				</div>
 				<div class="form-group">
 					<label>Last Name</label>
-					<?= Html::activeInput('text', $user, 'lastName',['class'=>'form-control','readonly'=>$disp2])?>
+					<?= Html::activeInput('text', $user, 'lastName',['class'=>'form-control','readonly'=>$disp2, 'required' => 'required'])?>
 				</div>
 				<?php if($arrSetting['view.role']){?>
 				<div class="form-group">
 					<label>Position</label>
-					<?= Html::activeDropDownList($user, 'role', Auth::$arrUserRole,['class'=>'form-control'])?>
+					<?= Html::activeDropDownList($user, 'role', ['' => 'กรูณาเลือกตำแหน่ง']+Auth::$arrUserRole,['class'=>'form-control', 'required' => 'required'])?>
 				</div>
 				<?php }?>
 				<div class="form-group">
 					<label>จังหวัดที่สังกัด</label>
-					<?php //= Html::activeDropDownList($user, 'web', ['']+Workflow::$arrWeb,['class'=>'form-control'])?>
-					<?= Html::activeHiddenInput($user, 'web',['class'=>'form-control select2','id'=>'tagSug'])?>
+					<?php echo Html::activeDropDownList($user, 'web', ['' => 'กรูณาเลือกจังหวัด']+Workflow::$arrWeb,['class'=>'form-control', 'required' => 'required'])?>
+					<?php //echo Html::activeHiddenInput($user, 'web',['class'=>'form-control select2','id'=>'tagSug', 'required' => 'required'])?>
 				</div>
 				<div class="form-group">
 					<label>โต๊ะ</label>
-					<?= Html::activeDropDownList($user, 'section', ['' => 'กรูณาเลือกโต๊ะข่าว'] + $arrCate,['class'=>'form-control'])?>
+					<?= Html::activeDropDownList($user, 'section', ['' => 'กรูณาเลือกโต๊ะข่าว'] + $arrCate,['class'=>'form-control', 'required' => 'required'])?>
 				</div>
 				<?php if($arrSetting['view.status']){?>
 				<div class="form-group">
 					<label>Status</label>
-					<?= Html::activeDropDownList($user, 'status', [Workflow::STATUS_PUBLISHED=>'เปิด',Workflow::STATUS_REJECTED=>'ปิด'],['class'=>'form-control'])?>
+					<?= Html::activeDropDownList($user, 'status', [Workflow::STATUS_PUBLISHED=>'เปิด',Workflow::STATUS_REJECTED=>'ปิด'],['class'=>'form-control', 'required' => 'required'])?>
 				</div>
 				<?php }?>
 				

@@ -203,7 +203,7 @@ class UserController extends Controller
     	foreach(Workflow::$arrWeb as $key => $web){
     		$provinces[] = ['id'=>$key,'text'=>$web];
     	}
- 
+
     	$arrSetting = [
 			'edit.username'=>$editUser,
 			'edit.content'=>$editContent,

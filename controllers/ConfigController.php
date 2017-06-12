@@ -5,6 +5,7 @@ use Yii;
 use yii\helpers\Url;
 use yii\web\Controller;
 use app\lib\Auth;
+use app\lib\Workflow;
 
 
 class ConfigController extends Controller
@@ -62,6 +63,7 @@ class ConfigController extends Controller
     					'sub'=>[
     							[
     									'title'=>'กรุงเทพ',
+    									'titleEn' => Workflow::CONTENT_WEB_1,
     									'icon'=>'',
     									'uri'=> Url::toRoute(["online/view", 'web' => 'bkk']),
     									'group'=> [
@@ -70,6 +72,7 @@ class ConfigController extends Controller
     							],
     							[
     									'title'=>'กาญจนบุรี',
+    									'titleEn' => Workflow::CONTENT_WEB_2,
     									'icon'=>'',
     									'uri'=>Url::toRoute(["online/view", 'web' => 'kri']),
     									'group'=> [
@@ -78,6 +81,7 @@ class ConfigController extends Controller
     							],
     							[
     									'title'=>'นครราชสีมา',
+    									'titleEn' => Workflow::CONTENT_WEB_3,
     									'icon'=>'',
     									'uri'=>Url::toRoute(["online/view", 'web' => 'nma']),
     									'group'=> [
@@ -104,6 +108,7 @@ class ConfigController extends Controller
 	    			'sub'=>[
     					[
     							'title'=>'กรุงเทพ',
+    							'titleEn' => Workflow::CONTENT_WEB_1,
     							'icon'=>'',
     							'uri'=> Url::toRoute(["hottopic/edit", 'web' => 'bkk']),
     							'group'=> [
@@ -112,6 +117,7 @@ class ConfigController extends Controller
     					],
     					[
     							'title'=>'กาญจนบุรี',
+    							'titleEn' => Workflow::CONTENT_WEB_2,
     							'icon'=>'',
     							'uri'=>Url::toRoute(["hottopic/edit", 'web' => 'kri']),
     							'group'=> [
@@ -120,6 +126,7 @@ class ConfigController extends Controller
     					],
     					[
     							'title'=>'นครราชสีมา',
+    							'titleEn' => Workflow::CONTENT_WEB_3,
     							'icon'=>'',
     							'uri'=>Url::toRoute(["hottopic/edit", 'web' => 'nma']),
     							'group'=> [
